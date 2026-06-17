@@ -504,7 +504,10 @@
     </div>
     <div class="dtp-nav">
       <button class="dtp-btn-back" onclick="goStep(3,2)">←  Anterior</button>
-      <button class="dtp-btn-next" onclick="goStep(3,4)">CONTINUAR CON EL PAGO  →</button>
+     <button class="dtp-btn-pay" onclick="enviarPedidoWhatsApp()">
+  CONTINUAR CON EL PEDIDO
+  <small>Enviar características por WhatsApp</small>
+</button>
     </div>
   </div>
 
@@ -558,9 +561,9 @@
             <button class="dtp-btn-pay" onclick="realizarPago()">
               <div style="display:flex;align-items:center;gap:10px;">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-                REALIZAR PAGO
+                CONTINUAR CON EL PEDIDO
               </div>
-              <small>Serás redirigido a Mercado Pago</small>
+              <small>Enviar características por WhatsApp</small>
             </button>
           </div>
         </div>
@@ -860,15 +863,24 @@ document.addEventListener('DOMContentLoaded', function () {
       alert('Completá nombre, teléfono y email para continuar.');
       return;
     }
-    var msg = 'Hola! Quiero finalizar mi pedido de Laboratorio Genus.\n' +
-      'Producto: ' + (dtpState.producto || '—') + '\n' +
-      'Marca: ' + (dtpState.marca || 'TU MARCA') + '\n' +
-      'Nombre del producto: ' + (dtpState.nombre || '—') + '\n' +
-      'Color: ' + (dtpState.color || '—') + '\n' +
-      'Textura: ' + (dtpState.textura || '—') + '\n' +
-      'Aroma: ' + (dtpState.aroma || '—') + '\n' +
-      'Activos: ' + (dtpState.activos.length ? dtpState.activos.join(', ') : '—') + '\n' +
-      'Contacto: ' + nombre + ' / ' + tel + ' / ' + email;
+  var msg =
+'Hola Laboratorio Genus, quiero continuar con el desarrollo de mi producto personalizado.%0A%0A' +
+
+'📦 DATOS DEL PRODUCTO%0A' +
+'Producto: ' + (dtpState.producto || '—') + '%0A' +
+'Marca: ' + (dtpState.marca || 'TU MARCA') + '%0A' +
+'Nombre comercial: ' + (dtpState.nombre || '—') + '%0A' +
+'Color: ' + (dtpState.color || '—') + '%0A' +
+'Textura: ' + (dtpState.textura || '—') + '%0A' +
+'Aroma: ' + (dtpState.aroma || '—') + '%0A' +
+'Activos: ' + (dtpState.activos.length ? dtpState.activos.join(', ') : '—') + '%0A%0A' +
+
+'👤 DATOS DE CONTACTO%0A' +
+'Nombre: ' + nombre + '%0A' +
+'Teléfono: ' + tel + '%0A' +
+'Email: ' + email + '%0A%0A' +
+
+'Quedo a la espera de información sobre muestras, desarrollo y presupuesto.';
     var url = 'https://wa.me/5491124980861?text=' + encodeURIComponent(msg);
     window.open(url, '_blank');
   };
