@@ -885,20 +885,20 @@ a { text-decoration: none; color: inherit; }
  @media (max-width: 768px) {
 
   .hh-right {
-    width: 160% !important;
+    width: 90% !important;
     display: flex !important;
     justify-content: center !important;
     overflow: hidden !important;
   }
 
   .hh-img-wrap {
-    width: 130% !important;
+    width: 170% !important;
     max-width: 380px !important;
     margin: 0 auto !important;
   }
 
   .hh-img-wrap svg {
-    width: 160% !important;
+    width: 190% !important;
     height: auto !important;
     display: block !important;
   }
