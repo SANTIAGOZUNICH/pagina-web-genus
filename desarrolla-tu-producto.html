@@ -622,12 +622,11 @@ document.addEventListener('DOMContentLoaded', function () {
     aroma: ''
   };
 
-  var TEXTURA_OPTS = ['Ligera', 'Media', 'Rica / Nutritiva', 'Gel', 'Oil-free'];
+  var TEXTURA_OPTS = ['Ligera', 'Media', 'Densa',];
 
   var ACTIVOS_LIST = [
     'Ácido Hialurónico', 'Vitamina C', 'Niacinamida', 'Colágeno',
-    'Vitamina E', 'Aloe Vera', 'Retinol', 'Centella Asiática',
-    'Manteca de Karité', 'Té Verde', 'Argán', 'Coenzima Q10'
+    'Vitamina E', 'Aloe Vera', 'Retinol', 'Centella Asiática', 'Té Verde', 'Argán', 'Coenzima Q10', 'Otros',
   ];
 
   /* Colores de muestra: deben coincidir con FILL_COLORS de mockups.js
@@ -641,7 +640,7 @@ document.addEventListener('DOMContentLoaded', function () {
     Amarillo: '#f6d83a',
     Verde:    '#46bb67',
     Lila:     '#ab6ce8'
-  };
+   };
 
   function escapeHtml(str) {
     return String(str == null ? '' : str).replace(/[&<>"']/g, function (s) {
