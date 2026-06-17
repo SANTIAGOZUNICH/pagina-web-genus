@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contacto | Laboratorio Genus</title>
+  <meta name="description" content="Contacte a Laboratorio Genus para desarrollar su producto cosmético. WhatsApp, email y formulario directo." />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles-internal.css" />
+   </head>
+<body>
+
+<!-- NAV -->
+<nav class="hn">
+  <div class="hn-inner">
+    <a class="hn-logo" href="index.html">
+      <img src="assets/logo-genus.png" alt="Laboratorio Genus">
+    </a>
+
+  <ul class="hn-links">
+  <li><a href="index.html">Inicio</a></li>
+  <li><a href="quienes-somos.html">Nosotros</a></li>
+  <li><a href="productos.html">Productos</a></li>
+  <li><a href="llave-en-mano.html">Llave en mano</a></li>
+  <li><a href="calidad.html">Calidad</a></li>
+  <li><a href="contacto.html" class="act" >Contacto</a></li>
+  <li>
+    <a href="desarrolla-tu-producto.html" class="nav-create-product">
+      Crea tu producto
+    </a>
+  </li>
+    </ul>
+
+    <div class="hn-right">
+      <a class="hn-wa" href="https://wa.me/5491124980861" target="_blank" aria-label="WhatsApp">
+        <div class="hn-wa-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+            <path d="M12 0C5.373 0 0 5.373 0 12c0 2.089.539 4.048 1.481 5.751L0 24l6.389-1.474A11.944 11.944 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.803 9.803 0 0 1-5.003-1.372l-.359-.213-3.721.858.88-3.62-.234-.372A9.795 9.795 0 0 1 2.182 12C2.182 6.578 6.578 2.182 12 2.182S21.818 6.578 21.818 12 17.422 21.818 12 21.818z"/>
+          </svg>
+        </div>
+      </a>
+
+      <a class="hn-cta" href="cotizador.html">
+        SOLICITAR COTIZACIÓN →
+      </a>
+    </div>
+
+    <button class="hn-ham" id="ham" aria-label="Menú">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+
+<!-- HERO -->
+<section class="g-hero" style="padding:60px 0 52px;">
+  <div class="g-hero-grid">
+    <span class="g-hero-tag">Contacto</span>
+    <h1>Hablemos de su proyecto</h1>
+    <p>Cuéntenos qué producto desea desarrollar y nuestro equipo se pondrá en contacto a la brevedad. Respondemos dentro de las 24 hs hábiles.</p>
+  </div>
+</section>
+
+<!-- CONTACTO GRID -->
+<section class="g-section g-section-white">
+  <div class="g-wrap">
+    <div class="g-contact-grid">
+      <!-- FORMULARIO -->
+      <div>
+        <div style="margin-bottom:28px;">
+          <span class="g-section-tag">Formulario de consulta</span>
+          <h2 style="font-size:26px;font-weight:900;margin:8px 0 0;">Envíenos su consulta</h2>
+        </div>
+        <form class="g-form" id="contactForm" onsubmit="handleContact(event)">
+          <div class="g-field-group">
+            <div class="g-field">
+              <label>Nombre *</label>
+              <input type="text" name="nombre" placeholder="Su nombre" required>
+            </div>
+            <div class="g-field">
+              <label>Empresa</label>
+              <input type="text" name="empresa" placeholder="Nombre de su empresa o marca">
+            </div>
+          </div>
+          <div class="g-field-group">
+            <div class="g-field">
+              <label>Email *</label>
+              <input type="email" name="email" placeholder="su@email.com" required>
+            </div>
+            <div class="g-field">
+              <label>WhatsApp</label>
+              <input type="tel" name="whatsapp" placeholder="+54 9 11 xxxxxxxx">
+            </div>
+          </div>
+          <div class="g-field">
+            <label>¿En qué podemos ayudarle?</label>
+            <select name="tema">
+              <option value="">Seleccione un tema...</option>
+              <option>Desarrollo de producto</option>
+              <option>Solicitud de cotización</option>
+              <option>Servicio llave en mano</option>
+              <option>Información general</option>
+              <option>Gestión de registros ANMAT</option>
+              <option>Consulta técnica</option>
+            </select>
+          </div>
+          <div class="g-field">
+            <label>Mensaje *</label>
+            <textarea name="mensaje" placeholder="Cuéntenos sobre su proyecto: qué producto desea desarrollar, cantidades aproximadas, si ya tiene fórmula o necesita desarrollo..." required></textarea>
+          </div>
+          <div class="g-form-submit">
+            <button type="submit" class="g-btn-submit">Enviar consulta →</button>
+            <span style="font-size:13px;color:#3a4a5a;">Respondemos en 24 hs hábiles</span>
+          </div>
+        </form>
+        <div id="contactSuccess" style="display:none;margin-top:24px;background:#f0fdf4;border:1px solid #86efac;border-radius:12px;padding:20px 20px;display:none;align-items:center;gap:14px;">
+          <span style="font-size:24px;">✅</span>
+          <div>
+            <strong style="display:block;margin-bottom:4px;">¡Consulta enviada!</strong>
+            <span style="font-size:14px;color:#3a4a5a;">Nos pondremos en contacto a la brevedad.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- INFO -->
+      <div class="g-contact-info">
+        <div style="margin-bottom:4px;">
+          <span class="g-section-tag">Canales directos</span>
+          <h2 style="font-size:22px;font-weight:900;margin:8px 0 0;">También puede contactarnos por</h2>
+        </div>
+
+        <a class="g-contact-item" href="https://wa.me/5491124980861" target="_blank" style="text-decoration:none;background:#f0fdf4;border-color:#86efac;">
+          <div class="g-contact-icon" style="background:#25d366;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.089.539 4.048 1.481 5.751L0 24l6.389-1.474A11.944 11.944 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.803 9.803 0 0 1-5.003-1.372l-.359-.213-3.721.858.88-3.62-.234-.372A9.795 9.795 0 0 1 2.182 12C2.182 6.578 6.578 2.182 12 2.182S21.818 6.578 21.818 12 17.422 21.818 12 21.818z"/></svg>
+          </div>
+          <div class="g-contact-item-body">
+            <label>WhatsApp</label>
+            <span>+54 9 11 2498-0861</span>
+            <span style="font-size:12px;color:#3a4a5a;font-weight:400;margin-top:2px;">Respuesta inmediata en horario comercial</span>
+          </div>
+        </a>
+
+        <div class="g-contact-item">
+          <div class="g-contact-icon">✉️</div>
+          <div class="g-contact-item-body">
+            <label>Email</label>
+            <a href="mailto:ventas@laboratoriogenus.com.ar">ventas@laboratoriogenus.com.ar</a>
+            <span style="font-size:12px;color:#3a4a5a;font-weight:400;margin-top:2px;">Para consultas detalladas y presupuestos</span>
+          </div>
+        </div>
+
+        <div class="g-contact-item">
+          <div class="g-contact-icon">📍</div>
+          <div class="g-contact-item-body">
+            <label>Ubicación</label>
+            <span>Buenos Aires, Argentina</span>
+            <span style="font-size:12px;color:#3a4a5a;font-weight:400;margin-top:2px;">Visitas al laboratorio con turno previo</span>
+          </div>
+        </div>
+
+        <div class="g-contact-item">
+          <div class="g-contact-icon">🕐</div>
+          <div class="g-contact-item-body">
+            <label>Horario de atención</label>
+            <span>Lunes a viernes</span>
+            <span style="font-size:12px;color:#3a4a5a;font-weight:400;margin-top:2px;">9:00 a 18:00 hs</span>
+          </div>
+        </div>
+
+        <!-- MAPA -->
+        <div class="g-map-placeholder">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d209715.08649978604!2d-58.70551!3d-34.6157826!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95bcca3b4ef90cbd%3A0xa0b3812e88e88e87!2sBuenos%20Aires%2C%20Argentina!5e0!3m2!1ses!2sar!4v1700000000000"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            title="Buenos Aires, Argentina"
+          ></iframe>
+        </div>
+
+        <a class="g-btn-primary" href="cotizador.html" style="display:flex;justify-content:center;">
+          Usar el cotizador online →
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="g-footer">
+  <div class="g-footer-inner">
+    <img class="g-footer-logo" src="assets/logo-genus.png" alt="Laboratorio Genus">
+    <div class="g-footer-info">
+      <strong>Laboratorio Genus</strong>
+      ventas@laboratoriogenus.com.ar<br>
+      +54 9 11 2498-0861 · Buenos Aires, Argentina
+    </div>
+    <a class="g-footer-cta" href="cotizador.html">Solicitar cotización →</a>
+  </div>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var hamBtn = document.getElementById('ham');
+  var navLinks = document.querySelector('.hn-links');
+  if (hamBtn && navLinks) {
+    hamBtn.addEventListener('click', function () {
+      navLinks.classList.toggle('open');
+    });
+  }
+});
+</script>
+</body>
+</html>

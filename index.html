@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Laboratorio Genus | Desarrollo y fabricación de cosméticos.</title>
+  <meta name="description" content="Laboratorio cosmetológico en Buenos Aires. Desarrollo y fabricación de cosméticos para tu marca." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<nav class="hn">
+  <div class="hn-inner">
+
+    <a class="hn-logo" href="index.html">
+      <img src="assets/logo-genus.png" alt="Laboratorio Genus">
+    </a>
+
+    <ul class="hn-links">
+      <li><a href="index.html" class="act">Inicio</a></li>
+      <li><a href="quienes-somos.html">Nosotros</a></li>
+      <li><a href="productos.html">Productos</a></li>
+      <li><a href="llave-en-mano.html">Llave en mano</a></li>
+      <li><a href="calidad.html">Calidad</a></li>
+      <li><a href="contacto.html">Contacto</a></li>
+      <li>
+        <a href="desarrolla-tu-producto.html" class="nav-create-product">
+          Crea tu producto
+        </a>
+      </li>
+    </ul>
+
+    <div class="hn-right">
+      <a class="hn-wa" href="https://wa.me/5491124980861" target="_blank">
+        <div class="hn-wa-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+            <path d="M12 0C5.373 0 0 5.373 0 12c0 2.089.539 4.048 1.481 5.751L0 24l6.389-1.474A11.944 11.944 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.803 9.803 0 0 1-5.003-1.372l-.359-.213-3.721.858.88-3.62-.234-.372A9.795 9.795 0 0 1 2.182 12C2.182 6.578 6.578 2.182 12 2.182S21.818 6.578 21.818 12 17.422 21.818 12 21.818z"/>
+          </svg>
+        </div>
+        <div class="hn-wa-text">
+          <small>Contactanos</small>
+          <strong>WhatsApp</strong>
+        </div>
+      </a>
+      <a class="hn-cta" href="cotizador.html">
+        SOLICITAR COTIZACIÓN →
+      </a>
+    </div>
+
+    <button class="hn-ham" id="ham" aria-label="Menú">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<section class="hh">
+  <div class="hh-inner">
+
+    <div class="hh-left">
+      <div class="hh-tag">Desarrollamos y fabricamos</div>
+      <h1>Cosméticos<span>para tu marca</span></h1>
+      <div class="hh-rule"></div>
+      <p>Convertimos tus ideas en productos reales.<br>
+      Te acompañamos en cada etapa para que tu marca<br>
+      crezca con calidad, seguridad y confianza.</p>
+      <div class="hh-btns">
+        <a class="hh-btn-cta" href="cotizador.html">SOLICITAR COTIZACIÓN →</a>
+        <a class="hh-btn-wa" href="https://wa.me/5491124980861" target="_blank">
+          <div class="hh-btn-wa-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+              <path d="M12 0C5.373 0 0 5.373 0 12c0 2.089.539 4.048 1.481 5.751L0 24l6.389-1.474A11.944 11.944 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.803 9.803 0 0 1-5.003-1.372l-.359-.213-3.721.858.88-3.62-.234-.372A9.795 9.795 0 0 1 2.182 12C2.182 6.578 6.578 2.182 12 2.182S21.818 6.578 21.818 12 17.422 21.818 12 21.818z"/>
+            </svg>
+          </div>
+          <div class="hh-btn-wa-text">
+            <strong>HABLAR POR WHATSAPP</strong>
+            <small>Respuesta inmediata</small>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <div class="hh-right">
+      <div class="hh-img-wrap">
+        <svg viewBox="0 0 700 520" preserveAspectRatio="xMidYMid slice"
+          xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+          <defs>
+            <clipPath id="heroClip">
+              <path d="M0,0 L700,0 L700,520 L245,520 Q0,520 0,310 Z"/>
+            </clipPath>
+          </defs>
+          <image href="assets/hero-lab.jpg" x="0" y="0" width="700" height="520"
+            preserveAspectRatio="xMidYMid slice" clip-path="url(#heroClip)"/>
+          <path d="M0,0 L700,0 L700,520 L245,520 Q0,520 0,310 Z"
+            fill="none" stroke="rgba(22,154,176,0.55)" stroke-width="4.5"
+            vector-effect="non-scaling-stroke"/>
+        </svg>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ FEATURES STRIP ============ -->
+<section class="hf">
+  <div class="hf-card">
+    <div class="hf-inner">
+      <div class="hf-item">
+        <div class="hf-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M9 3v7l-6 11h18L15 10V3"/></svg>
+        </div>
+        <div class="hf-text">
+          <h4>Calidad que<br>se ve y se siente</h4>
+          <p>Trabajamos con materias primas seleccionadas y procesos controlados.</p>
+        </div>
+      </div>
+      <div class="hf-item">
+        <div class="hf-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v6.5L4 18a2 2 0 0 0 1.7 3h12.6A2 2 0 0 0 20 18l-6-9.5V2"/><line x1="8.5" y1="2" x2="15.5" y2="2"/></svg>
+        </div>
+        <div class="hf-text">
+          <h4>Tecnología<br>y experiencia</h4>
+          <p>Contamos con equipamiento de última generación y un equipo altamente capacitado.</p>
+        </div>
+      </div>
+      <div class="hf-item">
+        <div class="hf-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="3"/><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/></svg>
+        </div>
+        <div class="hf-text">
+          <h4>Somos tu socio<br>estratégico</h4>
+          <p>Acompañamos tu proyecto en cada etapa, con cercanía y compromiso.</p>
+        </div>
+      </div>
+      <div class="hf-item">
+        <div class="hf-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+        </div>
+        <div class="hf-text">
+          <h4>Llave en mano</h4>
+          <p>Nos encargamos del desarrollo, los envases, la producción, el envasado y la entrega.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROCESO ============ -->
+<section class="hp">
+  <div class="hp-inner">
+    <div class="hp-left">
+      <span class="sup">Así trabajamos</span>
+      <h2>Un proceso simple<br>y transparente</h2>
+      <div class="rule"></div>
+      <div class="hp-dots">
+        <span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span><span></span>
+      </div>
+    </div>
+    <div class="hp-steps">
+      <div class="hp-step">
+        <div class="hp-step-top"><div class="hp-num">1</div><div class="hp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#169ab0" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div></div>
+        <h5>Consulta</h5><p>Nos contás tu proyecto y definimos el producto a desarrollar.</p>
+      </div>
+      <div class="hp-step">
+        <div class="hp-step-top"><div class="hp-num">2</div><div class="hp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#169ab0" stroke-width="2" stroke-linecap="round"><path d="M10 2v6.5L4 18a2 2 0 0 0 1.7 3h12.6A2 2 0 0 0 20 18l-6-9.5V2"/><line x1="8.5" y1="2" x2="15.5" y2="2"/></svg></div></div>
+        <h5>Desarrollo<br>a medida</h5><p>Desarrollamos el producto según tus necesidades. También contamos con un banco de desarrollos previamente aprobados.</p>
+      </div>
+      <div class="hp-step">
+        <div class="hp-step-top"><div class="hp-num">3</div><div class="hp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#169ab0" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div></div>
+        <h5>Aprobación<br>de muestra</h5><p>Te enviamos la muestra para que la evalúes y apruebes antes de avanzar.</p>
+      </div>
+      <div class="hp-step">
+        <div class="hp-step-top"><div class="hp-num">4</div><div class="hp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#169ab0" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div></div>
+        <h5>Registros<br>ANMAT</h5><p>Gestionamos ante ANMAT los registros correspondientes para comercializar correctamente tus productos.</p>
+      </div>
+      <div class="hp-step">
+        <div class="hp-step-top"><div class="hp-num">5</div><div class="hp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#169ab0" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div></div>
+        <h5>Producción</h5><p>Con el desarrollo aprobado y los registros gestionados, comenzamos la producción bajo altos estándares de calidad.</p>
+      </div>
+      <div class="hp-step">
+        <div class="hp-step-top"><div class="hp-num">6</div><div class="hp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#169ab0" stroke-width="2" stroke-linecap="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 6v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div></div>
+        <h5>Entrega</h5><p>Entregamos tu pedido listo para comercializar.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LÍNEAS DE PRODUCTOS ============ -->
+<section class="product-lines" id="productos">
+  <div class="container product-lines-grid">
+    <div class="product-lines-title">
+      <span>Nuestras</span>
+      <h2>Líneas de productos</h2>
+      <a href="productos.html">Ver todas las líneas →</a>
+    </div>
+    <article class="product-card"><img src="assets/capilar.png" alt="Capilar TU MARCA"><strong>Capilar</strong></article>
+    <article class="product-card"><img src="assets/facial.png" alt="Facial TU MARCA"><strong>Facial</strong></article>
+    <article class="product-card"><img src="assets/corporal.png" alt="Corporal TU MARCA"><strong>Corporal</strong></article>
+    <article class="product-card"><img src="assets/serums.png" alt="Serums TU MARCA"><strong>Serums</strong></article>
+    <article class="product-card"><img src="assets/cremas.png" alt="Cremas TU MARCA"><strong>Cremas</strong></article>
+    <article class="product-card"><img src="assets/geles.png" alt="Geles y limpiadores TU MARCA"><strong>Geles y limpiadores</strong></article>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="container footer-grid">
+    <img src="assets/logo-genus.png" alt="Laboratorio Genus">
+    <div>
+      <strong>Laboratorio Genus</strong><br>
+      ventas@laboratoriogenus.com.ar<br>
+      +54 9 11 2498-0861
+    </div>
+    <a href="cotizador.html">Solicitar cotización →</a>
+  </div>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var hamBtn = document.getElementById('ham');
+  var navLinks = document.querySelector('.hn-links');
+  if (hamBtn && navLinks) {
+    hamBtn.addEventListener('click', function () {
+      navLinks.classList.toggle('open');
+    });
+  }
+});
+</script>
+
+</body>
+</html>

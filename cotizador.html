@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cotizador | Laboratorio Genus</title>
+  <meta name="description" content="Solicite una cotización de fabricación cosmética con Laboratorio Genus. Proceso guiado en pocos pasos." />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles-internal.css" />
+  </head>
+<body>
+
+<!-- NAV -->
+<nav class="g-nav">
+  <div class="g-nav-inner">
+    <a class="g-nav-logo" href="index.html"><img src="assets/logo-genus.png" alt="Laboratorio Genus"></a>
+    <ul class="g-nav-links" id="navLinks">
+      <li><a href="index.html">Inicio</a></li>
+      <li><a href="quienes-somos.html">Nosotros</a></li>
+      <li><a href="productos.html">Productos</a></li>
+      <li><a href="llave-en-mano.html">Llave en mano</a></li>
+      <li><a href="contacto.html">Contacto</a></li>
+      <li><a href="desarrolla-tu-producto.html" style="background:var(--aqua);color:#fff;border-radius:6px;padding:8px 14px;font-weight:900;">Desarrollá tu producto</a></li>
+    </ul>
+    <div class="g-nav-actions">
+      <a class="g-btn-wa" href="https://wa.me/5491124980861" target="_blank">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.089.539 4.048 1.481 5.751L0 24l6.389-1.474A11.944 11.944 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.803 9.803 0 0 1-5.003-1.372l-.359-.213-3.721.858.88-3.62-.234-.372A9.795 9.795 0 0 1 2.182 12C2.182 6.578 6.578 2.182 12 2.182S21.818 6.578 21.818 12 17.422 21.818 12 21.818z"/></svg>
+        WhatsApp
+      </a>
+    </div>
+    <button class="g-nav-hamburger" id="hamburger" aria-label="Menú">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- HERO COMPACT -->
+<section class="g-hero" style="padding:52px 0 44px;">
+  <div class="g-hero-grid">
+    <span class="g-hero-tag">Cotizador online</span>
+    <h1>Solicitar cotización</h1>
+    <p>Complete el formulario guiado y recibirá una propuesta personalizada. Proceso rápido, sin compromiso.</p>
+  </div>
+</section>
+
+<!-- WIZARD -->
+<section class="g-section g-section-white" style="padding:60px 0 80px;">
+  <div class="g-wrap">
+    <div class="g-wizard-wrap">
+
+      <!-- PROGRESS BAR -->
+      <div class="g-wizard-progress" id="wizardProgress">
+        <div class="g-wizard-step-dot active" data-step="1">1. Datos</div>
+        <div class="g-wizard-step-dot" data-step="2">2. Producto</div>
+        <div class="g-wizard-step-dot" data-step="3">3. Fórmula</div>
+        <div class="g-wizard-step-dot" data-step="4">4. Desarrollo</div>
+        <div class="g-wizard-step-dot" data-step="5">5. Envases</div>
+        <div class="g-wizard-step-dot" data-step="6">6. Packaging</div>
+        <div class="g-wizard-step-dot" data-step="7">7. Resumen</div>
+      </div>
+
+      <!-- PASO 1: Datos del cliente -->
+      <div class="g-wizard-panel active" id="step1">
+        <div class="g-step-header">
+          <span class="g-step-num">Paso 1 de 7</span>
+          <h3>Datos de contacto</h3>
+          <p>Para enviarle la cotización necesitamos sus datos. Todo queda en estricta confidencialidad.</p>
+        </div>
+        <form style="display:flex;flex-direction:column;gap:18px;">
+          <div class="g-field-group">
+            <div class="g-field">
+              <label>Nombre *</label>
+              <input type="text" id="f_nombre" placeholder="Su nombre completo">
+            </div>
+            <div class="g-field">
+              <label>Empresa / Marca</label>
+              <input type="text" id="f_empresa" placeholder="Nombre de su empresa o marca">
+            </div>
+          </div>
+          <div class="g-field-group">
+            <div class="g-field">
+              <label>Email *</label>
+              <input type="email" id="f_email" placeholder="su@email.com">
+            </div>
+            <div class="g-field">
+              <label>WhatsApp *</label>
+              <input type="tel" id="f_wa" placeholder="+54 9 11 xxxxxxxx">
+            </div>
+          </div>
+        </form>
+        <div class="g-wizard-nav">
+          <div></div>
+          <button class="g-btn-next" onclick="goNext(1)">Continuar →</button>
+        </div>
+      </div>
+
+      <!-- PASO 2: Tipo de producto + cantidad -->
+      <div class="g-wizard-panel" id="step2">
+        <div class="g-step-header">
+          <span class="g-step-num">Paso 2 de 7</span>
+          <h3>Tipo de producto y cantidad</h3>
+          <p>Seleccione qué producto desea fabricar y la cantidad estimada del primer lote.</p>
+        </div>
+
+        <div style="margin-bottom:22px;">
+          <label style="display:block;font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#3a4a5a;margin-bottom:12px;">Tipo de producto *</label>
+          <div class="g-options-grid" id="productoOpts">
+            <label class="g-option-label" onclick="selectOption(this,'producto')">
+              <span class="g-option-check"></span> Serum facial
+            </label>
+            <label class="g-option-label" onclick="selectOption(this,'producto')">
+              <span class="g-option-check"></span> Crema facial
+            </label>
+            <label class="g-option-label" onclick="selectOption(this,'producto')">
+              <span class="g-option-check"></span> Crema corporal
+            </label>
+            <label class="g-option-label" onclick="selectOption(this,'producto')">
+              <span class="g-option-check"></span> Shampoo
+            </label>
+            <label class="g-option-label" onclick="selectOption(this,'producto')">
+              <span class="g-option-check"></span> Acondicionador
+            </label>
+            <label class="g-option-label" onclick="selectOption(this,'producto')">
+              <span class="g-option-check"></span> Gel limpiador
+            </label>
+            <label class="g-option-label" onclick="selectOption(this,'producto')">
+              <span class="g-option-check"></span> Body Splash
+            </label>
+            <label class="g-option-label" onclick="selectOption(this,'producto')">
+              <span class="g-option-check"></span> Perfume
+            </label>
+            <label class="g-option-label" onclick="selectOption(this,'producto')">
+              <span class="g-option-check"></span> Otro producto
+            </label>
+          </div>
+        </div>
+
+        <div>
+          <label style="display:block;font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#3a4a5a;margin-bottom:12px;">Cantidad estimada (unidades) *</label>
+          <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;" id="cantidadOpts">
+            <label class="g-option-label" style="flex-direction:column;text-align:center;padding:16px 8px;font-size:15px;" onclick="selectOption(this,'cantidad')">
+              <span class="g-option-check" style="margin:0 auto 6px;"></span> 500
+            </label>
+            <label class="g-option-label" style="flex-direction:column;text-align:center;padding:16px 8px;font-size:15px;" onclick="selectOption(this,'cantidad')">
+              <span class="g-option-check" style="margin:0 auto 6px;"></span> 1.000
+            </label>
+            <label class="g-option-label" style="flex-direction:column;text-align:center;padding:16px 8px;font-size:15px;" onclick="selectOption(this,'cantidad')">
+              <span class="g-option-check" style="margin:0 auto 6px;"></span> 3.000
+            </label>
+            <label class="g-option-label" style="flex-direction:column;text-align:center;padding:16px 8px;font-size:15px;" onclick="selectOption(this,'cantidad')">
+              <span class="g-option-check" style="margin:0 auto 6px;"></span> 5.000
+            </label>
+            <label class="g-option-label" style="flex-direction:column;text-align:center;padding:16px 8px;font-size:15px;" onclick="selectOption(this,'cantidad')">
+              <span class="g-option-check" style="margin:0 auto 6px;"></span> +10.000
+            </label>
+          </div>
+        </div>
+
+        <div class="g-wizard-nav">
+          <button class="g-btn-back" onclick="goBack(2)">← Atrás</button>
+          <button class="g-btn-next" onclick="goNext(2)">Continuar →</button>
+        </div>
+      </div>
+
+      <!-- PASO 3: ¿Tiene fórmula? -->
+      <div class="g-wizard-panel" id="step3">
+        <div class="g-step-header">
+          <span class="g-step-num">Paso 3 de 7</span>
+          <h3>¿Posee fórmula propia?</h3>
+          <p>Si ya cuenta con una fórmula desarrollada, podemos validarla y producirla. Si no, nuestro equipo la desarrolla para usted.</p>
+        </div>
+        <div class="g-yn-grid" id="formulaOpts">
+          <label class="g-yn-label" onclick="selectYN(this,'formula')">
+            <span style="font-size:24px;">✅</span> Sí, tengo fórmula
+          </label>
+          <label class="g-yn-label" onclick="selectYN(this,'formula')">
+            <span style="font-size:24px;">❌</span> No, necesito fórmula
+          </label>
+        </div>
+        <div class="g-wizard-nav">
+          <button class="g-btn-back" onclick="goBack(3)">← Atrás</button>
+          <button class="g-btn-next" onclick="goNext(3)">Continuar →</button>
+        </div>
+      </div>
+
+      <!-- PASO 4: ¿Necesita desarrollo? -->
+      <div class="g-wizard-panel" id="step4">
+        <div class="g-step-header">
+          <span class="g-step-num">Paso 4 de 7</span>
+          <h3>¿Necesita que desarrollemos su producto?</h3>
+          <p>Podemos desarrollar la fórmula desde cero o adaptar desarrollos existentes de nuestro banco. Proceso ágil y con pruebas incluidas.</p>
+        </div>
+        <div class="g-yn-grid" id="desarrolloOpts">
+          <label class="g-yn-label" onclick="selectYN(this,'desarrollo')">
+            <span style="font-size:24px;">✅</span> Sí, necesito desarrollo
+          </label>
+          <label class="g-yn-label" onclick="selectYN(this,'desarrollo')">
+            <span style="font-size:24px;">❌</span> No, ya tengo todo definido
+          </label>
+        </div>
+        <div class="g-wizard-nav">
+          <button class="g-btn-back" onclick="goBack(4)">← Atrás</button>
+          <button class="g-btn-next" onclick="goNext(4)">Continuar →</button>
+        </div>
+      </div>
+
+      <!-- PASO 5: ¿Posee envases? -->
+      <div class="g-wizard-panel" id="step5">
+        <div class="g-step-header">
+          <span class="g-step-num">Paso 5 de 7</span>
+          <h3>¿Posee sus propios envases?</h3>
+          <p>Si ya cuenta con envases, los recibimos y coordinamos el proceso de envasado. Si no, podemos conseguirlos por usted.</p>
+        </div>
+        <div class="g-yn-grid" id="envasesOpts">
+          <label class="g-yn-label" onclick="selectYN(this,'envases')">
+            <span style="font-size:24px;">✅</span> Sí, tengo mis envases
+          </label>
+          <label class="g-yn-label" onclick="selectYN(this,'envases')">
+            <span style="font-size:24px;">❌</span> No tengo envases
+          </label>
+        </div>
+        <div class="g-wizard-nav">
+          <button class="g-btn-back" onclick="goBack(5)">← Atrás</button>
+          <button class="g-btn-next" onclick="goNext(5)">Continuar →</button>
+        </div>
+      </div>
+
+      <!-- PASO 6: ¿Genus consigue envases? -->
+      <div class="g-wizard-panel" id="step6">
+        <div class="g-step-header">
+          <span class="g-step-num">Paso 6 de 7</span>
+          <h3>¿Necesita que Genus consiga los envases?</h3>
+          <p>Contamos con una red de proveedores especializados en packaging cosmético. Goteros, airless, potes, botellas, tubos y perfumería.</p>
+        </div>
+        <div class="g-yn-grid" id="packagingOpts">
+          <label class="g-yn-label" onclick="selectYN(this,'packaging')">
+            <span style="font-size:24px;">✅</span> Sí, que Genus los consiga
+          </label>
+          <label class="g-yn-label" onclick="selectYN(this,'packaging')">
+            <span style="font-size:24px;">❌</span> No, ya tengo proveedor
+          </label>
+        </div>
+        <div class="g-wizard-nav">
+          <button class="g-btn-back" onclick="goBack(6)">← Atrás</button>
+          <button class="g-btn-next" onclick="goNext(6)">Continuar →</button>
+        </div>
+      </div>
+
+      <!-- PASO 7: Comentarios + Resumen -->
+      <div class="g-wizard-panel" id="step7">
+        <div class="g-step-header">
+          <span class="g-step-num">Paso 7 de 7</span>
+          <h3>Comentarios adicionales</h3>
+          <p>Si tiene alguna aclaración, especificación técnica o consulta adicional, este es el momento. También puede enviar sin completar este campo.</p>
+        </div>
+
+        <div class="g-field" style="margin-bottom:28px;">
+          <label>Comentarios o especificaciones adicionales (opcional)</label>
+          <textarea id="f_comentarios" placeholder="Ej: El producto necesita activo de vitamina C, packaging premium, línea vegana, certificación específica..." style="min-height:110px;"></textarea>
+        </div>
+
+        <!-- Resumen -->
+        <div class="g-summary-card" id="summaryCard">
+          <h4>Resumen de su solicitud</h4>
+          <!-- Llenado por JS -->
+        </div>
+
+        <div class="g-wizard-nav">
+          <button class="g-btn-back" onclick="goBack(7)">← Atrás</button>
+          <button class="g-btn-final" onclick="submitQuote()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.089.539 4.048 1.481 5.751L0 24l6.389-1.474A11.944 11.944 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.803 9.803 0 0 1-5.003-1.372l-.359-.213-3.721.858.88-3.62-.234-.372A9.795 9.795 0 0 1 2.182 12C2.182 6.578 6.578 2.182 12 2.182S21.818 6.578 21.818 12 17.422 21.818 12 21.818z"/></svg>
+            SOLICITAR PRESUPUESTO
+          </button>
+        </div>
+      </div>
+
+      <!-- SUCCESS STATE -->
+      <div class="g-success" id="successState">
+        <div class="g-success-icon">✓</div>
+        <h2>¡Solicitud enviada!</h2>
+        <p>Redirigiendo a WhatsApp para confirmar su solicitud con nuestro equipo.<br>Nos pondremos en contacto a la brevedad.</p>
+        <a class="g-btn-primary" href="index.html">← Volver al inicio</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="g-footer">
+  <div class="g-footer-inner">
+    <img class="g-footer-logo" src="assets/logo-genus.png" alt="Laboratorio Genus">
+    <div class="g-footer-info">
+      <strong>Laboratorio Genus</strong>
+      ventas@laboratoriogenus.com.ar<br>
+      +54 9 11 2498-0861 · Buenos Aires, Argentina
+    </div>
+    <a class="g-footer-cta" href="contacto.html">Contactarnos →</a>
+  </div>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var hamBtn = document.getElementById('hamburger');
+  var navLinks = document.querySelector('.g-nav-links');
+  if (hamBtn && navLinks) {
+    hamBtn.addEventListener('click', function () {
+      navLinks.classList.toggle('open');
+    });
+  }
+});
+</script>
+</body>
+</html>
