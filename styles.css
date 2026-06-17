@@ -849,6 +849,19 @@ a { text-decoration: none; color: inherit; }
   /* Features strip */
   .hf-inner {
         grid-template-columns: 1fr;
+     @media (max-width: 768px){
+
+  .hh-img-wrap{
+    max-width: 85%;
+    margin: 0 auto;
+  }
+
+  .hh-img-wrap svg{
+    width: 100%;
+    height: auto;
+  }
+
+}
         border-radius: 12px;
   }
 
