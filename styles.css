@@ -350,7 +350,11 @@ a { text-decoration: none; color: inherit; }
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(to right, #eaf6f9 0%, rgba(234,246,249,0) 26%);
+    background: linear-gradient(
+      to right,
+      rgba(255,255,255,.12) 0%,
+      rgba(255,255,255,0) 15%
+    );
     pointer-events: none;
 }
 
