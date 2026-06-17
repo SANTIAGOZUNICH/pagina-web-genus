@@ -882,21 +882,19 @@ a { text-decoration: none; color: inherit; }
 
   /* Footer */
   .footer-grid { flex-direction: column; align-items: flex-start; }
- 
-   @media (max-width: 768px) {
+ @media (max-width: 768px) {
+
   .hh-right {
     width: 100% !important;
-    max-width: 100% !important;
-    overflow: hidden !important;
     display: flex !important;
     justify-content: center !important;
+    overflow: hidden !important;
   }
 
   .hh-img-wrap {
-    width: 82% !important;
-    max-width: 300px !important;
+    width: 92% !important;
+    max-width: 380px !important;
     margin: 0 auto !important;
-    overflow: hidden !important;
   }
 
   .hh-img-wrap svg {
@@ -904,6 +902,8 @@ a { text-decoration: none; color: inherit; }
     height: auto !important;
     display: block !important;
   }
+
+}
 }
 }
 
