@@ -15,10 +15,10 @@
     {
       "source": "/contacto",
       "destination": "/contacto.html"
-    }
+    },
         {
       "source": "/llave-en-mano",
       "destination": "/llave-en-mano.html"
-    }
+    },
   ]
 }
