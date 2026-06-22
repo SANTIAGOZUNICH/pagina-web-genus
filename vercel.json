@@ -19,6 +19,14 @@
     {
       "source": "/llave-en-mano",
       "destination": "/llave-en-mano.html"
+    },
+      {
+      "source": "/crea-tu-producto",
+      "destination": "/desarrolla-tu-producto.html"
+    },
+      {
+      "source": "/cotizador",
+      "destination": "/cotizador.html"
     }
   ]
 }
