@@ -717,7 +717,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function toggleActivo(name, chip) {
-    var idx = dtpState.activos./Of(name);
+    var idx = dtpState.activos.indexOf(name);
     if (idx > -1) {
       dtpState.activos.splice(idx, 1);
       chip.classList.remove('selected');
