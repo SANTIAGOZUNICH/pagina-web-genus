@@ -227,9 +227,16 @@ ${renderLabelText(90, 225, marcaLabel, {maxWidth:68, fontSize:14, letterSpacing:
 <rect x="72" y="82" width="6" height="14" rx="3" fill="white" opacity=".28"/>
 <path d="M72,89 Q90,87 108,89" stroke="rgba(0,22,38,.15)" stroke-width=".8" fill="none"/>
 
-<!-- DROPPER TUBE -->
-<rect x="88.8" y="46" width="2.4" height="36" rx="1.2" fill="rgba(170,198,214,.78)"/>
-<rect x="89.3" y="48" width="1.0" height="30" rx=".5" fill="white" opacity=".40"/>
+<-- PIPETA INTERNA -->
+<rect x="88.5" y="104" width="3" height="125" rx="1.5"
+      fill="rgba(170,198,214,.42)"/>
+
+<rect x="89.2" y="108" width="1.2" height="112" rx=".6"
+      fill="rgba(255,255,255,.38)"/>
+
+<path d="M90,220 Q90,236 86,244 Q82,251 90,256 Q98,251 94,244 Q90,236 90,220 Z"
+      fill="${c.drop}" opacity=".72"/>
+
 </svg>`;
 }
 
