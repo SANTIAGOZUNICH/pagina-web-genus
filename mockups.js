@@ -350,8 +350,8 @@ function svgCrema(color, size, marca, nombreProducto) {
 <rect x="22" y="182" width="216" height="8" rx="4" fill="rgba(30,48,62,.20)"/>
 
 <!-- aro superior del pote (platino) -->
-<rect x="18" y="86" width="224" height="14" rx="7" fill="url(#cr-lid-rim-${size})"/>
-<rect x="20" y="88" width="12"  height="10" rx="5" fill="white" opacity=".28"/>
+<rect x="18" y="86" width="224" height="14" rx="7" fill="#121212"/>
+<rect x="20" y="88" width="12" height="10" rx="5" fill="white" opacity=".10"/>
 <rect x="18" y="86" width="224" height="3"  rx="1.5" fill="white" opacity=".22"/>
 
 <!-- ââ REFLECTION LAYER â fijo ââ -->
@@ -574,9 +574,9 @@ function svgGel(color, size, marca, nombreProducto) {
 <!-- base pote -->
 <rect x="18" y="182" width="244" height="8" rx="4" fill="rgba(30,48,62,.22)"/>
 
-<!-- aro superior platino -->
-<rect x="14" y="82" width="252" height="16" rx="8" fill="url(#gl-lid-rim-${size})"/>
-<rect x="16" y="84" width="14"  height="12" rx="6" fill="white" opacity=".28"/>
+<!-- aro superior negro -->
+<rect x="14" y="82" width="252" height="16" rx="8" fill="#121212"/>
+<rect x="16" y="84" width="14" height="12" rx="6" fill="white" opacity=".10"/>
 <rect x="14" y="82" width="252" height="3"  rx="1.5" fill="white" opacity=".20"/>
 
 <!-- ââ REFLECTION LAYER â fijo ââ -->
