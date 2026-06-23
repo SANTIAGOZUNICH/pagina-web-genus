@@ -288,11 +288,11 @@ function svgCrema(color, size, marca, nombreProducto) {
     <stop offset="91%"  stop-color="#1e3040" stop-opacity=".10"/>
     <stop offset="100%" stop-color="#142030" stop-opacity=".22"/>
   </linearGradient>
-  <linearGradient id="cr-lid-${size}" x1="0%" y1="0%" x2="0%" y2="100%">
-    <stop offset="0%"  stop-color="#f8fafb"/>
-    <stop offset="40%" stop-color="#e4edf2"/>
-    <stop offset="100%" stop-color="#ccd8e0"/>
-  </linearGradient>
+  <linearGradient id="cr-lid-${size}">
+  <stop offset="0%" stop-color="#3a3a3a"/>
+  <stop offset="45%" stop-color="#1f1f1f"/>
+  <stop offset="100%" stop-color="#090909"/>
+</linearGradient>
   <linearGradient id="cr-lid-rim-${size}" x1="0%" y1="0%" x2="100%" y2="0%">
     <stop offset="0%"   stop-color="#6a7a84"/>
     <stop offset="20%"  stop-color="#c2d0d8"/>
@@ -368,9 +368,9 @@ ${renderLabelText(130, 133, nombreProducto, {maxWidth:102, fontSize:20, letterSp
 ${renderLabelText(130, 157, marcaLabel, {maxWidth:102, fontSize:17, letterSpacing:2, fill:'#666', minFontSize:9})}
 
 <!-- ââ CAP LAYER â tapa blanca, fija ââ -->
-<ellipse cx="130" cy="74" rx="112" ry="22" fill="url(#cr-lid-${size})"/>
-<ellipse cx="130" cy="70" rx="108" ry="17" fill="#f0f5f8"/>
-<ellipse cx="130" cy="66" rx="102" ry="13" fill="white" opacity=".68"/>
+<ellipse cx="130" cy="84" rx="112" ry="22" fill="url(#cr-lid-${size})"/>
+<ellipse cx="130" cy="80" rx="108" ry="17" fill="#f0f5f8"/>
+<ellipse cx="130" cy="76" rx="102" ry="13" fill="white" opacity=".68"/>
 <ellipse cx="106" cy="64" rx="24"  ry="7" fill="white" opacity=".52" transform="rotate(-16,106,64)"/>
 <ellipse cx="152" cy="60" rx="15"  ry="4.5" fill="white" opacity=".36" transform="rotate(9,152,60)"/>
 <rect x="18" y="86" width="224" height="3" rx="1.5" fill="rgba(80,100,112,.20)"/>
@@ -512,11 +512,11 @@ function svgGel(color, size, marca, nombreProducto) {
     <stop offset="91%"  stop-color="#1c2e3c" stop-opacity=".10"/>
     <stop offset="100%" stop-color="#142030" stop-opacity=".22"/>
   </linearGradient>
-  <linearGradient id="gl-lid-${size}" x1="0%" y1="0%" x2="0%" y2="100%">
-    <stop offset="0%"  stop-color="#f6f9fb"/>
-    <stop offset="40%" stop-color="#e2ecf2"/>
-    <stop offset="100%" stop-color="#c8d6e0"/>
-  </linearGradient>
+<linearGradient id="gl-lid-${size}">
+  <stop offset="0%" stop-color="#3a3a3a"/>
+  <stop offset="45%" stop-color="#1f1f1f"/>
+  <stop offset="100%" stop-color="#090909"/>
+</linearGradient>
   <linearGradient id="gl-lid-rim-${size}" x1="0%" y1="0%" x2="100%" y2="0%">
     <stop offset="0%"   stop-color="#68787e"/>
     <stop offset="20%"  stop-color="#bcccd4"/>
@@ -593,9 +593,9 @@ ${renderLabelText(140, 131, nombreProducto, {maxWidth:94, fontSize:16, letterSpa
 ${renderLabelText(140, 156, marcaLabel, {maxWidth:94, fontSize:15, letterSpacing:2, fill:'#666', minFontSize:9})}
 
 <!-- ââ CAP LAYER â tapa blanca amplia, fija ââ -->
-<ellipse cx="140" cy="68" rx="128" ry="24" fill="url(#gl-lid-${size})"/>
-<ellipse cx="140" cy="63" rx="124" ry="19" fill="#eff5f8"/>
-<ellipse cx="140" cy="59" rx="118" ry="14" fill="white" opacity=".68"/>
+<ellipse cx="140" cy="78" rx="128" ry="24" fill="url(#gl-lid-${size})"/>
+<ellipse cx="140" cy="73" rx="124" ry="19" fill="#eff5f8"/>
+<ellipse cx="140" cy="69" rx="118" ry="14" fill="white" opacity=".68"/>
 <ellipse cx="114" cy="57" rx="30"  ry="8"  fill="white" opacity=".52" transform="rotate(-15,114,57)"/>
 <ellipse cx="162" cy="53" rx="18"  ry="5"  fill="white" opacity=".36" transform="rotate(9,162,53)"/>
 <!-- aro inferior tapa -->
