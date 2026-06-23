@@ -368,11 +368,11 @@ ${renderLabelText(130, 133, nombreProducto, {maxWidth:102, fontSize:20, letterSp
 ${renderLabelText(130, 157, marcaLabel, {maxWidth:102, fontSize:17, letterSpacing:2, fill:'#666', minFontSize:9})}
 
 <!-- ââ CAP LAYER â tapa blanca, fija ââ -->
-<ellipse cx="130" cy="84" rx="112" ry="22" fill="url(#cr-lid-${size})"/>
-<ellipse cx="130" cy="80" rx="108" ry="17" fill="#f0f5f8"/>
-<ellipse cx="130" cy="76" rx="102" ry="13" fill="white" opacity=".68"/>
-<ellipse cx="106" cy="64" rx="24"  ry="7" fill="white" opacity=".52" transform="rotate(-16,106,64)"/>
-<ellipse cx="152" cy="60" rx="15"  ry="4.5" fill="white" opacity=".36" transform="rotate(9,152,60)"/>
+<ellipse cx="130" cy="84" rx="112" ry="22" fill="#151515"/>
+<ellipse cx="130" cy="80" rx="108" ry="17" fill="#202020"/>
+<ellipse cx="130" cy="76" rx="102" ry="13" fill="#2b2b2b"/>
+<ellipse cx="106" cy="64" rx="24" ry="7" fill="white" opacity=".10"/>
+<ellipse cx="152" cy="60" rx="15" ry="4.5" fill="white" opacity=".06"/>
 <rect x="18" y="86" width="224" height="3" rx="1.5" fill="rgba(80,100,112,.20)"/>
 </svg>`;
 }
