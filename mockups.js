@@ -324,19 +324,6 @@ function svgCrema(color, size, marca, nombreProducto) {
   <!-- tono base mÃ¡s oscuro en el fondo -->
   <rect x="20" y="165" width="220" height="25" fill="${c.edge}" opacity=".28"/>
 </g>
-<!-- CREMA ENCIMA del pote (copete, fuera de la clipPath del cuerpo) -->
-<g clip-path="url(#cr-cream-clip-${size})">
-  <!-- masa base de crema -->
-  <ellipse cx="130" cy="92" rx="104" ry="36" fill="${c.base}"/>
-  <!-- copete central -->
-  <path d="M98,82 Q110,48 130,40 Q150,48 162,82 Q148,72 130,68 Q112,72 98,82 Z" fill="${c.surface}"/>
-  <!-- sombra que da volumen al copete -->
-  <path d="M72,88 Q98,62 130,56 Q162,62 188,88" fill="none" stroke="${c.edge}" stroke-width="10" stroke-opacity=".28" stroke-linecap="round"/>
-  <path d="M88,94 Q112,74 130,68 Q148,74 172,94" fill="none" stroke="${c.edge}" stroke-width="6" stroke-opacity=".20" stroke-linecap="round"/>
-  <!-- brillo superficie crema -->
-  <ellipse cx="108" cy="54" rx="14" ry="6" fill="white" opacity=".42" transform="rotate(-18,108,54)"/>
-  <ellipse cx="148" cy="50" rx="8"  ry="4" fill="white" opacity=".28" transform="rotate(10,148,50)"/>
-</g>
 
 <!-- ââ GLASS LAYER â paredes encima del fill ââ -->
 <rect x="20" y="94" width="220" height="96" rx="8" fill="url(#cr-glass-${size})"/>
