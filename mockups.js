@@ -216,21 +216,35 @@ ${renderLabelText(90, 203, nombreProducto, {maxWidth:68, fontSize:15, letterSpac
 <line x1="56" y1="210" x2="124" y2="210" stroke="#aaa" stroke-width=".75"/>
 ${renderLabelText(90, 225, marcaLabel, {maxWidth:68, fontSize:14, letterSpacing:2, fill:'#666', minFontSize:8})}
 
-<!-- TETINA NEGRA -->
-<ellipse cx="90" cy="60" rx="14" ry="22"
-         fill="#171717"/>
+<!-- TETINA BLANCA PREMIUM -->
+<path d="
+M78 66
+Q78 48 90 34
+Q102 48 102 66
+Q102 82 98 92
+Q95 98 90 100
+Q85 98 82 92
+Q78 82 78 66
+Z"
+fill="#f5f5f5"/>
 
-<ellipse cx="86" cy="50" rx="3" ry="6"
-         fill="rgba(255,255,255,.20)"/>
+<path d="
+M82 58
+Q84 48 90 40"
+stroke="rgba(255,255,255,.75)"
+stroke-width="2"
+fill="none"
+stroke-linecap="round"/>
+         <rect x="70" y="80" width="40" height="20" rx="7"
+fill="#f5f5f5"/>
 
-<ellipse cx="90" cy="77" rx="9" ry="2"
-         fill="rgba(255,255,255,.10)"/>
-         
+<rect x="72" y="97" width="36" height="8" rx="4"
+fill="#ececec"/>
 <!-- COLLAR / CAP ASSEMBLY -->
-<rect x="72" y="97" width="36" height="8" rx="4" fill="url(#sr-cap-${size})"/>
-<rect x="72" y="97" width="36" height="8" rx="4" fill="url(#sr-cap-v-${size})"/>
-<rect x="70" y="84" width="40" height="20" rx="7" fill="url(#sr-cap-${size})"/>
-<rect x="70" y="84" width="40" height="20" rx="7" fill="url(#sr-cap-v-${size})"/>
+<rect x="72" y="97" width="36" height="8" rx="4" fill="#ececec"/>
+<rect x="72" y="97" width="36" height="8" rx="4" fill="#ececec"/>
+<rect x="70" y="84" width="40" height="20" rx="7" fill="#f5f5f5"/>
+<rect x="70" y="84" width="40" height="20" rx="7" fill="#f5f5f5"/>
 <rect x="70" y="80" width="40" height="3"  rx="1.5" fill="rgba(255,255,255,.26)"/>
 <rect x="70" y="87" width="40" height="1"  rx=".5"  fill="rgba(255,255,255,.12)"/>
 <rect x="70" y="97" width="40" height="2"  rx="1"   fill="rgba(30,50,65,.26)"/>
