@@ -217,11 +217,11 @@ ${renderLabelText(90, 203, nombreProducto, {maxWidth:68, fontSize:15, letterSpac
 ${renderLabelText(90, 225, marcaLabel, {maxWidth:68, fontSize:14, letterSpacing:2, fill:'#666', minFontSize:8})}
 
 <!-- TETINA BLANCA -->
-<ellipse cx="90" cy="58" rx="12" ry="18"
+<ellipse cx="90" cy="60" rx="14" ry="22"
          fill="#f8f8f8"/>
-
+         
 <ellipse cx="86" cy="50" rx="3" ry="6"
-         fill="white"
+         fill="black"
          opacity=".8"/>
 
 <ellipse cx="90" cy="73" rx="8" ry="2"
