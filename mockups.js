@@ -217,15 +217,15 @@ ${renderLabelText(90, 203, nombreProducto, {maxWidth:68, fontSize:15, letterSpac
 ${renderLabelText(90, 225, marcaLabel, {maxWidth:68, fontSize:14, letterSpacing:2, fill:'#666', minFontSize:8})}
 
 <!-- TETINA BLANCA -->
-<ellipse cx="90" cy="24" rx="11" ry="20"
-         fill="#f4f4f4"/>
+<ellipse cx="90" cy="58" rx="12" ry="18"
+         fill="#f8f8f8"/>
 
-<ellipse cx="86" cy="14" rx="3.5" ry="7"
+<ellipse cx="86" cy="50" rx="3" ry="6"
          fill="white"
-         opacity=".75"/>
+         opacity=".8"/>
 
-<ellipse cx="90" cy="42" rx="8" ry="2"
-         fill="rgba(0,0,0,.12)"/>
+<ellipse cx="90" cy="73" rx="8" ry="2"
+         fill="rgba(0,0,0,.10)"/>
          
 <!-- COLLAR / CAP ASSEMBLY -->
 <rect x="72" y="97" width="36" height="8" rx="4" fill="url(#sr-cap-${size})"/>
