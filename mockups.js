@@ -230,8 +230,8 @@ ${renderLabelText(90, 225, marcaLabel, {maxWidth:68, fontSize:14, letterSpacing:
 <!-- DROPPER TUBE -->
 <rect x="88.8" y="46" width="2.4" height="36" rx="1.2" fill="rgba(170,198,214,.78)"/>
 <rect x="89.3" y="48" width="1.0" height="30" rx=".5" fill="white" opacity=".40"/>
-
-
+;
+}
 
 
 /* ============================================================
