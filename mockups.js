@@ -97,130 +97,151 @@ function svgSerum(color, size, marca, nombreProducto) {
   nombreProducto = nombreProducto || 'SERUM';
   const w = size, h = Math.round(size * 1.62);
 
+  // Premium tapered-shoulder bottle silhouette — curved inward to the neck
+  const bodyPath = "M46,152 Q44,160 44,172 L44,252 Q44,264 56,266 L124,266 Q136,264 136,252 L136,172 Q136,160 134,152 Q126,138 90,136 Q54,138 46,152 Z";
+
   return `<svg width="${w}" height="${h}" viewBox="0 0 180 292" xmlns="http://www.w3.org/2000/svg">
 <defs>
-  <!-- clip para el interior del frasco (fill-layer solo vive aquÃ­) -->
   <clipPath id="sr-fill-clip-${size}">
-    <path d="M38,148 L38,252 Q38,264 50,264 L130,264 Q142,264 142,252 L142,148 Q142,136 130,136 L50,136 Q38,136 38,148 Z"/>
+    <path d="${bodyPath}"/>
   </clipPath>
-  <!-- clip para el cuello -->
   <clipPath id="sr-neck-clip-${size}">
-    <rect x="72" y="102" width="36" height="36"/>
+    <path d="M74,102 L106,102 L106,140 Q98,137 90,137 Q82,137 74,140 Z"/>
   </clipPath>
-  <!-- gradiente del vidrio: bordes con tinte, centro claro -->
+  <!-- Premium glass gradient — stronger edge contrast, clean centre -->
   <linearGradient id="sr-glass-grad-${size}" x1="0%" y1="0%" x2="100%" y2="0%">
-    <stop offset="0%"   stop-color="#1a2a35" stop-opacity=".18"/>
-    <stop offset="8%"   stop-color="#2a4050" stop-opacity=".08"/>
-    <stop offset="35%"  stop-color="#e8f4f8" stop-opacity=".04"/>
-    <stop offset="65%"  stop-color="#ddeef5" stop-opacity=".06"/>
-    <stop offset="92%"  stop-color="#1e3040" stop-opacity=".10"/>
-    <stop offset="100%" stop-color="#152030" stop-opacity=".20"/>
+    <stop offset="0%"   stop-color="#0d1820" stop-opacity=".30"/>
+    <stop offset="6%"   stop-color="#1e3040" stop-opacity=".14"/>
+    <stop offset="22%"  stop-color="#e4f2f8" stop-opacity=".05"/>
+    <stop offset="50%"  stop-color="#f2f9fc" stop-opacity=".02"/>
+    <stop offset="78%"  stop-color="#d4eaf4" stop-opacity=".06"/>
+    <stop offset="94%"  stop-color="#182838" stop-opacity=".13"/>
+    <stop offset="100%" stop-color="#0a1620" stop-opacity=".26"/>
   </linearGradient>
-  <!-- fondo de la sombra base -->
+  <!-- Vertical sheen for subtle facets -->
+  <linearGradient id="sr-sheen-${size}" x1="0%" y1="0%" x2="0%" y2="100%">
+    <stop offset="0%"   stop-color="rgba(255,255,255,.10)"/>
+    <stop offset="40%"  stop-color="rgba(255,255,255,.04)"/>
+    <stop offset="100%" stop-color="rgba(10,24,38,.08)"/>
+  </linearGradient>
   <radialGradient id="sr-shadow-${size}" cx="50%" cy="50%" r="50%">
-    <stop offset="0%"  stop-color="rgba(7,23,47,.28)"/>
+    <stop offset="0%"  stop-color="rgba(7,23,47,.34)"/>
     <stop offset="100%" stop-color="transparent"/>
   </radialGradient>
-  <!-- gradiente tapa gotero (platino) -->
+  <!-- Platinum collar — 7-stop metallic sheen -->
   <linearGradient id="sr-cap-${size}" x1="0%" y1="0%" x2="100%" y2="0%">
-    <stop offset="0%"   stop-color="#6a7880"/>
-    <stop offset="15%"  stop-color="#b8c8d0"/>
-    <stop offset="38%"  stop-color="#e8f0f4"/>
-    <stop offset="60%"  stop-color="#c0ced6"/>
-    <stop offset="100%" stop-color="#5e6e78"/>
+    <stop offset="0%"   stop-color="#4e5e68"/>
+    <stop offset="10%"  stop-color="#88a0ac"/>
+    <stop offset="26%"  stop-color="#d8e8f0"/>
+    <stop offset="44%"  stop-color="#f4f8fa"/>
+    <stop offset="60%"  stop-color="#e0ecf2"/>
+    <stop offset="78%"  stop-color="#96b0bc"/>
+    <stop offset="100%" stop-color="#485860"/>
   </linearGradient>
-  <!-- bulbo gotero -->
-  <radialGradient id="sr-bulb-${size}" cx="35%" cy="28%" r="65%">
-    <stop offset="0%"   stop-color="#f8fafc"/>
-    <stop offset="45%"  stop-color="#dde8ee"/>
-    <stop offset="100%" stop-color="#b0c4ce"/>
+  <linearGradient id="sr-cap-v-${size}" x1="0%" y1="0%" x2="0%" y2="100%">
+    <stop offset="0%"   stop-color="rgba(255,255,255,.22)"/>
+    <stop offset="55%"  stop-color="rgba(255,255,255,.02)"/>
+    <stop offset="100%" stop-color="rgba(0,20,35,.18)"/>
+  </linearGradient>
+  <!-- Satin rubber bulb with 3-D depth -->
+  <radialGradient id="sr-bulb-${size}" cx="30%" cy="24%" r="62%">
+    <stop offset="0%"   stop-color="#f2f6f8"/>
+    <stop offset="28%"  stop-color="#d4e2ea"/>
+    <stop offset="65%"  stop-color="#a8c0cc"/>
+    <stop offset="100%" stop-color="#78949e"/>
+  </radialGradient>
+  <radialGradient id="sr-bulb-rim-${size}" cx="50%" cy="50%" r="50%">
+    <stop offset="72%"  stop-color="rgba(100,135,150,.00)"/>
+    <stop offset="100%" stop-color="rgba(60,90,105,.28)"/>
   </radialGradient>
 </defs>
 
-<!-- sombra base -->
-<ellipse cx="90" cy="276" rx="62" ry="10" fill="url(#sr-shadow-${size})"/>
+<!-- GROUND SHADOW -->
+<ellipse cx="90" cy="278" rx="56" ry="8" fill="url(#sr-shadow-${size})"/>
 
-<!-- ââ GLASS LAYER â parte trasera (se dibuja primero) ââ -->
-<!-- base / anillo inferior del frasco -->
-<rect x="36" y="256" width="108" height="10" rx="5" fill="#b8cdd8" opacity=".35"/>
-<!-- cuerpo vidrio â contorno exterior negro suave (como en la referencia) -->
-<path d="M38,148 L38,252 Q38,264 50,264 L130,264 Q142,264 142,252 L142,148 Q142,136 130,136 L50,136 Q38,136 38,148 Z"
-      fill="rgba(240,250,255,0.06)" stroke="#1e2e3a" stroke-width="2.2" stroke-linejoin="round"/>
+<!-- BASE RING -->
+<rect x="42" y="258" width="96" height="9" rx="4.5" fill="#a8c2ce" opacity=".42"/>
+<rect x="44" y="258" width="92" height="4" rx="2" fill="rgba(255,255,255,.18)"/>
 
-<!-- ââ FILL LAYER â Ãºnico que cambia de color ââ -->
+<!-- BOTTLE BODY back shell -->
+<path d="${bodyPath}"
+      fill="rgba(232,248,255,0.05)" stroke="#16263a" stroke-width="2.0" stroke-linejoin="round"/>
+
+<!-- FILL LAYER -->
 <g clip-path="url(#sr-fill-clip-${size})">
-  <!-- fondo base del lÃ­quido -->
-  <rect x="38" y="136" width="104" height="128" fill="${c.base}"/>
-  <!-- gradiente de profundidad: lado izquierdo mÃ¡s oscuro -->
-  <rect x="38" y="136" width="22" height="128" fill="${c.edge}" opacity=".55"/>
-  <!-- gradiente derecho -->
-  <rect x="120" y="136" width="22" height="128" fill="${c.edge}" opacity=".35"/>
-  <!-- superficie del lÃ­quido (menisco) -->
-  <path d="M38,155 Q50,148 90,150 Q130,148 142,155" fill="${c.surface}" opacity=".80"/>
-  <!-- brillo interno del lÃ­quido (no es el reflejo del vidrio) -->
-  <ellipse cx="72" cy="160" rx="18" ry="4" fill="${c.surface}" opacity=".55" transform="rotate(-6,72,160)"/>
-  <!-- tubo del gotero sumergido en el lÃ­quido -->
-  <rect x="88" y="150" width="4" height="100" rx="2" fill="rgba(200,225,240,.22)"/>
-  <!-- gota cayendo del tubo -->
-  <path d="M90,230 Q90,242 87,248 Q84,252 90,255 Q96,252 93,248 Q90,242 90,230 Z" fill="${c.drop}" opacity=".88"/>
-  <circle cx="90" cy="255" r="3.5" fill="${c.drop}" opacity=".80"/>
+  <rect x="44" y="136" width="92" height="132" fill="${c.base}"/>
+  <rect x="44" y="136" width="20" height="132" fill="${c.edge}" opacity=".62"/>
+  <rect x="116" y="136" width="20" height="132" fill="${c.edge}" opacity=".40"/>
+  <rect x="44" y="228" width="92" height="40" fill="${c.edge}" opacity=".20"/>
+  <path d="M44,158 Q58,150 90,152 Q122,150 136,158" fill="${c.surface}" opacity=".88"/>
+  <ellipse cx="74" cy="162" rx="16" ry="4" fill="${c.surface}" opacity=".50" transform="rotate(-5,74,162)"/>
+  <rect x="88.5" y="152" width="3" height="98" rx="1.5" fill="rgba(210,232,244,.28)"/>
+  <path d="M90,232 Q90,246 87,252 Q84,257 90,260 Q96,257 93,252 Q90,246 90,232 Z"
+        fill="${c.drop}" opacity=".92"/>
+  <circle cx="90" cy="260" r="3.2" fill="${c.drop}" opacity=".82"/>
 </g>
 
-<!-- ââ GLASS LAYER â paredes encima del fill ââ -->
-<!-- vidrio frontal (encima del fill, transparente con tinte mÃ­nimo) -->
-<path d="M38,148 L38,252 Q38,264 50,264 L130,264 Q142,264 142,252 L142,148 Q142,136 130,136 L50,136 Q38,136 38,148 Z"
-      fill="url(#sr-glass-grad-${size})"/>
-<!-- bordes laterales gruesos vidrio (lÃ­nea interior izq y der) -->
-<line x1="52" y1="138" x2="52" y2="262" stroke="rgba(255,255,255,.12)" stroke-width="2"/>
-<line x1="128" y1="138" x2="128" y2="262" stroke="rgba(0,20,40,.06)" stroke-width="2"/>
+<!-- GLASS SHELL over fill -->
+<path d="${bodyPath}" fill="url(#sr-glass-grad-${size})"/>
+<path d="${bodyPath}" fill="url(#sr-sheen-${size})" opacity=".8"/>
+<line x1="56" y1="142" x2="56" y2="264" stroke="rgba(255,255,255,.16)" stroke-width="1.5"/>
+<line x1="124" y1="142" x2="124" y2="264" stroke="rgba(0,20,40,.07)" stroke-width="1.5"/>
+<path d="M45,196 Q90,194 135,196" stroke="rgba(210,232,245,.14)" stroke-width="1" fill="none"/>
 
-<!-- cuello frasco â vidrio -->
+<!-- NECK -->
 <g clip-path="url(#sr-neck-clip-${size})">
-  <rect x="72" y="102" width="36" height="36" fill="${c.base}" opacity=".30"/>
-  <rect x="72" y="102" width="36" height="36" fill="url(#sr-glass-grad-${size})"/>
+  <rect x="74" y="102" width="32" height="38" fill="${c.base}" opacity=".26"/>
+  <rect x="74" y="102" width="32" height="38" fill="url(#sr-glass-grad-${size})"/>
 </g>
-<rect x="72" y="102" width="36" height="36" rx="3" fill="none" stroke="#1e2e3a" stroke-width="1.8"/>
+<rect x="74" y="102" width="32" height="38" rx="3" fill="none" stroke="#16263a" stroke-width="1.6"/>
+<rect x="77" y="104" width="4" height="34" rx="2" fill="white" opacity=".16"/>
 
-<!-- hombros del frasco -->
-<path d="M50,136 Q44,136 38,148 L38,148 Q44,138 50,138 Z" fill="rgba(30,48,60,.12)"/>
-<path d="M130,136 Q136,136 142,148 L142,148 Q136,138 130,138 Z" fill="rgba(30,48,60,.08)"/>
+<!-- SHOULDER CURVES -->
+<path d="M56,137 Q47,138 46,152" fill="none" stroke="rgba(22,40,56,.22)" stroke-width="2.5" stroke-linecap="round"/>
+<path d="M124,137 Q133,138 134,152" fill="none" stroke="rgba(22,40,56,.14)" stroke-width="2.5" stroke-linecap="round"/>
+<path d="M56,138 Q49,140 47,150" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="1.2" stroke-linecap="round"/>
 
-<!-- ââ REFLECTION LAYER â fijo, nunca cambia ââ -->
-<!-- reflejo frontal izquierdo (largo, cÃ¡lido) -->
-<rect x="44" y="142" width="8" height="114" rx="4" fill="white" opacity=".48"/>
-<!-- reflejo secundario izquierdo -->
-<rect x="55" y="148" width="3" height="88" rx="1.5" fill="white" opacity=".22"/>
-<!-- brillo superior derecho -->
-<ellipse cx="118" cy="148" rx="10" ry="3.5" fill="white" opacity=".30" transform="rotate(10,118,148)"/>
-<!-- destello esquina superior izq -->
-<ellipse cx="50" cy="140" rx="7" ry="4" fill="white" opacity=".55" transform="rotate(-15,50,140)"/>
+<!-- REFLECTIONS -->
+<rect x="50" y="150" width="7" height="106" rx="3.5" fill="white" opacity=".54"/>
+<rect x="60" y="156" width="2.5" height="80" rx="1.2" fill="white" opacity=".24"/>
+<ellipse cx="122" cy="154" rx="9" ry="3.5" fill="white" opacity=".30" transform="rotate(9,122,154)"/>
+<ellipse cx="54" cy="144" rx="7" ry="3.5" fill="white" opacity=".65" transform="rotate(-18,54,144)"/>
+<ellipse cx="90" cy="260" rx="34" ry="5" fill="rgba(200,232,248,.20)"/>
 
-<!-- ââ LABEL LAYER â fijo ââ -->
-<rect x="46" y="180" width="88" height="58" rx="3" fill="white" opacity=".90"/>
-<rect x="48" y="182" width="84" height="54" rx="2" fill="none" stroke="#ccc" stroke-width=".75"/>
+<!-- LABEL -->
+<rect x="47" y="178" width="86" height="60" rx="4.5" fill="white" opacity=".93"/>
+<rect x="49" y="180" width="82" height="56" rx="3.5" fill="none" stroke="#d5d5d5" stroke-width=".6"/>
+<rect x="56" y="181" width="68" height="1.5" rx=".75" fill="rgba(175,148,98,.40)"/>
 ${renderLabelText(90, 203, nombreProducto, {maxWidth:68, fontSize:15, letterSpacing:3.5, fontWeight:300, fill:'#1a1a2e', minFontSize:9})}
 <line x1="56" y1="210" x2="124" y2="210" stroke="#aaa" stroke-width=".75"/>
 ${renderLabelText(90, 225, marcaLabel, {maxWidth:68, fontSize:14, letterSpacing:2, fill:'#666', minFontSize:8})}
 
-<!-- ââ CAP LAYER â tapa platino + bulbo gotero, fijo ââ -->
-<!-- anillo de rosca (collar platino) -->
-<rect x="70" y="90" width="40" height="16" rx="5" fill="url(#sr-cap-${size})"/>
-<rect x="72" y="92" width="7"  height="12" rx="3.5" fill="white" opacity=".28"/>
-<rect x="70" y="90" width="40" height="3"  rx="1.5" fill="white" opacity=".22"/>
-<rect x="70" y="103" width="40" height="3" rx="1" fill="rgba(80,100,110,.28)"/>
-<!-- tubo fino del gotero (parte exterior, sobre la tapa) -->
-<rect x="88.5" y="56" width="3" height="36" rx="1.5" fill="rgba(180,200,212,.70)"/>
-<rect x="89.2" y="58" width="1.2" height="32" rx=".6" fill="white" opacity=".30"/>
-<!-- bulbo goma â grande y redondeado como la referencia -->
-<ellipse cx="90" cy="34" rx="18" ry="22" fill="url(#sr-bulb-${size})"/>
-<ellipse cx="90" cy="33" rx="16" ry="20" fill="none" stroke="rgba(150,175,190,.50)" stroke-width="1"/>
-<!-- brillo del bulbo -->
-<ellipse cx="82" cy="24" rx="6"  ry="8" fill="white" opacity=".52" transform="rotate(-12,82,24)"/>
-<ellipse cx="95" cy="20" rx="3"  ry="4" fill="white" opacity=".32" transform="rotate(8,95,20)"/>
-<!-- base bulbo (uniÃ³n con tubo) -->
-<ellipse cx="90" cy="55" rx="10" ry="4" fill="rgba(160,185,198,.60)"/>
+<!-- COLLAR / CAP ASSEMBLY -->
+<rect x="72" y="97" width="36" height="8" rx="4" fill="url(#sr-cap-${size})"/>
+<rect x="72" y="97" width="36" height="8" rx="4" fill="url(#sr-cap-v-${size})"/>
+<rect x="70" y="80" width="40" height="20" rx="7" fill="url(#sr-cap-${size})"/>
+<rect x="70" y="80" width="40" height="20" rx="7" fill="url(#sr-cap-v-${size})"/>
+<rect x="70" y="80" width="40" height="3"  rx="1.5" fill="rgba(255,255,255,.26)"/>
+<rect x="70" y="87" width="40" height="1"  rx=".5"  fill="rgba(255,255,255,.12)"/>
+<rect x="70" y="97" width="40" height="2"  rx="1"   fill="rgba(30,50,65,.26)"/>
+<rect x="72" y="82" width="6" height="14" rx="3" fill="white" opacity=".28"/>
+<path d="M72,89 Q90,87 108,89" stroke="rgba(0,22,38,.15)" stroke-width=".8" fill="none"/>
+
+<!-- DROPPER TUBE -->
+<rect x="88.8" y="46" width="2.4" height="36" rx="1.2" fill="rgba(170,198,214,.78)"/>
+<rect x="89.3" y="48" width="1.0" height="30" rx=".5" fill="white" opacity=".40"/>
+
+<!-- PREMIUM BULB — elongated elegant pipette -->
+<ellipse cx="90" cy="50" rx="9" ry="3.5" fill="rgba(130,162,178,.52)"/>
+<ellipse cx="90" cy="22" rx="14" ry="26" fill="url(#sr-bulb-${size})"/>
+<ellipse cx="90" cy="22" rx="14" ry="26" fill="url(#sr-bulb-rim-${size})"/>
+<ellipse cx="90" cy="22" rx="14" ry="26" fill="none" stroke="rgba(115,150,168,.38)" stroke-width="1.2"/>
+<ellipse cx="82" cy="11" rx="5" ry="9" fill="white" opacity=".60" transform="rotate(-14,82,11)"/>
+<ellipse cx="97" cy="8"  rx="2.4" ry="3.8" fill="white" opacity=".36" transform="rotate(10,97,8)"/>
+<ellipse cx="90" cy="45" rx="7" ry="2.5" fill="rgba(228,242,250,.44)"/>
 </svg>`;
 }
+
 
 /* ============================================================
    CREMA â pote cilÃ­ndrico de vidrio con crema visible encima
