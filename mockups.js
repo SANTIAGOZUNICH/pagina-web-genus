@@ -593,9 +593,9 @@ ${renderLabelText(140, 131, nombreProducto, {maxWidth:94, fontSize:16, letterSpa
 ${renderLabelText(140, 156, marcaLabel, {maxWidth:94, fontSize:15, letterSpacing:2, fill:'#666', minFontSize:9})}
 
 <!-- ââ CAP LAYER â tapa blanca amplia, fija ââ -->
-<ellipse cx="140" cy="78" rx="128" ry="24" fill="url(#gl-lid-${size})"/>
-<ellipse cx="140" cy="73" rx="124" ry="19" fill="#eff5f8"/>
-<ellipse cx="140" cy="69" rx="118" ry="14" fill="white" opacity=".68"/>
+<ellipse cx="140" cy="78" rx="128" ry="24" fill="#151515"/>
+<ellipse cx="140" cy="73" rx="124" ry="19" fill="#202020"/>
+<ellipse cx="140" cy="69" rx="118" ry="14" fill="#2b2b2b"/>
 <ellipse cx="114" cy="57" rx="30"  ry="8"  fill="white" opacity=".52" transform="rotate(-15,114,57)"/>
 <ellipse cx="162" cy="53" rx="18"  ry="5"  fill="white" opacity=".36" transform="rotate(9,162,53)"/>
 <!-- aro inferior tapa -->
