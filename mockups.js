@@ -231,16 +231,7 @@ ${renderLabelText(90, 225, marcaLabel, {maxWidth:68, fontSize:14, letterSpacing:
 <rect x="88.8" y="46" width="2.4" height="36" rx="1.2" fill="rgba(170,198,214,.78)"/>
 <rect x="89.3" y="48" width="1.0" height="30" rx=".5" fill="white" opacity=".40"/>
 
-<!-- PREMIUM BULB — elongated elegant pipette -->
-<ellipse cx="90" cy="50" rx="9" ry="3.5" fill="rgba(130,162,178,.52)"/>
-<ellipse cx="90" cy="22" rx="14" ry="26" fill="url(#sr-bulb-${size})"/>
-<ellipse cx="90" cy="22" rx="14" ry="26" fill="url(#sr-bulb-rim-${size})"/>
-<ellipse cx="90" cy="22" rx="14" ry="26" fill="none" stroke="rgba(115,150,168,.38)" stroke-width="1.2"/>
-<ellipse cx="82" cy="11" rx="5" ry="9" fill="white" opacity=".60" transform="rotate(-14,82,11)"/>
-<ellipse cx="97" cy="8"  rx="2.4" ry="3.8" fill="white" opacity=".36" transform="rotate(10,97,8)"/>
-<ellipse cx="90" cy="45" rx="7" ry="2.5" fill="rgba(228,242,250,.44)"/>
-</svg>`;
-}
+
 
 
 /* ============================================================
