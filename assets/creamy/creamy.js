@@ -37,6 +37,16 @@
     WHATSAPP: { label: '💬 Hablar con un asesor', style: 'whatsapp', key: 'whatsapp', external: true },
   };
 
+  const CREAMY_AVATAR_SVG = `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <circle cx="24" cy="24" r="22" fill="#D9F0F7"/>
+    <ellipse cx="24" cy="30" rx="12" ry="10" fill="#1E9BC0"/>
+    <rect x="17" y="10" width="14" height="16" rx="4" fill="#fff" stroke="#0D5C73" stroke-width="1.5"/>
+    <circle cx="20" cy="17" r="1.5" fill="#0D5C73"/>
+    <circle cx="28" cy="17" r="1.5" fill="#0D5C73"/>
+    <path d="M20 21c2 2 6 2 8 0" stroke="#0D5C73" stroke-width="1.5" stroke-linecap="round"/>
+    <ellipse cx="24" cy="8" rx="5" ry="3" fill="#1E9BC0"/>
+  </svg>`;
+
   class CreamyAI {
     constructor() {
       this.config = { ...DEFAULT_CONFIG };
@@ -90,19 +100,20 @@
     }
 
     _render() {
-      const avatar = this.config.avatarEmoji;
       const wrapper = document.createElement('div');
       wrapper.id = 'creamy-widget';
       wrapper.className = 'creamy-widget';
       wrapper.innerHTML = `
+        <div class="creamy-backdrop creamy-hidden" id="creamy-backdrop" aria-hidden="true"></div>
         <button class="creamy-fab" id="creamy-fab" aria-label="Abrir chat con Creamy AI" type="button">
-          <span class="creamy-fab-avatar-placeholder creamy-fab-avatar-inner" aria-hidden="true">${avatar}</span>
+          <span class="creamy-fab-avatar" aria-hidden="true">${CREAMY_AVATAR_SVG}</span>
           <span class="creamy-fab-badge" aria-hidden="true"></span>
+          <span class="creamy-fab-tooltip" aria-hidden="true">¿Te ayudo?</span>
         </button>
         <div class="creamy-greeting-bubble creamy-hidden" id="creamy-greeting-bubble" role="status" aria-live="polite"></div>
         <div class="creamy-window creamy-hidden" id="creamy-window" role="dialog" aria-label="Chat Creamy AI" aria-modal="true">
           <header class="creamy-header">
-            <span class="creamy-header-avatar-placeholder" aria-hidden="true">${avatar}</span>
+            <span class="creamy-header-avatar" aria-hidden="true">${CREAMY_AVATAR_SVG}</span>
             <div class="creamy-header-info">
               <div class="creamy-header-name">Creamy AI</div>
               <div class="creamy-header-status">
@@ -129,7 +140,9 @@
 
       document.body.appendChild(wrapper);
 
+      this.wrapper = wrapper;
       this.fab = document.getElementById('creamy-fab');
+      this.backdrop = document.getElementById('creamy-backdrop');
       this.windowEl = document.getElementById('creamy-window');
       this.messagesEl = document.getElementById('creamy-messages');
       this.inputEl = document.getElementById('creamy-textarea');
@@ -139,8 +152,9 @@
 
     _bindEvents() {
       this.fab.addEventListener('click', () => this._open());
-      document.querySelector('.creamy-minimize-btn').addEventListener('click', () => this._minimize());
-      document.querySelector('.creamy-close-btn').addEventListener('click', () => this._close());
+      this.backdrop.addEventListener('click', () => this._minimize());
+      this.wrapper.querySelector('.creamy-minimize-btn').addEventListener('click', () => this._minimize());
+      this.wrapper.querySelector('.creamy-close-btn').addEventListener('click', () => this._close());
       this.sendBtn.addEventListener('click', () => this._sendUserMessage());
       this.inputEl.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
@@ -178,10 +192,10 @@
 
       const contextual = this._getContextualHint();
       const text = contextual
-        ? `👋 Hola. Soy Creamy.\n${contextual}`
-        : '👋 Hola.\nSoy Creamy.\nSi necesitás ayuda para desarrollar tu producto o tenés alguna duda, estoy para ayudarte.';
+        ? `👋 Hola, soy Creamy. ${contextual}`
+        : '👋 Hola, soy Creamy. ¿Necesitás ayuda para desarrollar tu producto?';
 
-      this.greetingBubbleEl.innerHTML = text.replace(/\n/g, '<br>');
+      this.greetingBubbleEl.textContent = text;
       this.greetingBubbleEl.classList.remove('creamy-hidden');
       this.greetingBubbleEl.classList.add('creamy-greeting-visible');
       this.fab.classList.add('creamy-fab--wave');
@@ -205,9 +219,10 @@
     _open() {
       this._dismissGreeting();
       this.isOpen = true;
+      this.wrapper.classList.add('creamy-widget--open');
+      this.backdrop.classList.remove('creamy-hidden');
       this.windowEl.classList.remove('creamy-hidden');
       this.fab.classList.add('creamy-fab--hidden');
-      document.body.classList.add('creamy-chat-open');
 
       if (this.messageCount === 0) this._showWelcome();
 
@@ -217,9 +232,10 @@
 
     _minimize() {
       this.isOpen = false;
+      this.wrapper.classList.remove('creamy-widget--open');
+      this.backdrop.classList.add('creamy-hidden');
       this.windowEl.classList.add('creamy-hidden');
       this.fab.classList.remove('creamy-fab--hidden');
-      document.body.classList.remove('creamy-chat-open');
       this._trackEvent('creamy_close');
     }
 
