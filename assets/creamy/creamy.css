@@ -1,0 +1,670 @@
+/* ============================================================
+   CREAMY AI - WIDGET CSS
+      Fase C1 - Widget Visual
+         Namespace: .creamy-* (encapsulado, sin colisiones globales)
+            Arquitectura: docs/CREAMY_AI_ARCHITECTURE_v1.md
+               ============================================================ */
+
+/* Variables CSS encapsuladas */
+.creamy-widget {
+    --creamy-blue: #1E9BC0;
+    --creamy-dark: #0D5C73;
+    --creamy-light: #D9F0F7;
+    --creamy-white: #FFFFFF;
+    --creamy-gray-light: #F4F6F7;
+    --creamy-gray-medium: #E8EAED;
+    --creamy-text: #2C3E50;
+    --creamy-text-muted: #566573;
+    --creamy-green: #2ECC71;
+    --creamy-shadow: rgba(0, 0, 0, 0.12);
+    --creamy-shadow-lg: rgba(0, 0, 0, 0.20);
+    --creamy-radius: 18px;
+    --creamy-radius-sm: 10px;
+    --creamy-transition: all 0.2s ease;
+    --creamy-font: inherit, system-ui, -apple-system, sans-serif;
+    --creamy-z-index: 9999;
+}
+
+/* ============================================================
+   KEYFRAMES DE ANIMACIONES
+      ============================================================ */
+
+@keyframes creamy-slideInUp {
+    from {
+          opacity: 0;
+          transform: translateY(30px) scale(0.95);
+    }
+    to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes creamy-fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes creamy-wave {
+    0%, 60%, 100% { transform: translateY(0); }
+    30% { transform: translateY(-6px); }
+}
+
+@keyframes creamy-bounce {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+}
+
+@keyframes creamy-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}
+
+@keyframes creamy-slideDown {
+    from {
+          opacity: 0;
+          transform: translateY(-10px);
+    }
+    to {
+          opacity: 1;
+          transform: translateY(0);
+    }
+}
+
+@keyframes creamy-messagePop {
+    from {
+          opacity: 0;
+          transform: translateY(8px) scale(0.97);
+    }
+    to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+    }
+}
+
+/* ============================================================
+   BOTÓN FLOTANTE
+      ============================================================ */
+
+.creamy-fab {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: var(--creamy-z-index, 9999);
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--creamy-blue, #1E9BC0);
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    box-shadow: 0 4px 20px var(--creamy-shadow-lg, rgba(0,0,0,0.20));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--creamy-transition, all 0.2s ease);
+    opacity: 0;
+    animation: creamy-slideInUp 0.4s ease-out 1.5s forwards;
+    overflow: visible;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.creamy-fab:hover {
+    transform: scale(1.08);
+    box-shadow: 0 6px 28px var(--creamy-shadow-lg, rgba(0,0,0,0.25));
+}
+
+.creamy-fab:active {
+    transform: scale(0.96);
+}
+
+.creamy-fab-avatar {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    object-fit: cover;
+    pointer-events: none;
+    display: block;
+}
+
+/* Avatar placeholder SVG cuando no hay imagen */
+.creamy-fab-avatar-placeholder {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--creamy-white, #fff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    user-select: none;
+}
+
+/* Badge estado "En línea" */
+.creamy-fab-badge {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--creamy-green, #2ECC71);
+    border: 2.5px solid var(--creamy-white, #fff);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.18);
+    animation: creamy-pulse 2.5s ease-in-out infinite;
+}
+
+/* ============================================================
+   VENTANA DE CHAT
+      ============================================================ */
+
+.creamy-window {
+    position: fixed;
+    bottom: 100px;
+    right: 24px;
+    z-index: var(--creamy-z-index, 9999);
+    width: 380px;
+    height: 560px;
+    background: var(--creamy-white, #fff);
+    border-radius: 20px;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.18), 0 2px 8px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    animation: creamy-slideInUp 0.3s ease-out, creamy-fadeIn 0.3s ease-out;
+    transform-origin: bottom right;
+    font-family: var(--creamy-font, system-ui, sans-serif);
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--creamy-text, #2C3E50);
+}
+
+.creamy-window.creamy-hidden {
+    display: none;
+}
+
+/* ============================================================
+   HEADER
+      ============================================================ */
+
+.creamy-header {
+    background: linear-gradient(135deg, var(--creamy-blue, #1E9BC0), var(--creamy-dark, #0D5C73));
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    border-radius: 20px 20px 0 0;
+}
+
+.creamy-header-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.4);
+    object-fit: cover;
+    flex-shrink: 0;
+    background: var(--creamy-light, #D9F0F7);
+}
+
+.creamy-header-avatar-placeholder {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.4);
+    background: rgba(255,255,255,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.creamy-header-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.creamy-header-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--creamy-white, #fff);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.3;
+}
+
+.creamy-header-status {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 2px;
+}
+
+.creamy-header-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--creamy-green, #2ECC71);
+    flex-shrink: 0;
+}
+
+.creamy-header-status-text {
+    font-size: 11px;
+    color: rgba(255,255,255,0.85);
+    font-weight: 400;
+}
+
+.creamy-header-actions {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.creamy-header-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255,255,255,0.15);
+    color: var(--creamy-white, #fff);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    transition: var(--creamy-transition, all 0.2s ease);
+    padding: 0;
+    line-height: 1;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.creamy-header-btn:hover {
+    background: rgba(255,255,255,0.28);
+}
+
+.creamy-header-btn:active {
+    transform: scale(0.9);
+}
+
+/* ============================================================
+   ÁREA DE MENSAJES
+      ============================================================ */
+
+.creamy-messages {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 16px 14px 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    scroll-behavior: smooth;
+    background: #FAFBFC;
+}
+
+/* Scrollbar personalizado */
+.creamy-messages::-webkit-scrollbar {
+    width: 4px;
+}
+
+.creamy-messages::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.creamy-messages::-webkit-scrollbar-thumb {
+    background: var(--creamy-gray-medium, #E8EAED);
+    border-radius: 2px;
+}
+
+/* ============================================================
+   BURBUJAS DE MENSAJES
+      ============================================================ */
+
+.creamy-message {
+    display: flex;
+    flex-direction: column;
+    max-width: 88%;
+    animation: creamy-messagePop 0.25s ease-out;
+}
+
+.creamy-message-user {
+    align-self: flex-end;
+    align-items: flex-end;
+}
+
+.creamy-message-bot {
+    align-self: flex-start;
+    align-items: flex-start;
+}
+
+.creamy-message-system {
+    align-self: center;
+    max-width: 100%;
+}
+
+.creamy-bubble {
+    padding: 10px 14px;
+    word-wrap: break-word;
+    word-break: break-word;
+    hyphens: auto;
+    font-size: 13.5px;
+    line-height: 1.55;
+}
+
+/* Burbuja usuario */
+.creamy-message-user .creamy-bubble {
+    background: var(--creamy-blue, #1E9BC0);
+    color: var(--creamy-white, #fff);
+    border-radius: 18px 18px 4px 18px;
+    box-shadow: 0 2px 8px rgba(30,155,192,0.20);
+}
+
+/* Burbuja Creamy bot */
+.creamy-message-bot .creamy-bubble {
+    background: var(--creamy-gray-light, #F4F6F7);
+    color: var(--creamy-text, #2C3E50);
+    border-radius: 4px 18px 18px 18px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+/* Mensaje sistema */
+.creamy-message-system .creamy-bubble {
+    background: transparent;
+    color: var(--creamy-text-muted, #566573);
+    font-size: 11px;
+    text-align: center;
+    padding: 4px 8px;
+}
+
+/* Timestamp */
+.creamy-timestamp {
+    font-size: 10px;
+    color: var(--creamy-text-muted, #566573);
+    margin-top: 3px;
+    padding: 0 4px;
+}
+
+/* ============================================================
+   TYPING INDICATOR (indicador de escritura)
+      ============================================================ */
+
+.creamy-typing {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 12px 14px;
+    background: var(--creamy-gray-light, #F4F6F7);
+    border-radius: 4px 18px 18px 18px;
+    align-self: flex-start;
+    animation: creamy-messagePop 0.25s ease-out;
+    max-width: 88px;
+}
+
+.creamy-typing.creamy-hidden {
+    display: none;
+}
+
+.creamy-typing-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--creamy-blue, #1E9BC0);
+    opacity: 0.7;
+    animation: creamy-wave 1.3s ease-in-out infinite;
+    flex-shrink: 0;
+}
+
+.creamy-typing-dot:nth-child(2) {
+    animation-delay: 0.15s;
+}
+
+.creamy-typing-dot:nth-child(3) {
+    animation-delay: 0.30s;
+}
+
+/* ============================================================
+   QUICK CHIPS
+      ============================================================ */
+
+.creamy-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-top: 8px;
+    animation: creamy-slideDown 0.3s ease-out;
+}
+
+.creamy-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 7px 13px;
+    border: 1.5px solid var(--creamy-blue, #1E9BC0);
+    border-radius: 20px;
+    background: transparent;
+    color: var(--creamy-blue, #1E9BC0);
+    font-size: 12.5px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--creamy-transition, all 0.2s ease);
+    white-space: nowrap;
+    font-family: inherit;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.creamy-chip:hover {
+    background: var(--creamy-blue, #1E9BC0);
+    color: var(--creamy-white, #fff);
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px rgba(30,155,192,0.25);
+}
+
+.creamy-chip:active {
+    transform: scale(0.97);
+}
+
+/* Chip de conversión (más destacado) */
+.creamy-chip-cta {
+    border-color: var(--creamy-dark, #0D5C73);
+    color: var(--creamy-dark, #0D5C73);
+    font-weight: 600;
+}
+
+.creamy-chip-cta:hover {
+    background: var(--creamy-dark, #0D5C73);
+    color: var(--creamy-white, #fff);
+}
+
+/* ============================================================
+   INPUT ÁREA
+      ============================================================ */
+
+.creamy-input-area {
+    padding: 10px 12px 12px;
+    border-top: 1px solid var(--creamy-gray-medium, #E8EAED);
+    background: var(--creamy-white, #fff);
+    flex-shrink: 0;
+}
+
+.creamy-input-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    background: var(--creamy-gray-light, #F4F6F7);
+    border-radius: 22px;
+    padding: 6px 6px 6px 14px;
+    border: 1.5px solid transparent;
+    transition: border-color 0.2s ease;
+}
+
+.creamy-input-row:focus-within {
+    border-color: var(--creamy-blue, #1E9BC0);
+    background: var(--creamy-white, #fff);
+}
+
+.creamy-textarea {
+    flex: 1;
+    border: none;
+    background: transparent;
+    resize: none;
+    outline: none;
+    font-family: inherit;
+    font-size: 13.5px;
+    color: var(--creamy-text, #2C3E50);
+    line-height: 1.5;
+    max-height: 72px;
+    min-height: 22px;
+    overflow-y: auto;
+    padding: 2px 0;
+    scrollbar-width: none;
+}
+
+.creamy-textarea::-webkit-scrollbar {
+    display: none;
+}
+
+.creamy-textarea::placeholder {
+    color: var(--creamy-text-muted, #566573);
+}
+
+.creamy-send-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: none;
+    background: var(--creamy-blue, #1E9BC0);
+    color: var(--creamy-white, #fff);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: var(--creamy-transition, all 0.2s ease);
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.creamy-send-btn:hover {
+    background: var(--creamy-dark, #0D5C73);
+    transform: scale(1.06);
+}
+
+.creamy-send-btn:active {
+    transform: scale(0.94);
+}
+
+.creamy-send-btn:disabled {
+    background: var(--creamy-gray-medium, #E8EAED);
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* ============================================================
+   FOOTER DEL WIDGET
+      ============================================================ */
+
+.creamy-powered {
+    text-align: center;
+    font-size: 10px;
+    color: var(--creamy-text-muted, #566573);
+    padding: 5px 12px 8px;
+    background: var(--creamy-white, #fff);
+}
+
+/* ============================================================
+   RESPONSIVE - MOBILE BOTTOM SHEET
+      ============================================================ */
+
+@media (max-width: 768px) {
+    .creamy-fab {
+          bottom: 16px;
+          right: 16px;
+          width: 58px;
+          height: 58px;
+    }
+
+    .creamy-fab-avatar,
+    .creamy-fab-avatar-placeholder {
+          width: 46px;
+          height: 46px;
+    }
+
+    .creamy-window {
+          position: fixed;
+          bottom: 0;
+          right: 0;
+          left: 0;
+          width: 100vw;
+          height: 85vh;
+          border-radius: 20px 20px 0 0;
+          max-height: 85vh;
+          animation: creamy-slideInUp 0.3s ease-out;
+    }
+
+    .creamy-header {
+          border-radius: 20px 20px 0 0;
+    }
+}
+
+/* ============================================================
+   ACCESIBILIDAD Y FOCUS
+      ============================================================ */
+
+.creamy-fab:focus-visible,
+.creamy-chip:focus-visible,
+.creamy-send-btn:focus-visible,
+.creamy-header-btn:focus-visible {
+    outline: 2px solid var(--creamy-blue, #1E9BC0);
+    outline-offset: 2px;
+}
+
+/* Pantallas muy pequeñas */
+@media (max-width: 360px) {
+    .creamy-window {
+          height: 92vh;
+    }
+
+    .creamy-chip {
+          font-size: 11.5px;
+          padding: 6px 10px;
+    }
+}
+
+/* Modo oscuro del sistema - sutil adaptación */
+@media (prefers-color-scheme: dark) {
+    .creamy-window {
+          background: #1a1a2e;
+          color: #e8eaed;
+          --creamy-text: #e8eaed;
+          --creamy-gray-light: #2a2a3e;
+          --creamy-white: #1a1a2e;
+    }
+
+    .creamy-messages {
+          background: #1e1e32;
+    }
+
+    .creamy-message-bot .creamy-bubble {
+          background: #2a2a3e;
+          color: #e8eaed;
+    }
+
+    .creamy-input-area {
+          background: #1a1a2e;
+          border-top-color: #2a2a3e;
+    }
+
+    .creamy-input-row {
+          background: #2a2a3e;
+    }
+
+    .creamy-textarea {
+          color: #e8eaed;
+    }
+
+    .creamy-powered {
+          background: #1a1a2e;
+    }
+}
