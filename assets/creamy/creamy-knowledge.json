@@ -1,0 +1,320 @@
+{
+  "version": "1.0.0",
+  "fase": "C2",
+  "laboratorio": {
+    "nombre": "Laboratorio Genus",
+    "descripcion": "Empresa argentina especializada en desarrollo, formulacion y fabricacion de productos cosmeticos a medida",
+    "pais": "Argentina",
+    "whatsapp": "https://wa.me/5491124980861",
+    "cotizador": "/cotizador.html",
+    "contacto": "/contacto.html"
+  },
+  "reglas_comerciales": {
+    "moq_minimo": 500,
+    "llave_en_mano_desde": 5000,
+    "productos_no_disponibles": [
+      "balm_barra",
+      "labial_barra",
+      "lip_balm_barra"
+    ],
+    "productos_disponibles": {
+      "balm_lata": "Si fabricamos balsamos y pomadas en lata, tarrito o pot",
+      "pomadas": "Si fabricamos pomadas en pot/lata",
+      "cremas": "Amplia gama de cremas para cara y cuerpo",
+      "serums": "Serums acuosos y oleosos",
+      "shampoos": "Shampoos y acondicionadores personalizados"
+    },
+    "servicios": [
+      "Desarrollo de formulas desde cero",
+      "Fabricacion tercerizada (maquila)",
+      "Servicio llave en mano",
+      "Desarrollo de muestras y prototipos",
+      "Adaptacion de formulas existentes"
+    ],
+    "claims_prohibidos": [
+      "cura",
+      "trata enfermedades",
+      "efecto medico",
+      "terapeutico",
+      "garantizamos resultados"
+    ]
+  },
+  "activos_cosmeticos": [
+    {
+      "nombre": "Vitamina C (Acido Ascorbico)",
+      "tipo": "antioxidante",
+      "beneficios": [
+        "antioxidante",
+        "iluminador",
+        "antiage",
+        "uniformiza el tono"
+      ],
+      "ph_optimo": "2.5-3.5",
+      "estabilidad": "sensible a luz, calor y oxidacion",
+      "incompatibles_alta_conc": [
+        "retinol",
+        "niacinamida > 10%"
+      ],
+      "notas": "Inestable en agua a pH alto. Usar forma estabilizada o pH bajo."
+    },
+    {
+      "nombre": "Retinol / Retinoides",
+      "tipo": "antiedad",
+      "beneficios": [
+        "estimula colageno",
+        "antiage",
+        "regenerador celular",
+        "reduce arrugas"
+      ],
+      "ph_optimo": "5.5-6.0",
+      "estabilidad": "sensible a luz y oxidacion",
+      "incompatibles_alta_conc": [
+        "AHA",
+        "BHA",
+        "vitamina C"
+      ],
+      "notas": "Usar en rutinas alternadas con AHA/BHA. No en mismo producto con vitamina C."
+    },
+    {
+      "nombre": "Niacinamida",
+      "tipo": "multifuncional",
+      "beneficios": [
+        "reduce poros",
+        "controla sebo",
+        "ilumina",
+        "antiinflamatorio",
+        "fortalece barrera"
+      ],
+      "ph_optimo": "5.0-7.0",
+      "estabilidad": "muy estable",
+      "incompatibles": [
+        "vitamina C > 10% simultaneo puede generar niacina"
+      ],
+      "notas": "Compatible con casi todo. Excelente activo para formulas multifuncionales."
+    },
+    {
+      "nombre": "Acido Hialuronico",
+      "tipo": "humectante",
+      "beneficios": [
+        "hidratacion profunda",
+        "rellena finas lineas",
+        "plumping"
+      ],
+      "ph_optimo": "5.0-8.0",
+      "estabilidad": "muy estable",
+      "incompatibles": [],
+      "notas": "Compatible con practicamente todos los activos. Ideal en capas."
+    },
+    {
+      "nombre": "AHA (Acido Glicolico, Lactico, Mandelico)",
+      "tipo": "exfoliante",
+      "beneficios": [
+        "exfoliacion quimica",
+        "renueva celulas",
+        "mejora textura",
+        "antiage"
+      ],
+      "ph_optimo": "3.0-4.0",
+      "estabilidad": "estable",
+      "incompatibles_alta_conc": [
+        "retinol",
+        "peptidos"
+      ],
+      "notas": "pH bajo puede irritar. No mezclar con retinol en mismo producto."
+    },
+    {
+      "nombre": "BHA (Acido Salicilico)",
+      "tipo": "exfoliante",
+      "beneficios": [
+        "exfoliante liposoluble",
+        "control acne",
+        "despeja poros",
+        "antiinflamatorio"
+      ],
+      "ph_optimo": "3.0-4.0",
+      "estabilidad": "estable",
+      "incompatibles_alta_conc": [
+        "retinol"
+      ],
+      "notas": "Ideal para piel grasa y acneica. Liposoluble, penetra en poros."
+    },
+    {
+      "nombre": "Peptidos",
+      "tipo": "antiedad",
+      "beneficios": [
+        "estimulan colageno",
+        "tensan la piel",
+        "antiage",
+        "reparadores"
+      ],
+      "ph_optimo": "5.0-7.5",
+      "estabilidad": "buena",
+      "incompatibles_alta_conc": [
+        "AHA en alta concentracion (el pH bajo los degrada)"
+      ],
+      "notas": "No mezclar con AHA en alta concentracion. Compatibles con la mayoria."
+    },
+    {
+      "nombre": "Arnica",
+      "tipo": "antiinflamatorio",
+      "beneficios": [
+        "antiinflamatorio",
+        "alivio muscular",
+        "reduce hematomas",
+        "dolor muscular"
+      ],
+      "ph_optimo": "5.0-7.0",
+      "estabilidad": "buena",
+      "incompatibles": [],
+      "notas": "Excelente para cremas musculares y deportivas. Combinacion ideal con magnesio."
+    },
+    {
+      "nombre": "Magnesio (Cloruro/Sulfato)",
+      "tipo": "mineral",
+      "beneficios": [
+        "relajante muscular",
+        "antistress",
+        "calma la piel"
+      ],
+      "ph_optimo": "5.0-8.0",
+      "estabilidad": "muy estable",
+      "incompatibles": [],
+      "notas": "Ideal en cremas corporales y musculares. Combinacion excelente con arnica."
+    },
+    {
+      "nombre": "Ceramidas",
+      "tipo": "barrera cutanea",
+      "beneficios": [
+        "restauran barrera",
+        "hidratacion",
+        "piel seca y sensible",
+        "antiedad"
+      ],
+      "ph_optimo": "5.0-7.0",
+      "estabilidad": "muy estable",
+      "incompatibles": [],
+      "notas": "Compatibles con todo. Esenciales para piel seca, sensible o comprometida."
+    },
+    {
+      "nombre": "Cafeina",
+      "tipo": "energizante/lipolitico",
+      "beneficios": [
+        "lipolitica",
+        "anticelulitis",
+        "antibolsas",
+        "reafirmante",
+        "efecto drenante"
+      ],
+      "ph_optimo": "5.0-7.0",
+      "estabilidad": "buena",
+      "incompatibles": [],
+      "notas": "Ideal en productos corporales reductores y contorno de ojos."
+    },
+    {
+      "nombre": "Zinc",
+      "tipo": "seborreductor",
+      "beneficios": [
+        "reduce sebo",
+        "aclarante",
+        "anti-acne",
+        "cicatrizante"
+      ],
+      "ph_optimo": "5.0-7.5",
+      "estabilidad": "estable",
+      "incompatibles": [],
+      "notas": "Compatible con niacinamida (potencian efecto seborreductor juntos)."
+    }
+  ],
+  "tipos_productos": [
+    {
+      "tipo": "serum_acuoso",
+      "descripcion": "Alta concentracion de activos, textura fluida"
+    },
+    {
+      "tipo": "serum_oleoso",
+      "descripcion": "Base oleosa, activos liposolubles"
+    },
+    {
+      "tipo": "crema_ow",
+      "descripcion": "Emulsion aceite en agua, textura liviana"
+    },
+    {
+      "tipo": "crema_wo",
+      "descripcion": "Emulsion agua en aceite, textura rica y nutritiva"
+    },
+    {
+      "tipo": "gel_acuoso",
+      "descripcion": "Sin residuo graso, ideal piel grasa"
+    },
+    {
+      "tipo": "balm_lata",
+      "descripcion": "Base anhydra o emulsion rica, oclusiva"
+    },
+    {
+      "tipo": "pomada",
+      "descripcion": "Alta oclusividad, base anhydra"
+    },
+    {
+      "tipo": "shampoo",
+      "descripcion": "Limpieza capilar personalizada"
+    },
+    {
+      "tipo": "acondicionador",
+      "descripcion": "Tratamiento capilar post-lavado"
+    },
+    {
+      "tipo": "mascarilla",
+      "descripcion": "Tratamiento intensivo de uso periodico"
+    },
+    {
+      "tipo": "tonico",
+      "descripcion": "Producto liquido para equilibrar y preparar la piel"
+    },
+    {
+      "tipo": "exfoliante",
+      "descripcion": "Fisico o quimico para renovacion celular"
+    },
+    {
+      "tipo": "protector_solar",
+      "descripcion": "FPS variable, fisico o quimico"
+    },
+    {
+      "tipo": "desodorante",
+      "descripcion": "Formato roll-on, spray o crema"
+    },
+    {
+      "tipo": "colonia",
+      "descripcion": "Fragancia en base alcoholica o acuosa"
+    },
+    {
+      "tipo": "reductor",
+      "descripcion": "Crema corporal con activos lipoliticos"
+    },
+    {
+      "tipo": "crema_muscular",
+      "descripcion": "Alivio muscular con arnica, magnesio, mentol"
+    }
+  ],
+  "faq": [
+    {
+      "pregunta": "Cual es el MOQ minimo?",
+      "respuesta": "El MOQ minimo es de 500 unidades por producto. Para el servicio llave en mano (formula + fabricacion + envase + etiqueta) el minimo es de 5.000 unidades."
+    },
+    {
+      "pregunta": "Hacen balsamos en barra?",
+      "respuesta": "No fabricamos balsamos labiales en formato barra o stick. Si fabricamos balsamos y pomadas en lata, tarrito o pot, que son formatos muy populares y versatiles."
+    },
+    {
+      "pregunta": "Pueden desarrollar una formula desde cero?",
+      "respuesta": "Si, uno de nuestros servicios principales es el desarrollo de formulas cosmeticas completamente personalizadas desde cero, segun los requerimientos del cliente."
+    },
+    {
+      "pregunta": "Hacen muestras antes de la produccion?",
+      "respuesta": "Si, desarrollamos muestras y prototipos previos a la produccion final para que el cliente pueda evaluar y aprobar el producto."
+    },
+    {
+      "pregunta": "Como empiezo mi marca de cosmeticos?",
+      "respuesta": "El proceso empieza con una consulta para definir que tipo de producto queres, para que publico, con que activos y en que textura. Luego desarrollamos la formula, hacemos muestras, ajustamos, y producimos. Podes empezar desde 500 unidades."
+    }
+  ]
+}
