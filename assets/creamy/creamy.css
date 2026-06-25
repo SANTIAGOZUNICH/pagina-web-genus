@@ -164,7 +164,8 @@
     right: 24px;
     z-index: var(--creamy-z-index, 9999);
     width: 380px;
-    height: 560px;
+    height: min(560px, calc(100vh - 120px));
+    max-height: calc(100vh - 120px);
     background: var(--creamy-white, #fff);
     border-radius: 20px;
     box-shadow: 0 8px 40px rgba(0, 0, 0, 0.18), 0 2px 8px rgba(0, 0, 0, 0.08);
