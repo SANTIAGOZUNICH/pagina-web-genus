@@ -1,13 +1,41 @@
 {
-  "version": "1.0.0",
-  "phase": "C1",
+  "version": "2.1.0",
+  "phase": "C2",
+  "useMock": false,
+  "apiEndpoint": "/api/creamy/chat",
+  "sessionTimeout": 86400000,
+  "maxHistoryTurns": 12,
+  "typingDelayMin": 400,
+  "typingDelayMax": 900,
+  "greetingDelayMin": 6000,
+  "greetingDelayMax": 8000,
+  "greetingBubbleDuration": 8000,
   "name": "Creamy AI",
-  "statusText": "En linea",
-  "whatsappUrl": "https://wa.me/5491124980861",
-  "configuradorUrl": "/cotizador.html",
-  "cotizacionUrl": "/contacto.html",
-  "typingDelayMin": 800,
-  "typingDelayMax": 1400,
+  "statusText": "En línea",
+  "avatarEmoji": "🧴",
+  "welcomeMessage": "Hola, soy Creamy — el asistente de Laboratorio Genus. Puedo ayudarte a explorar nuestros servicios, resolver consultas técnicas y orientarte en el desarrollo de tu producto cosmético. ¿Por dónde empezamos?",
+  "urls": {
+    "configurador": "/cotizador.html",
+    "cotizacion": "/contacto.html",
+    "whatsapp": "https://wa.me/5491124980861"
+  },
+  "initialChips": [
+    { "id": "develop", "label": "🧪 Quiero desarrollar un producto" },
+    { "id": "services", "label": "📋 Consultar servicios y precios" },
+    { "id": "technical", "label": "⚗️ Tengo una consulta técnica" },
+    { "id": "advisor", "label": "💬 Hablar con un asesor" }
+  ],
+  "pageContext": {
+    "productos": "¿Querés desarrollar alguno de estos productos?",
+    "cotizador": "¿Necesitás ayuda para elegir activos o la mejor formulación?",
+    "desarrolla-tu-producto": "¿Necesitás ayuda para elegir activos o la mejor formulación?",
+    "crea-tu-producto": "¿Necesitás ayuda para elegir activos o la mejor formulación?",
+    "contacto": "¿Tenés dudas antes de cotizar?",
+    "calidad": "¿Querés conocer cómo trabajamos?",
+    "llave-en-mano": "¿Querés saber si el servicio llave en mano es para vos?",
+    "quienes-somos": "¿Querés conocer cómo podemos ayudarte con tu marca?",
+    "index": "Si necesitás ayuda para desarrollar tu producto o tenés alguna duda, estoy para ayudarte."
+  },
   "colors": {
     "blue": "#1E9BC0",
     "dark": "#0D5C73",
@@ -17,14 +45,5 @@
     "text": "#2C3E50",
     "textMuted": "#566573",
     "green": "#2ECC71"
-  },
-  "integration": {
-    "cssPath": "/assets/creamy/creamy.css",
-    "jsPath": "/assets/creamy/creamy.js"
-  },
-  "notes": {
-    "phase": "C1 - Widget visual con mock responses",
-    "nextPhase": "C2 - Conectar IA real con OpenAI GPT-4o-mini",
-    "architecture": "docs/CREAMY_AI_ARCHITECTURE_v1.md"
   }
 }

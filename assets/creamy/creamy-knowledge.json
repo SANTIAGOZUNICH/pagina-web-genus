@@ -1,320 +1,212 @@
 {
-  "version": "1.0.0",
-  "fase": "C2",
-  "laboratorio": {
-    "nombre": "Laboratorio Genus",
-    "descripcion": "Empresa argentina especializada en desarrollo, formulacion y fabricacion de productos cosmeticos a medida",
-    "pais": "Argentina",
-    "whatsapp": "https://wa.me/5491124980861",
-    "cotizador": "/cotizador.html",
-    "contacto": "/contacto.html"
-  },
-  "reglas_comerciales": {
+  "version": "1.0",
+  "updated_at": "2025-01-01",
+  "restrictions": {
     "moq_minimo": 500,
     "llave_en_mano_desde": 5000,
-    "productos_no_disponibles": [
-      "balm_barra",
-      "labial_barra",
-      "lip_balm_barra"
-    ],
-    "productos_disponibles": {
-      "balm_lata": "Si fabricamos balsamos y pomadas en lata, tarrito o pot",
-      "pomadas": "Si fabricamos pomadas en pot/lata",
-      "cremas": "Amplia gama de cremas para cara y cuerpo",
-      "serums": "Serums acuosos y oleosos",
-      "shampoos": "Shampoos y acondicionadores personalizados"
+    "productos_no_disponibles": ["balm_barra", "balm_labial_stick"],
+    "productos_disponibles_con_aclaracion": {
+      "balm_lata": "Sí fabricamos bálsamos y pomadas en lata con distintas formulaciones",
+      "pomadas": "Sí fabricamos pomadas en distintos formatos y consistencias"
     },
-    "servicios": [
-      "Desarrollo de formulas desde cero",
-      "Fabricacion tercerizada (maquila)",
-      "Servicio llave en mano",
-      "Desarrollo de muestras y prototipos",
-      "Adaptacion de formulas existentes"
-    ],
-    "claims_prohibidos": [
-      "cura",
-      "trata enfermedades",
-      "efecto medico",
-      "terapeutico",
-      "garantizamos resultados"
-    ]
+    "claims_prohibidos": ["cura", "trata", "sana", "medicamento", "terapéutico", "diagnóstica"],
+    "evaluacion_tecnica_requerida": "La viabilidad final de cualquier fórmula se evalúa técnicamente durante el desarrollo."
   },
-  "activos_cosmeticos": [
+  "services": [
     {
-      "nombre": "Vitamina C (Acido Ascorbico)",
-      "tipo": "antioxidante",
-      "beneficios": [
-        "antioxidante",
-        "iluminador",
-        "antiage",
-        "uniformiza el tono"
-      ],
-      "ph_optimo": "2.5-3.5",
-      "estabilidad": "sensible a luz, calor y oxidacion",
-      "incompatibles_alta_conc": [
-        "retinol",
-        "niacinamida > 10%"
-      ],
-      "notas": "Inestable en agua a pH alto. Usar forma estabilizada o pH bajo."
+      "id": "desarrollo",
+      "nombre": "Desarrollo cosmético a medida",
+      "descripcion": "Formulación personalizada según brief del cliente. Incluye muestra y ajustes.",
+      "moq": 500
     },
     {
-      "nombre": "Retinol / Retinoides",
-      "tipo": "antiedad",
-      "beneficios": [
-        "estimula colageno",
-        "antiage",
-        "regenerador celular",
-        "reduce arrugas"
-      ],
-      "ph_optimo": "5.5-6.0",
-      "estabilidad": "sensible a luz y oxidacion",
-      "incompatibles_alta_conc": [
-        "AHA",
-        "BHA",
-        "vitamina C"
-      ],
-      "notas": "Usar en rutinas alternadas con AHA/BHA. No en mismo producto con vitamina C."
+      "id": "fabricacion",
+      "nombre": "Fabricación tercerizada",
+      "descripcion": "Producción del producto una vez aprobada la fórmula. El cliente aporta la fórmula o la desarrollamos juntos.",
+      "moq": 500
     },
     {
-      "nombre": "Niacinamida",
-      "tipo": "multifuncional",
-      "beneficios": [
-        "reduce poros",
-        "controla sebo",
-        "ilumina",
-        "antiinflamatorio",
-        "fortalece barrera"
-      ],
-      "ph_optimo": "5.0-7.0",
-      "estabilidad": "muy estable",
-      "incompatibles": [
-        "vitamina C > 10% simultaneo puede generar niacina"
-      ],
-      "notas": "Compatible con casi todo. Excelente activo para formulas multifuncionales."
+      "id": "llave_en_mano",
+      "nombre": "Servicio llave en mano",
+      "descripcion": "Desarrollo + producción + envase + etiqueta. Producto listo para comercializar.",
+      "moq": 5000
     },
     {
-      "nombre": "Acido Hialuronico",
-      "tipo": "humectante",
-      "beneficios": [
-        "hidratacion profunda",
-        "rellena finas lineas",
-        "plumping"
-      ],
-      "ph_optimo": "5.0-8.0",
-      "estabilidad": "muy estable",
-      "incompatibles": [],
-      "notas": "Compatible con practicamente todos los activos. Ideal en capas."
-    },
-    {
-      "nombre": "AHA (Acido Glicolico, Lactico, Mandelico)",
-      "tipo": "exfoliante",
-      "beneficios": [
-        "exfoliacion quimica",
-        "renueva celulas",
-        "mejora textura",
-        "antiage"
-      ],
-      "ph_optimo": "3.0-4.0",
-      "estabilidad": "estable",
-      "incompatibles_alta_conc": [
-        "retinol",
-        "peptidos"
-      ],
-      "notas": "pH bajo puede irritar. No mezclar con retinol en mismo producto."
-    },
-    {
-      "nombre": "BHA (Acido Salicilico)",
-      "tipo": "exfoliante",
-      "beneficios": [
-        "exfoliante liposoluble",
-        "control acne",
-        "despeja poros",
-        "antiinflamatorio"
-      ],
-      "ph_optimo": "3.0-4.0",
-      "estabilidad": "estable",
-      "incompatibles_alta_conc": [
-        "retinol"
-      ],
-      "notas": "Ideal para piel grasa y acneica. Liposoluble, penetra en poros."
-    },
-    {
-      "nombre": "Peptidos",
-      "tipo": "antiedad",
-      "beneficios": [
-        "estimulan colageno",
-        "tensan la piel",
-        "antiage",
-        "reparadores"
-      ],
-      "ph_optimo": "5.0-7.5",
-      "estabilidad": "buena",
-      "incompatibles_alta_conc": [
-        "AHA en alta concentracion (el pH bajo los degrada)"
-      ],
-      "notas": "No mezclar con AHA en alta concentracion. Compatibles con la mayoria."
-    },
-    {
-      "nombre": "Arnica",
-      "tipo": "antiinflamatorio",
-      "beneficios": [
-        "antiinflamatorio",
-        "alivio muscular",
-        "reduce hematomas",
-        "dolor muscular"
-      ],
-      "ph_optimo": "5.0-7.0",
-      "estabilidad": "buena",
-      "incompatibles": [],
-      "notas": "Excelente para cremas musculares y deportivas. Combinacion ideal con magnesio."
-    },
-    {
-      "nombre": "Magnesio (Cloruro/Sulfato)",
-      "tipo": "mineral",
-      "beneficios": [
-        "relajante muscular",
-        "antistress",
-        "calma la piel"
-      ],
-      "ph_optimo": "5.0-8.0",
-      "estabilidad": "muy estable",
-      "incompatibles": [],
-      "notas": "Ideal en cremas corporales y musculares. Combinacion excelente con arnica."
-    },
-    {
-      "nombre": "Ceramidas",
-      "tipo": "barrera cutanea",
-      "beneficios": [
-        "restauran barrera",
-        "hidratacion",
-        "piel seca y sensible",
-        "antiedad"
-      ],
-      "ph_optimo": "5.0-7.0",
-      "estabilidad": "muy estable",
-      "incompatibles": [],
-      "notas": "Compatibles con todo. Esenciales para piel seca, sensible o comprometida."
-    },
-    {
-      "nombre": "Cafeina",
-      "tipo": "energizante/lipolitico",
-      "beneficios": [
-        "lipolitica",
-        "anticelulitis",
-        "antibolsas",
-        "reafirmante",
-        "efecto drenante"
-      ],
-      "ph_optimo": "5.0-7.0",
-      "estabilidad": "buena",
-      "incompatibles": [],
-      "notas": "Ideal en productos corporales reductores y contorno de ojos."
-    },
-    {
-      "nombre": "Zinc",
-      "tipo": "seborreductor",
-      "beneficios": [
-        "reduce sebo",
-        "aclarante",
-        "anti-acne",
-        "cicatrizante"
-      ],
-      "ph_optimo": "5.0-7.5",
-      "estabilidad": "estable",
-      "incompatibles": [],
-      "notas": "Compatible con niacinamida (potencian efecto seborreductor juntos)."
+      "id": "muestras",
+      "nombre": "Muestras de desarrollo",
+      "descripcion": "Elaboración de muestras para evaluación y aprobación antes de la producción."
     }
   ],
-  "tipos_productos": [
+  "products": [
     {
-      "tipo": "serum_acuoso",
-      "descripcion": "Alta concentracion de activos, textura fluida"
+      "id": "serum-facial",
+      "nombre": "Serum facial",
+      "tipo": "serum",
+      "zona": "cara",
+      "descripcion": "Formulaciones acuosas de alta concentración de activos. Texturas ligeras que penetran rápido.",
+      "texturas": ["fluido acuoso", "gel-suero", "suero denso"],
+      "activos_frecuentes": ["niacinamida", "vitamina-c-derivados", "acido-hialuronico", "peptidos", "retinol-baja-conc"],
+      "envases_recomendados": ["dosificador airless", "pipeta", "dosificador bomba"],
+      "moq": 500
     },
     {
-      "tipo": "serum_oleoso",
-      "descripcion": "Base oleosa, activos liposolubles"
+      "id": "crema-facial",
+      "nombre": "Crema facial",
+      "tipo": "crema",
+      "zona": "cara",
+      "descripcion": "Emulsiones O/W o W/O para hidratación, nutrición o tratamiento antiage.",
+      "texturas": ["gel-crema", "crema fluida", "crema densa", "crema rica"],
+      "activos_frecuentes": ["niacinamida", "retinol", "peptidos", "ceramidas", "acido-hialuronico", "urea"],
+      "envases_recomendados": ["tarro", "dosificador airless", "tubo"],
+      "moq": 500
     },
     {
-      "tipo": "crema_ow",
-      "descripcion": "Emulsion aceite en agua, textura liviana"
+      "id": "crema-corporal",
+      "nombre": "Crema o loción corporal",
+      "tipo": "crema",
+      "zona": "cuerpo",
+      "descripcion": "Emulsiones para hidratación o tratamiento corporal. Desde texturas ligeras a muy nutritivas.",
+      "texturas": ["loción fluida", "crema corporal", "manteca corporal"],
+      "activos_frecuentes": ["manteca-karite", "aceite-argan", "urea", "cafeina", "magnesio", "arnica"],
+      "envases_recomendados": ["dosificador bomba", "tubo", "tarro"],
+      "moq": 500
     },
     {
-      "tipo": "crema_wo",
-      "descripcion": "Emulsion agua en aceite, textura rica y nutritiva"
-    },
-    {
-      "tipo": "gel_acuoso",
-      "descripcion": "Sin residuo graso, ideal piel grasa"
-    },
-    {
-      "tipo": "balm_lata",
-      "descripcion": "Base anhydra o emulsion rica, oclusiva"
-    },
-    {
-      "tipo": "pomada",
-      "descripcion": "Alta oclusividad, base anhydra"
-    },
-    {
+      "id": "shampoo",
+      "nombre": "Shampoo",
       "tipo": "shampoo",
-      "descripcion": "Limpieza capilar personalizada"
+      "zona": "cabello",
+      "descripcion": "Sistemas detergentes suaves para limpieza capilar. Distintos perfiles para todo tipo de cabello.",
+      "texturas": ["fluido", "cremoso", "gel"],
+      "activos_frecuentes": ["queratina", "proteinas-hidrolizadas", "aceite-argan", "biotina", "cafeina"],
+      "envases_recomendados": ["dosificador flip top", "dosificador bomba"],
+      "moq": 500
     },
     {
+      "id": "acondicionador",
+      "nombre": "Acondicionador / Mascarilla capilar",
       "tipo": "acondicionador",
-      "descripcion": "Tratamiento capilar post-lavado"
+      "zona": "cabello",
+      "descripcion": "Emulsiones catiónicas para suavizado, nutrición y reparación del cabello.",
+      "texturas": ["cremoso fluido", "mascarilla densa"],
+      "activos_frecuentes": ["queratina", "proteinas-hidrolizadas", "aceites-vegetales", "panthenol"],
+      "envases_recomendados": ["tubo", "dosificador bomba", "tarro"],
+      "moq": 500
     },
     {
-      "tipo": "mascarilla",
-      "descripcion": "Tratamiento intensivo de uso periodico"
+      "id": "gel-barba",
+      "nombre": "Productos para barba",
+      "tipo": "gel / aceite / bálsamo",
+      "zona": "barba",
+      "descripcion": "Aceites, geles de afeitado, bálsamos aftershave, acondicionadores de barba.",
+      "texturas": ["aceite", "gel", "bálsamo en lata", "loción"],
+      "activos_frecuentes": ["aceite-argan", "jojoba", "vitamina-e", "aloe-vera"],
+      "envases_recomendados": ["frasco vidrio con cuentagotas", "lata", "dosificador bomba"],
+      "moq": 500
     },
     {
-      "tipo": "tonico",
-      "descripcion": "Producto liquido para equilibrar y preparar la piel"
+      "id": "balm-lata",
+      "nombre": "Bálsamo / Pomada en lata",
+      "tipo": "bálsamo",
+      "zona": "labios / cuerpo / barba",
+      "descripcion": "Bálsamos y pomadas anidras o con baja fase acuosa en envase lata. NO disponible en formato barra/stick.",
+      "texturas": ["bálsamo semisólido", "pomada", "ungüento"],
+      "activos_frecuentes": ["cera-de-abejas", "manteca-karite", "aceite-ricino", "lanolina"],
+      "envases_recomendados": ["lata metálica", "tarro plástico pequeño"],
+      "moq": 500,
+      "aclaracion": "NO fabricamos bálsamos labiales en barra (stick). SÍ fabricamos en lata."
     },
     {
-      "tipo": "exfoliante",
-      "descripcion": "Fisico o quimico para renovacion celular"
-    },
-    {
-      "tipo": "protector_solar",
-      "descripcion": "FPS variable, fisico o quimico"
-    },
-    {
-      "tipo": "desodorante",
-      "descripcion": "Formato roll-on, spray o crema"
-    },
-    {
-      "tipo": "colonia",
-      "descripcion": "Fragancia en base alcoholica o acuosa"
-    },
-    {
-      "tipo": "reductor",
-      "descripcion": "Crema corporal con activos lipoliticos"
-    },
-    {
-      "tipo": "crema_muscular",
-      "descripcion": "Alivio muscular con arnica, magnesio, mentol"
+      "id": "protector-solar",
+      "nombre": "Protector solar",
+      "tipo": "protector solar",
+      "zona": "cara / cuerpo",
+      "descripcion": "Emulsiones con filtros UV físicos, químicos o mixtos. Requieren estudios de eficacia (FPS).",
+      "texturas": ["fluido", "crema", "gel-crema"],
+      "activos_frecuentes": ["dioxido-titanio", "zinc", "filtros-organicos"],
+      "envases_recomendados": ["dosificador airless", "tubo"],
+      "moq": 500,
+      "nota": "Requiere evaluación regulatoria adicional para claim de FPS."
     }
   ],
-  "faq": [
+  "actives": [
     {
-      "pregunta": "Cual es el MOQ minimo?",
-      "respuesta": "El MOQ minimo es de 500 unidades por producto. Para el servicio llave en mano (formula + fabricacion + envase + etiqueta) el minimo es de 5.000 unidades."
+      "id": "niacinamida",
+      "nombre": "Niacinamida",
+      "descripcion": "Vitamina B3. Regula sebo, unifica tono, refuerza barrera. Muy versátil y bien tolerada.",
+      "consideraciones": "A alta temperatura con vitamina C pura puede generar niazina (coloración). Se evalúa en formulación.",
+      "compatible_con": ["acido-hialuronico", "peptidos", "ceramidas", "retinol-baja-conc"],
+      "concentracion_tipica": "2-10%"
     },
     {
-      "pregunta": "Hacen balsamos en barra?",
-      "respuesta": "No fabricamos balsamos labiales en formato barra o stick. Si fabricamos balsamos y pomadas en lata, tarrito o pot, que son formatos muy populares y versatiles."
+      "id": "vitamina-c-pura",
+      "nombre": "Vitamina C (ácido ascórbico)",
+      "descripcion": "Antioxidante, iluminador, antiage. Muy inestable en agua. Requiere pH muy ácido (2.5-3.5).",
+      "consideraciones": "Alta inestabilidad. Incompatible con retinol a concentraciones altas. Puede reaccionar con niacinamida en calor. Alternativas más estables: ascorbil glucósido, MAP, STAY-C 50.",
+      "compatible_con": ["acido-hialuronico", "vitamina-e"],
+      "incompatible_con": ["retinol-alta-conc", "aha-alta-conc"],
+      "concentracion_tipica": "5-20%"
     },
     {
-      "pregunta": "Pueden desarrollar una formula desde cero?",
-      "respuesta": "Si, uno de nuestros servicios principales es el desarrollo de formulas cosmeticas completamente personalizadas desde cero, segun los requerimientos del cliente."
+      "id": "retinol",
+      "nombre": "Retinol",
+      "descripcion": "Vitamina A. Antiage, estimula colágeno, exfoliante suave. Fotosensibilizante.",
+      "consideraciones": "No combinar con AHAs de alta concentración ni con vitamina C pura en el mismo producto. Uso nocturno recomendado. Puede irritar en concentraciones altas. La viabilidad de combinaciones se evalúa técnicamente.",
+      "compatible_con": ["niacinamida-baja-conc", "acido-hialuronico", "peptidos"],
+      "incompatible_con": ["aha-alta-conc", "vitamina-c-pura-alta-conc"],
+      "concentracion_tipica": "0.1-1%"
     },
     {
-      "pregunta": "Hacen muestras antes de la produccion?",
-      "respuesta": "Si, desarrollamos muestras y prototipos previos a la produccion final para que el cliente pueda evaluar y aprobar el producto."
+      "id": "aha",
+      "nombre": "AHAs (ácido glicólico, láctico, mandélico)",
+      "descripcion": "Exfoliantes químicos. Mejoran textura, unificam tono. Requieren pH bajo (3-4).",
+      "consideraciones": "No combinar con retinol en alta concentración. Puede aumentar fotosensibilidad. El ácido mandélico es más suave y apto para piel sensible.",
+      "concentracion_tipica": "5-30%"
     },
     {
-      "pregunta": "Como empiezo mi marca de cosmeticos?",
-      "respuesta": "El proceso empieza con una consulta para definir que tipo de producto queres, para que publico, con que activos y en que textura. Luego desarrollamos la formula, hacemos muestras, ajustamos, y producimos. Podes empezar desde 500 unidades."
+      "id": "acido-hialuronico",
+      "nombre": "Ácido hialurónico",
+      "descripcion": "Humectante de alto poder. Compatible con casi cualquier activo. Distintos pesos moleculares para efecto superficial o profundo.",
+      "consideraciones": "Ninguna limitación relevante. Muy bien tolerado.",
+      "concentracion_tipica": "0.1-2%"
+    },
+    {
+      "id": "peptidos",
+      "nombre": "Péptidos",
+      "descripcion": "Activos antiage que estimulan colágeno y elastina. Gran variedad (Matrixyl, Argireline, etc.).",
+      "consideraciones": "Sensibles a algunos conservantes (evitar parabenos con ciertos péptidos). Se evalúa caso por caso.",
+      "compatible_con": ["niacinamida", "acido-hialuronico"],
+      "concentracion_tipica": "0.5-5% (varía por tipo de péptido)"
+    },
+    {
+      "id": "magnesio",
+      "nombre": "Magnesio (cloruro de magnesio u óxido)",
+      "descripcion": "Mineral con propiedades relajantes musculares, usado en cremas corporales y aceites.",
+      "consideraciones": "Compatible con árnica. Buen perfil de tolerancia.",
+      "compatible_con": ["arnica", "aceites-vegetales", "aloe-vera"],
+      "concentracion_tipica": "1-15%"
+    },
+    {
+      "id": "arnica",
+      "nombre": "Árnica (extracto)",
+      "descripcion": "Extracto vegetal antiinflamatorio cosmético. Usado en cremas musculares, post-ejercicio y piernas cansadas.",
+      "consideraciones": "Compatible con magnesio. No hacer claims terapéuticos (no es medicamento).",
+      "compatible_con": ["magnesio", "mentol", "aceites-esenciales"],
+      "concentracion_tipica": "0.5-5% (como extracto)"
+    },
+    {
+      "id": "cafeina",
+      "nombre": "Cafeína",
+      "descripcion": "Estimulante, vasoconstrictor. Usado en contorno de ojos, anticelulíticos y cuero cabelludo.",
+      "consideraciones": "Compatible con la mayoría de sistemas. Buen perfil de seguridad.",
+      "concentracion_tipica": "0.5-3%"
+    },
+    {
+      "id": "ceramidas",
+      "nombre": "Ceramidas",
+      "descripcion": "Lípidos naturales de la piel. Refuerzan la barrera cutánea. Ideales para piel seca y sensible.",
+      "consideraciones": "Compatibles con casi todo. Sensibles a ciertos emulsionantes.",
+      "concentracion_tipica": "0.1-1%"
     }
   ]
 }

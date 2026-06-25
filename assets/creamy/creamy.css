@@ -25,9 +25,53 @@
     --creamy-z-index: 9999;
 }
 
+/* Utilidades */
+.creamy-hidden {
+    display: none !important;
+}
+
+.creamy-fab--hidden {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transform: scale(0.8) translateY(20px) !important;
+}
+
+body.creamy-chat-open {
+    overflow: hidden;
+}
+
 /* ============================================================
    KEYFRAMES DE ANIMACIONES
       ============================================================ */
+
+@keyframes creamy-breathe {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.03); }
+}
+
+@keyframes creamy-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+}
+
+@keyframes creamy-wave {
+    0%, 100% { transform: rotate(0deg); }
+    20% { transform: rotate(-8deg) scale(1.05); }
+    40% { transform: rotate(10deg) scale(1.05); }
+    60% { transform: rotate(-6deg); }
+    80% { transform: rotate(4deg); }
+}
+
+@keyframes creamy-greetingIn {
+    from {
+          opacity: 0;
+          transform: translateY(8px) scale(0.96);
+    }
+    to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+    }
+}
 
 @keyframes creamy-slideInUp {
     from {
@@ -94,7 +138,7 @@
     width: 64px;
     height: 64px;
     border-radius: 50%;
-    background: var(--creamy-blue, #1E9BC0);
+    background: linear-gradient(145deg, var(--creamy-blue, #1E9BC0), var(--creamy-dark, #0D5C73));
     border: none;
     cursor: pointer;
     padding: 0;
@@ -102,11 +146,22 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: var(--creamy-transition, all 0.2s ease);
+    transition: opacity 0.3s ease, transform 0.3s ease, box-shadow 0.2s ease;
     opacity: 0;
-    animation: creamy-slideInUp 0.4s ease-out 1.5s forwards;
+    animation:
+        creamy-slideInUp 0.4s ease-out 1.5s forwards,
+        creamy-breathe 4s ease-in-out 2s infinite,
+        creamy-float 6s ease-in-out 2.5s infinite;
     overflow: visible;
     -webkit-tap-highlight-color: transparent;
+}
+
+.creamy-fab--wave {
+    animation: creamy-wave 0.9s ease-in-out !important;
+}
+
+.creamy-fab-avatar-inner {
+    transition: transform 0.3s ease;
 }
 
 .creamy-fab:hover {
@@ -138,6 +193,48 @@
     justify-content: center;
     font-size: 26px;
     user-select: none;
+}
+
+/* Burbuja de saludo inteligente */
+.creamy-greeting-bubble {
+    position: fixed;
+    bottom: 100px;
+    right: 24px;
+    z-index: calc(var(--creamy-z-index, 9999) + 1);
+    max-width: 280px;
+    padding: 14px 16px;
+    background: var(--creamy-white, #fff);
+    color: var(--creamy-text, #2C3E50);
+    border-radius: 16px 16px 4px 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.14), 0 2px 8px rgba(0, 0, 0, 0.06);
+    font-size: 13.5px;
+    line-height: 1.5;
+    cursor: pointer;
+    border: 1px solid rgba(30, 155, 192, 0.12);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(8px) scale(0.96);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.creamy-greeting-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    right: 22px;
+    width: 12px;
+    height: 12px;
+    background: var(--creamy-white, #fff);
+    border-right: 1px solid rgba(30, 155, 192, 0.12);
+    border-bottom: 1px solid rgba(30, 155, 192, 0.12);
+    transform: rotate(45deg);
+}
+
+.creamy-greeting-bubble.creamy-greeting-visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+    animation: creamy-greetingIn 0.4s ease-out;
 }
 
 /* Badge estado "En línea" */
@@ -478,6 +575,67 @@
     color: var(--creamy-white, #fff);
 }
 
+/* Botones de conversión comercial */
+.creamy-action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 10px;
+    animation: creamy-slideDown 0.3s ease-out;
+}
+
+.creamy-action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: var(--creamy-transition, all 0.2s ease);
+    text-align: center;
+    font-family: inherit;
+    cursor: pointer;
+    border: 1.5px solid transparent;
+}
+
+.creamy-action-btn--primary {
+    background: var(--creamy-blue, #1E9BC0);
+    color: var(--creamy-white, #fff);
+    border-color: var(--creamy-blue, #1E9BC0);
+}
+
+.creamy-action-btn--primary:hover {
+    background: var(--creamy-dark, #0D5C73);
+    border-color: var(--creamy-dark, #0D5C73);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(30, 155, 192, 0.3);
+}
+
+.creamy-action-btn--secondary {
+    background: transparent;
+    color: var(--creamy-blue, #1E9BC0);
+    border-color: var(--creamy-blue, #1E9BC0);
+}
+
+.creamy-action-btn--secondary:hover {
+    background: var(--creamy-light, #D9F0F7);
+}
+
+.creamy-action-btn--whatsapp {
+    background: #25D366;
+    color: #fff;
+    border-color: #25D366;
+}
+
+.creamy-action-btn--whatsapp:hover {
+    background: #1da851;
+    border-color: #1da851;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+}
+
 /* ============================================================
    INPUT ÁREA
       ============================================================ */
@@ -584,6 +742,12 @@
           right: 16px;
           width: 58px;
           height: 58px;
+    }
+
+    .creamy-greeting-bubble {
+          right: 16px;
+          bottom: 88px;
+          max-width: calc(100vw - 88px);
     }
 
     .creamy-fab-avatar,
