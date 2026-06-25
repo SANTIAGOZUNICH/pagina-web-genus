@@ -1,0 +1,166 @@
+╔══════════════════════════════════════════════════════════════════╗
+║         CREAMY AI C2 — CHECKLIST DE DEPURACIÓN COMPLETO        ║
+╚══════════════════════════════════════════════════════════════════╝
+
+INSTRUCCIONES:
+Ejecutá cada ítem en orden. No saltes pasos.
+Un ❌ en cualquier punto = detente y arreglalo antes de seguir.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BLOQUE 1 — ARCHIVOS A ACTUALIZAR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[ ] 1.1 Copiar system-prompt.txt
+    → Destino: backend/creamy/prompts/system-prompt.txt
+    → Reemplazar completamente el archivo anterior
+
+[ ] 1.2 Copiar creamy-knowledge.json
+    → Destino: assets/creamy/creamy-knowledge.json
+    → Reemplazar completamente el archivo anterior
+
+[ ] 1.3 Copiar chat.js
+    → Destino: api/creamy/chat.js
+    → Reemplazar completamente
+
+[ ] 1.4 Actualizar creamy-config.json
+    → Verificar que "useMock": false
+    → Verificar que "apiEndpoint": "/api/creamy/chat"
+
+[ ] 1.5 Aplicar parche en creamy.js
+    → Reemplazar el método _sendMessage() con el de creamy-patch.js
+    → Reemplazar el método _callAPI() con el de creamy-patch.js
+    → Eliminar cualquier referencia a _processWithMock() en el flujo
+      de mensajes de usuario (los quick chips de C1 pueden quedar,
+      pero el flujo de mensajes escritos NUNCA debe ir a mock)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BLOQUE 2 — VARIABLES DE ENTORNO EN VERCEL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Ir a: vercel.com → tu proyecto → Settings → Environment Variables
+
+[ ] 2.1 OPENAI_API_KEY
+    → Debe existir y empezar con "sk-"
+    → Entornos: Production + Preview + Development
+    → Si no existe: creala en platform.openai.com/api-keys
+
+[ ] 2.2 ALLOWED_ORIGIN
+    → Valor: https://tu-dominio.com (sin slash al final)
+    → Si no existe, el backend usa "*" (permite cualquier origen)
+    → Recomendado configurarla para evitar abusos
+
+[ ] 2.3 NODE_ENV
+    → Production: "production"
+    → Development: "development" (activa logs debug en el backend)
+
+Después de agregar/cambiar variables:
+[ ] 2.4 Hacer redeploy en Vercel (las variables no se aplican sin redeploy)
+    → Vercel Dashboard → Deployments → "Redeploy" en el último deploy
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BLOQUE 3 — VERIFICACIÓN EN CONSOLA DEL NAVEGADOR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Abrir el sitio → F12 → Console + Network (filtrar por "chat")
+
+[ ] 3.1 Al abrir Creamy, verificar en Console:
+    Debe aparecer: [Creamy] POST → /api/creamy/chat
+    NO debe aparecer: [Creamy] usando mock
+    NO debe aparecer: useMock: true
+
+[ ] 3.2 Al enviar un mensaje, verificar en Network tab:
+    → Debe existir un request POST a /api/creamy/chat
+    → Status debe ser 200
+    → Response debe tener el campo "reply" (no vacío)
+    → Response debe tener el campo "meta" con "model": "gpt-4o-mini"
+
+[ ] 3.3 Verificar el payload del request (Network → request → Payload):
+    → "message": [texto del usuario]
+    → "conversation_history": [array]
+    → "session_id": [string]
+
+[ ] 3.4 Verificar la respuesta (Network → request → Response):
+    → "reply": [texto generado por IA, no un mock hardcodeado]
+    → "meta.model": "gpt-4o-mini" (confirma que pasó por OpenAI)
+    → "meta.knowledge_loaded": true (confirma que el JSON se leyó)
+    → "meta.used_fallback": false (confirma que NO usó fallback)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BLOQUE 4 — VERIFICACIÓN EN LOGS DE VERCEL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Vercel Dashboard → tu proyecto → Logs (o Deployments → Functions)
+
+Cada request a /api/creamy/chat debe generar estos logs en orden:
+
+[ ] 4.1  [CREAMY:REQUEST_START] { requestId, method: "POST" }
+[ ] 4.2  [CREAMY:API_KEY] { present: true, prefix: "sk-proj-..." }
+[ ] 4.3  [CREAMY:PROMPT] { loaded: true, chars: [número > 1000] }
+[ ] 4.4  [CREAMY:KNOWLEDGE] { loaded: true, products: [número > 0] }
+[ ] 4.5  [CREAMY:SYSTEM_PROMPT] { knowledge_injected: true }
+[ ] 4.6  [CREAMY:OPENAI_REQUEST] { model: "gpt-4o-mini", ... }
+[ ] 4.7  [CREAMY:OPENAI_RESPONSE] { success: true, elapsed_ms: [número] }
+[ ] 4.8  [CREAMY:RESPONSE_PROCESSED] { has_actions: ..., used_fallback: false }
+
+Señales de problema:
+→ [CREAMY:ERROR:PROMPT_LOAD] = system-prompt.txt no se encuentra
+→ [CREAMY:ERROR:KNOWLEDGE_LOAD] = creamy-knowledge.json no se encuentra
+→ [CREAMY:ERROR:OPENAI_CALL] = error de API (clave inválida, cuota, etc.)
+→ [CREAMY:API_KEY] { present: false } = CRÍTICO, redeploy con la clave
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BLOQUE 5 — TESTS DE RESPUESTAS (LAS 5 PREGUNTAS OBLIGATORIAS)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Ejecutar en el chat real o con el script diagnose-creamy.js:
+
+  CREAMY_URL=https://tu-sitio.vercel.app node diagnose-creamy.js
+
+O testear manualmente en el chat:
+
+[ ] T1: "¿Cuál es el mínimo de unidades?"
+    ✅ Esperado: menciona 500 unidades Y llave en mano desde 5000
+    ❌ Falla si: da un número diferente o no menciona llave en mano
+
+[ ] T2: "¿Hacen bálsamos en barra?"
+    ✅ Esperado: dice que NO hacen en barra, SÍ en lata
+    ❌ Falla si: dice que sí sin aclarar el formato
+
+[ ] T3: "¿Hacen crema de magnesio con árnica?"
+    ✅ Esperado: dice que sí pueden desarrollarla
+    ❌ Falla si: dice que no trabajan con esos ingredientes
+
+[ ] T4: "¿Puedo mezclar retinol con AHA y vitamina C pura?"
+    ✅ Esperado: explica problemas de estabilidad/irritación, propone evaluación técnica
+    ❌ Falla si: dice "sí sin problema" sin ninguna advertencia
+
+[ ] T5: "¿Trabajan con niacinamida?"
+    ✅ Esperado: dice que sí, menciona versatilidad y evaluación de concentración
+    ❌ Falla si: dice que no o da información incorrecta
+
+[ ] T6: "Quiero hacer un serum de niacinamida." (test de inferencia)
+    ✅ Esperado: responde sobre serums y niacinamida SIN preguntar "¿para qué zona?"
+    ❌ Falla si: pregunta la zona corporal (ya está implícita: cara)
+
+[ ] T7: "Quiero un shampoo para cabello dañado, algo premium." (test de inferencia)
+    ✅ Esperado: responde sobre shampoo reparador SIN preguntar zona, objetivo ni público
+    ❌ Falla si: hace preguntas que el usuario ya respondió implícitamente
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TABLA DE ERRORES COMUNES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SÍNTOMA                          CAUSA MÁS PROBABLE
+─────────────────────────────────────────────────────────────────
+No hace POST a /api/creamy/chat  useMock: true en creamy-config.json
+HTTP 500 en el endpoint          OPENAI_API_KEY no configurada en Vercel
+HTTP 401 / 403                   CORS mal configurado o token inválido
+knowledge_loaded: false          Ruta de creamy-knowledge.json incorrecta
+used_fallback: true              System prompt insuficiente (reemplazarlo)
+Respuestas genéricas de ChatGPT  System prompt no se está cargando
+Creamy pregunta zona en serums   System prompt antiguo todavía activo
+Respuestas en inglés             El system prompt está en inglés
+Spinner infinito sin respuesta   Error de red o timeout sin manejo
+─────────────────────────────────────────────────────────────────
+
+FIN DEL CHECKLIST

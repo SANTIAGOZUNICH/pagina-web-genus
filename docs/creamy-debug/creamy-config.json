@@ -1,0 +1,25 @@
+{
+  "version": "2.0",
+  "useMock": false,
+  "apiEndpoint": "/api/creamy/chat",
+  "sessionTimeout": 86400000,
+  "maxHistoryTurns": 12,
+  "typingDelayMs": 0,
+  "welcomeMessage": "Hola, soy Creamy — el asistente de Laboratorio Genus. Puedo ayudarte a explorar nuestros servicios, resolver consultas técnicas y orientarte en el desarrollo de tu producto cosmético. ¿Por dónde empezamos?",
+  "urls": {
+    "configurador": "/crea-tu-producto",
+    "cotizacion": "/cotizacion",
+    "whatsapp": "https://wa.me/5491124980861"
+  },
+  "colors": {
+    "primary": "#1E9BC0",
+    "dark": "#0D5C73",
+    "light": "#D9F0F7"
+  },
+  "quickChips": [
+    "Quiero desarrollar un producto",
+    "Consultar servicios y precios",
+    "Tengo una consulta técnica",
+    "Hablar con un asesor"
+  ]
+}
