@@ -1,6 +1,7 @@
 /* ============================================================
-   CREAMY AI — Widget CSS (encapsulado bajo #creamy-widget)
-   Arquitectura: docs/CREAMY_AI_ARCHITECTURE_v1.md
+   CREAMY AI — Widget CSS
+   Namespace: #creamy-widget (all properties in standard English)
+   Architecture: docs/CREAMY_AI_ARCHITECTURE_v1.md
    ============================================================ */
 
 #creamy-widget {
@@ -19,23 +20,39 @@
     --creamy-font: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     position: fixed;
     inset: 0;
+    width: 0;
+    height: 0;
+    overflow: visible;
     pointer-events: none;
     z-index: var(--creamy-z);
 }
 
-#creamy-widget * {
+#creamy-widget,
+#creamy-widget *,
+#creamy-widget *::before,
+#creamy-widget *::after {
     box-sizing: border-box;
 }
 
 /* ── Keyframes ── */
 @keyframes creamy-fab-enter {
-    from { opacity: 0; transform: translateY(24px) scale(0.9); }
-    to   { opacity: 1; transform: translateY(0) scale(1); }
+    from {
+        opacity: 0;
+        transform: translateY(24px) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }
 
 @keyframes creamy-fab-idle {
-    0%, 100% { transform: translateY(0) scale(1); }
-    50%      { transform: translateY(-4px) scale(1.02); }
+    0%, 100% {
+        transform: translateY(0) scale(1);
+    }
+    50% {
+        transform: translateY(-4px) scale(1.02);
+    }
 }
 
 @keyframes creamy-fab-wave {
@@ -46,40 +63,73 @@
 }
 
 @keyframes creamy-window-in {
-    from { opacity: 0; transform: translateY(16px) scale(0.97); }
-    to   { opacity: 1; transform: translateY(0) scale(1); }
+    from {
+        opacity: 0;
+        transform: translateY(16px) scale(0.97);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }
 
 @keyframes creamy-greeting-in {
-    from { opacity: 0; transform: translateY(10px) scale(0.95); }
-    to   { opacity: 1; transform: translateY(0) scale(1); }
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }
 
 @keyframes creamy-msg-in {
-    from { opacity: 0; transform: translateY(6px); }
-    to   { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 @keyframes creamy-typing-bounce {
-    0%, 60%, 100% { transform: translateY(0); opacity: 0.45; }
-    30%           { transform: translateY(-5px); opacity: 1; }
+    0%, 60%, 100% {
+        transform: translateY(0);
+        opacity: 0.45;
+    }
+    30% {
+        transform: translateY(-5px);
+        opacity: 1;
+    }
 }
 
 @keyframes creamy-pulse-dot {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50%      { opacity: 0.55; transform: scale(0.85); }
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.55;
+        transform: scale(0.85);
+    }
 }
 
-/* ── Utilidades ── */
+/* ── Utilities ── */
 #creamy-widget .creamy-hidden {
     display: none !important;
 }
 
-/* ── Backdrop mobile ── */
+/* ── Backdrop (mobile only) ── */
 #creamy-widget .creamy-backdrop {
     display: none;
     position: fixed;
-    inset: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
     background: rgba(7, 23, 47, 0.35);
     backdrop-filter: blur(2px);
     -webkit-backdrop-filter: blur(2px);
@@ -101,7 +151,7 @@
     }
 }
 
-/* ── FAB (botón flotante) ── */
+/* ── FAB ── */
 #creamy-widget .creamy-fab {
     position: fixed;
     bottom: 24px;
@@ -109,12 +159,10 @@
     z-index: calc(var(--creamy-z) + 3);
     width: 72px;
     height: 72px;
+    margin: 0;
+    padding: 0;
     border: none;
     border-radius: 50%;
-    padding: 0;
-    margin: 0;
-    cursor: pointer;
-    pointer-events: auto;
     background: linear-gradient(145deg, var(--creamy-blue), var(--creamy-dark));
     box-shadow:
         0 6px 24px rgba(13, 92, 115, 0.35),
@@ -123,12 +171,16 @@
     align-items: center;
     justify-content: center;
     overflow: visible;
-    -webkit-tap-highlight-color: transparent;
+    cursor: pointer;
+    pointer-events: auto;
     opacity: 0;
     animation:
         creamy-fab-enter 0.45s cubic-bezier(0.22, 1, 0.36, 1) 1.2s forwards,
         creamy-fab-idle 5s ease-in-out 2s infinite;
     transition: box-shadow 0.2s ease, transform 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+    font: inherit;
+    line-height: 1;
 }
 
 #creamy-widget .creamy-fab:hover {
@@ -186,19 +238,19 @@
     animation: creamy-pulse-dot 2.5s ease-in-out infinite;
 }
 
-/* Tooltip hover */
 #creamy-widget .creamy-fab-tooltip {
     position: absolute;
-    right: calc(100% + 12px);
     top: 50%;
+    right: calc(100% + 12px);
     transform: translateY(-50%) translateX(6px);
+    padding: 8px 14px;
+    border-radius: 10px;
     background: var(--creamy-white);
     color: var(--creamy-text);
     font-family: var(--creamy-font);
     font-size: 13px;
     font-weight: 600;
-    padding: 8px 14px;
-    border-radius: 10px;
+    line-height: 1.3;
     white-space: nowrap;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
     opacity: 0;
@@ -209,12 +261,12 @@
 #creamy-widget .creamy-fab-tooltip::after {
     content: '';
     position: absolute;
-    right: -5px;
     top: 50%;
-    transform: translateY(-50%) rotate(45deg);
+    right: -5px;
     width: 10px;
     height: 10px;
     background: var(--creamy-white);
+    transform: translateY(-50%) rotate(45deg);
 }
 
 #creamy-widget .creamy-fab:hover .creamy-fab-tooltip {
@@ -222,22 +274,24 @@
     transform: translateY(-50%) translateX(0);
 }
 
-/* ── Burbuja de saludo ── */
+/* ── Greeting bubble ── */
 #creamy-widget .creamy-greeting-bubble {
     position: fixed;
     bottom: 108px;
     right: 24px;
     z-index: calc(var(--creamy-z) + 2);
     max-width: 270px;
+    margin: 0;
     padding: 14px 18px;
+    border: 1px solid rgba(30, 155, 192, 0.15);
+    border-radius: 16px 16px 4px 16px;
     background: var(--creamy-white);
     color: var(--creamy-text);
     font-family: var(--creamy-font);
     font-size: 13.5px;
+    font-weight: 400;
     line-height: 1.5;
-    border-radius: 16px 16px 4px 16px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.14);
-    border: 1px solid rgba(30, 155, 192, 0.15);
     cursor: pointer;
     pointer-events: none;
     opacity: 0;
@@ -265,20 +319,23 @@
     animation: creamy-greeting-in 0.4s ease-out;
 }
 
-/* ── Ventana de chat (DESKTOP) ── */
+/* ── Chat window (desktop) ── */
 #creamy-widget .creamy-window {
     position: fixed;
-    bottom: 24px;
-    right: 24px;
-    left: auto;
     top: auto;
+    right: 24px;
+    bottom: 24px;
+    left: auto;
     z-index: calc(var(--creamy-z) + 2);
     width: 380px;
     max-width: calc(100vw - 48px);
     height: 560px;
     max-height: calc(100vh - 48px);
-    background: var(--creamy-white);
+    margin: 0;
+    padding: 0;
+    border: none;
     border-radius: 20px;
+    background: var(--creamy-white);
     box-shadow:
         0 16px 48px rgba(0, 0, 0, 0.16),
         0 4px 12px rgba(0, 0, 0, 0.08);
@@ -288,6 +345,7 @@
     pointer-events: auto;
     font-family: var(--creamy-font);
     font-size: 14px;
+    font-weight: 400;
     line-height: 1.5;
     color: var(--creamy-text);
     transform-origin: bottom right;
@@ -300,26 +358,26 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 16px 18px;
-    background: linear-gradient(135deg, var(--creamy-blue), var(--creamy-dark));
-    border-radius: 20px 20px 0 0;
-    margin: 0;
-    border: none;
-    min-height: unset;
     width: 100%;
+    margin: 0;
+    padding: 16px 18px;
+    border: none;
+    border-radius: 20px 20px 0 0;
+    background: linear-gradient(135deg, var(--creamy-blue), var(--creamy-dark));
+    min-height: unset;
 }
 
 #creamy-widget .creamy-header-avatar {
     width: 42px;
     height: 42px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.95);
     border: 2px solid rgba(255, 255, 255, 0.45);
+    background: rgba(255, 255, 255, 0.95);
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0;
     overflow: hidden;
+    flex-shrink: 0;
 }
 
 #creamy-widget .creamy-header-avatar svg {
@@ -334,12 +392,12 @@
 }
 
 #creamy-widget .creamy-header-name {
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--creamy-white);
-    line-height: 1.3;
     margin: 0;
     padding: 0;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--creamy-white);
 }
 
 #creamy-widget .creamy-header-status {
@@ -359,8 +417,8 @@
 
 #creamy-widget .creamy-header-status-text {
     font-size: 11.5px;
-    color: rgba(255, 255, 255, 0.88);
     font-weight: 400;
+    color: rgba(255, 255, 255, 0.88);
 }
 
 #creamy-widget .creamy-header-actions {
@@ -372,12 +430,13 @@
 #creamy-widget .creamy-header-btn {
     width: 32px;
     height: 32px;
+    margin: 0;
+    padding: 0;
     border: none;
     border-radius: 50%;
-    padding: 0;
-    margin: 0;
     background: rgba(255, 255, 255, 0.16);
     color: var(--creamy-white);
+    font-family: var(--creamy-font);
     font-size: 18px;
     line-height: 1;
     cursor: pointer;
@@ -386,23 +445,23 @@
     justify-content: center;
     transition: background 0.15s ease;
     -webkit-tap-highlight-color: transparent;
-    font-family: var(--creamy-font);
 }
 
 #creamy-widget .creamy-header-btn:hover {
     background: rgba(255, 255, 255, 0.3);
 }
 
-/* ── Mensajes ── */
+/* ── Messages ── */
 #creamy-widget .creamy-messages {
     flex: 1 1 auto;
     min-height: 0;
-    overflow-y: auto;
-    overflow-x: hidden;
-    padding: 16px 16px 8px;
     display: flex;
     flex-direction: column;
     gap: 10px;
+    margin: 0;
+    padding: 16px 16px 8px;
+    overflow-x: hidden;
+    overflow-y: auto;
     background: #FAFBFC;
     scroll-behavior: smooth;
 }
@@ -412,8 +471,8 @@
 }
 
 #creamy-widget .creamy-messages::-webkit-scrollbar-thumb {
-    background: var(--creamy-gray-medium);
     border-radius: 2px;
+    background: var(--creamy-gray-medium);
 }
 
 #creamy-widget .creamy-message {
@@ -434,25 +493,25 @@
 }
 
 #creamy-widget .creamy-bubble {
+    margin: 0;
     padding: 10px 14px;
     font-size: 13.5px;
     line-height: 1.55;
     word-wrap: break-word;
     word-break: break-word;
-    margin: 0;
 }
 
 #creamy-widget .creamy-message-user .creamy-bubble {
+    border-radius: 18px 18px 4px 18px;
     background: var(--creamy-blue);
     color: var(--creamy-white);
-    border-radius: 18px 18px 4px 18px;
     box-shadow: 0 2px 8px rgba(30, 155, 192, 0.22);
 }
 
 #creamy-widget .creamy-message-bot .creamy-bubble {
+    border-radius: 4px 18px 18px 18px;
     background: var(--creamy-gray-light);
     color: var(--creamy-text);
-    border-radius: 4px 18px 18px 18px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
@@ -460,15 +519,15 @@
     font-weight: 600;
 }
 
-/* ── Typing ── */
+/* ── Typing indicator ── */
 #creamy-widget .creamy-typing {
     display: flex;
     align-items: center;
     gap: 5px;
-    padding: 12px 16px;
-    background: var(--creamy-gray-light);
-    border-radius: 4px 18px 18px 18px;
     align-self: flex-start;
+    padding: 12px 16px;
+    border-radius: 4px 18px 18px 18px;
+    background: var(--creamy-gray-light);
     animation: creamy-msg-in 0.22s ease-out;
 }
 
@@ -480,8 +539,13 @@
     animation: creamy-typing-bounce 1.2s ease-in-out infinite;
 }
 
-#creamy-widget .creamy-typing-dot:nth-child(2) { animation-delay: 0.15s; }
-#creamy-widget .creamy-typing-dot:nth-child(3) { animation-delay: 0.3s; }
+#creamy-widget .creamy-typing-dot:nth-child(2) {
+    animation-delay: 0.15s;
+}
+
+#creamy-widget .creamy-typing-dot:nth-child(3) {
+    animation-delay: 0.3s;
+}
 
 /* ── Chips ── */
 #creamy-widget .creamy-chips {
@@ -494,6 +558,7 @@
 #creamy-widget .creamy-chip {
     display: inline-flex;
     align-items: center;
+    margin: 0;
     padding: 7px 13px;
     border: 1.5px solid var(--creamy-blue);
     border-radius: 20px;
@@ -502,11 +567,10 @@
     font-family: var(--creamy-font);
     font-size: 12.5px;
     font-weight: 500;
-    cursor: pointer;
-    text-decoration: none;
-    transition: all 0.18s ease;
-    margin: 0;
     line-height: 1.3;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.18s ease;
     -webkit-tap-highlight-color: transparent;
 }
 
@@ -531,25 +595,27 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
-    margin-top: 10px;
     width: 100%;
+    margin-top: 10px;
 }
 
 #creamy-widget .creamy-action-btn {
     display: flex;
     align-items: center;
     justify-content: center;
+    margin: 0;
     padding: 10px 14px;
+    border: 1.5px solid transparent;
     border-radius: 12px;
+    background: transparent;
+    color: inherit;
     font-family: var(--creamy-font);
     font-size: 13px;
     font-weight: 600;
+    line-height: 1.3;
     text-decoration: none;
     cursor: pointer;
-    border: 1.5px solid transparent;
     transition: all 0.18s ease;
-    margin: 0;
-    line-height: 1.3;
 }
 
 #creamy-widget .creamy-action-btn--primary {
@@ -573,16 +639,19 @@
 
 #creamy-widget .creamy-action-btn--whatsapp {
     background: #25D366;
-    color: #fff;
+    color: #ffffff;
+    border-color: #25D366;
 }
 
 #creamy-widget .creamy-action-btn--whatsapp:hover {
     background: #1da851;
+    border-color: #1da851;
 }
 
-/* ── Input ── */
+/* ── Input area ── */
 #creamy-widget .creamy-input-area {
     flex-shrink: 0;
+    margin: 0;
     padding: 12px 14px 10px;
     border-top: 1px solid var(--creamy-gray-medium);
     background: var(--creamy-white);
@@ -592,10 +661,10 @@
     display: flex;
     align-items: flex-end;
     gap: 8px;
-    background: var(--creamy-gray-light);
-    border-radius: 24px;
     padding: 6px 6px 6px 16px;
     border: 1.5px solid transparent;
+    border-radius: 24px;
+    background: var(--creamy-gray-light);
     transition: border-color 0.2s ease, background 0.2s ease;
 }
 
@@ -607,22 +676,24 @@
 #creamy-widget .creamy-textarea {
     flex: 1;
     min-width: 0;
+    width: auto;
+    min-height: 22px;
+    max-height: 72px;
+    margin: 0;
+    padding: 4px 0;
     border: none;
     outline: none;
     background: transparent;
     resize: none;
-    font-family: var(--creamy-font);
-    font-size: 13.5px;
-    color: var(--creamy-text);
-    line-height: 1.5;
-    max-height: 72px;
-    min-height: 22px;
-    padding: 4px 0;
-    margin: 0;
-    width: auto;
-    box-shadow: none;
+    overflow-y: auto;
     appearance: none;
     -webkit-appearance: none;
+    box-shadow: none;
+    font-family: var(--creamy-font);
+    font-size: 13.5px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--creamy-text);
 }
 
 #creamy-widget .creamy-textarea::placeholder {
@@ -633,17 +704,17 @@
     width: 36px;
     height: 36px;
     min-width: 36px;
+    margin: 0;
+    padding: 0;
     border: none;
     border-radius: 50%;
-    padding: 0;
-    margin: 0;
     background: var(--creamy-blue);
     color: var(--creamy-white);
-    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    cursor: pointer;
     transition: background 0.15s ease, transform 0.15s ease;
     -webkit-tap-highlight-color: transparent;
 }
@@ -666,15 +737,16 @@
 /* ── Footer ── */
 #creamy-widget .creamy-powered {
     flex-shrink: 0;
-    text-align: center;
-    font-size: 10px;
-    color: var(--creamy-text-muted);
+    margin: 0;
     padding: 4px 12px 10px;
     background: var(--creamy-white);
-    margin: 0;
+    color: var(--creamy-text-muted);
+    font-size: 10px;
+    font-weight: 400;
+    text-align: center;
 }
 
-/* ── Focus visible ── */
+/* ── Focus ── */
 #creamy-widget .creamy-fab:focus-visible,
 #creamy-widget .creamy-chip:focus-visible,
 #creamy-widget .creamy-send-btn:focus-visible,
@@ -683,7 +755,7 @@
     outline-offset: 2px;
 }
 
-/* ── MOBILE: bottom sheet ── */
+/* ── Mobile bottom sheet ── */
 @media (max-width: 768px) {
     #creamy-widget .creamy-fab {
         bottom: 20px;
@@ -713,10 +785,10 @@
     }
 
     #creamy-widget .creamy-window {
-        bottom: 0;
-        right: 0;
-        left: 0;
         top: auto;
+        right: 0;
+        bottom: 0;
+        left: 0;
         width: 100%;
         max-width: 100%;
         height: 85vh;
@@ -737,7 +809,18 @@
     }
 
     #creamy-widget .creamy-chip {
-        font-size: 11.5px;
         padding: 6px 10px;
+        font-size: 11.5px;
+    }
+}
+
+/* ── Desktop guard: never full-width bar ── */
+@media (min-width: 769px) {
+    #creamy-widget .creamy-window:not(.creamy-hidden) {
+        width: 380px !important;
+        max-width: 380px !important;
+        left: auto !important;
+        right: 24px !important;
+        bottom: 24px !important;
     }
 }
