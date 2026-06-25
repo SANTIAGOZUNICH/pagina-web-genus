@@ -1,0 +1,30 @@
+{
+  "version": "1.0.0",
+  "phase": "C1",
+  "name": "Creamy AI",
+  "statusText": "En linea",
+  "whatsappUrl": "https://wa.me/5491124980861",
+  "configuradorUrl": "/cotizador.html",
+  "cotizacionUrl": "/contacto.html",
+  "typingDelayMin": 800,
+  "typingDelayMax": 1400,
+  "colors": {
+    "blue": "#1E9BC0",
+    "dark": "#0D5C73",
+    "light": "#D9F0F7",
+    "white": "#FFFFFF",
+    "grayLight": "#F4F6F7",
+    "text": "#2C3E50",
+    "textMuted": "#566573",
+    "green": "#2ECC71"
+  },
+  "integration": {
+    "cssPath": "/assets/creamy/creamy.css",
+    "jsPath": "/assets/creamy/creamy.js"
+  },
+  "notes": {
+    "phase": "C1 - Widget visual con mock responses",
+    "nextPhase": "C2 - Conectar IA real con OpenAI GPT-4o-mini",
+    "architecture": "docs/CREAMY_AI_ARCHITECTURE_v1.md"
+  }
+}
