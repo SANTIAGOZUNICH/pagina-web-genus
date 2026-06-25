@@ -103,6 +103,9 @@
       const wrapper = document.createElement('div');
       wrapper.id = 'creamy-widget';
       wrapper.className = 'creamy-widget';
+      wrapper.setAttribute('id', 'creamy-widget');
+      wrapper.setAttribute('class', 'creamy-widget');
+      wrapper.setAttribute('data-creamy-version', 'C2-plus');
       wrapper.innerHTML = `
         <div class="creamy-backdrop creamy-hidden" id="creamy-backdrop" aria-hidden="true"></div>
         <button class="creamy-fab" id="creamy-fab" aria-label="Abrir chat con Creamy AI" type="button">
