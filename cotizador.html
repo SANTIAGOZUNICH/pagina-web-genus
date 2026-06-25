@@ -62,6 +62,17 @@ const quoteData = {
 function showStep(step) {
   document.querySelectorAll('.g-wizard-panel').forEach(panel => {
     panel.classList.remove('active');
+    document.querySelectorAll('.g-progress-step').forEach(item => {
+  const itemStep = Number(item.dataset.step);
+
+  item.classList.remove('active', 'done');
+
+  if (itemStep < step) {
+    item.classList.add('done');
+  } else if (itemStep === step) {
+    item.classList.add('active');
+  }
+});
   });
 
   const nextPanel = document.getElementById('step' + step);
