@@ -112,7 +112,7 @@
         </button>
         <div class="creamy-greeting-bubble creamy-hidden" id="creamy-greeting-bubble" role="status" aria-live="polite"></div>
         <div class="creamy-window creamy-hidden" id="creamy-window" role="dialog" aria-label="Chat Creamy AI" aria-modal="true">
-          <header class="creamy-header">
+          <div class="creamy-header" role="banner">
             <span class="creamy-header-avatar" aria-hidden="true">${CREAMY_AVATAR_SVG}</span>
             <div class="creamy-header-info">
               <div class="creamy-header-name">Creamy AI</div>
@@ -122,10 +122,10 @@
               </div>
             </div>
             <div class="creamy-header-actions">
-              <button class="creamy-header-btn creamy-minimize-btn" aria-label="Minimizar" type="button">&#8212;</button>
-              <button class="creamy-header-btn creamy-close-btn" aria-label="Cerrar" type="button">&times;</button>
+              <button class="creamy-header-btn" data-creamy-action="minimize" aria-label="Minimizar" type="button">&#8212;</button>
+              <button class="creamy-header-btn" data-creamy-action="close" aria-label="Cerrar" type="button">&times;</button>
             </div>
-          </header>
+          </div>
           <div class="creamy-messages" id="creamy-messages" role="log" aria-live="polite"></div>
           <div class="creamy-input-area">
             <div class="creamy-input-row">
@@ -153,8 +153,8 @@
     _bindEvents() {
       this.fab.addEventListener('click', () => this._open());
       this.backdrop.addEventListener('click', () => this._minimize());
-      this.wrapper.querySelector('.creamy-minimize-btn').addEventListener('click', () => this._minimize());
-      this.wrapper.querySelector('.creamy-close-btn').addEventListener('click', () => this._close());
+      this.wrapper.querySelector('[data-creamy-action="minimize"]').addEventListener('click', () => this._minimize());
+      this.wrapper.querySelector('[data-creamy-action="close"]').addEventListener('click', () => this._close());
       this.sendBtn.addEventListener('click', () => this._sendUserMessage());
       this.inputEl.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {

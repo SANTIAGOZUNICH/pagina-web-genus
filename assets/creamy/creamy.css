@@ -1,10 +1,10 @@
 /* ============================================================
    CREAMY AI — Widget CSS
-   Namespace: #creamy-widget (all properties in standard English)
+   Namespace: #creamy-widget.creamy-widget (all properties in standard English)
    Architecture: docs/CREAMY_AI_ARCHITECTURE_v1.md
    ============================================================ */
 
-#creamy-widget {
+#creamy-widget.creamy-widget {
     --creamy-blue: #1E9BC0;
     --creamy-dark: #0D5C73;
     --creamy-light: #D9F0F7;
@@ -27,12 +27,27 @@
     z-index: var(--creamy-z);
 }
 
-#creamy-widget,
-#creamy-widget *,
-#creamy-widget *::before,
-#creamy-widget *::after {
+#creamy-widget.creamy-widget,
+#creamy-widget.creamy-widget *,
+#creamy-widget.creamy-widget *::before,
+#creamy-widget.creamy-widget *::after {
     box-sizing: border-box;
 }
+/* ── Native element reset (prevents site CSS leakage) ── */
+#creamy-widget.creamy-widget button,
+#creamy-widget.creamy-widget textarea,
+#creamy-widget.creamy-widget a {
+    font: inherit;
+    letter-spacing: normal;
+    text-transform: none;
+}
+
+#creamy-widget.creamy-widget button {
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+
 
 /* ── Keyframes ── */
 @keyframes creamy-fab-enter {
@@ -118,12 +133,12 @@
 }
 
 /* ── Utilities ── */
-#creamy-widget .creamy-hidden {
+#creamy-widget.creamy-widget .creamy-hidden {
     display: none !important;
 }
 
 /* ── Backdrop (mobile only) ── */
-#creamy-widget .creamy-backdrop {
+#creamy-widget.creamy-widget .creamy-backdrop {
     display: none;
     position: fixed;
     top: 0;
@@ -140,7 +155,7 @@
 }
 
 @media (max-width: 768px) {
-    #creamy-widget .creamy-backdrop {
+    #creamy-widget.creamy-widget .creamy-backdrop {
         display: block;
     }
 
@@ -152,7 +167,7 @@
 }
 
 /* ── FAB ── */
-#creamy-widget .creamy-fab {
+#creamy-widget.creamy-widget .creamy-fab {
     position: fixed;
     bottom: 24px;
     right: 24px;
@@ -183,7 +198,7 @@
     line-height: 1;
 }
 
-#creamy-widget .creamy-fab:hover {
+#creamy-widget.creamy-widget .creamy-fab:hover {
     box-shadow:
         0 10px 32px rgba(13, 92, 115, 0.42),
         0 4px 12px rgba(0, 0, 0, 0.14);
@@ -191,22 +206,22 @@
     animation: none;
 }
 
-#creamy-widget .creamy-fab:active {
+#creamy-widget.creamy-widget .creamy-fab:active {
     transform: scale(0.96);
 }
 
-#creamy-widget .creamy-fab--wave {
+#creamy-widget.creamy-widget .creamy-fab--wave {
     animation: creamy-fab-wave 0.85s ease-in-out !important;
 }
 
-#creamy-widget .creamy-fab--hidden {
+#creamy-widget.creamy-widget .creamy-fab--hidden {
     opacity: 0 !important;
     pointer-events: none !important;
     transform: scale(0.75) translateY(16px) !important;
     animation: none !important;
 }
 
-#creamy-widget .creamy-fab-avatar {
+#creamy-widget.creamy-widget .creamy-fab-avatar {
     width: 58px;
     height: 58px;
     border-radius: 50%;
@@ -219,13 +234,13 @@
     flex-shrink: 0;
 }
 
-#creamy-widget .creamy-fab-avatar svg {
+#creamy-widget.creamy-widget .creamy-fab-avatar svg {
     width: 40px;
     height: 40px;
     display: block;
 }
 
-#creamy-widget .creamy-fab-badge {
+#creamy-widget.creamy-widget .creamy-fab-badge {
     position: absolute;
     top: 4px;
     right: 4px;
@@ -238,7 +253,7 @@
     animation: creamy-pulse-dot 2.5s ease-in-out infinite;
 }
 
-#creamy-widget .creamy-fab-tooltip {
+#creamy-widget.creamy-widget .creamy-fab-tooltip {
     position: absolute;
     top: 50%;
     right: calc(100% + 12px);
@@ -258,7 +273,7 @@
     transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
-#creamy-widget .creamy-fab-tooltip::after {
+#creamy-widget.creamy-widget .creamy-fab-tooltip::after {
     content: '';
     position: absolute;
     top: 50%;
@@ -269,13 +284,13 @@
     transform: translateY(-50%) rotate(45deg);
 }
 
-#creamy-widget .creamy-fab:hover .creamy-fab-tooltip {
+#creamy-widget.creamy-widget .creamy-fab:hover .creamy-fab-tooltip {
     opacity: 1;
     transform: translateY(-50%) translateX(0);
 }
 
 /* ── Greeting bubble ── */
-#creamy-widget .creamy-greeting-bubble {
+#creamy-widget.creamy-widget .creamy-greeting-bubble {
     position: fixed;
     bottom: 108px;
     right: 24px;
@@ -299,7 +314,7 @@
     transition: opacity 0.35s ease, transform 0.35s ease;
 }
 
-#creamy-widget .creamy-greeting-bubble::after {
+#creamy-widget.creamy-widget .creamy-greeting-bubble::after {
     content: '';
     position: absolute;
     bottom: -5px;
@@ -312,7 +327,7 @@
     transform: rotate(45deg);
 }
 
-#creamy-widget .creamy-greeting-bubble.creamy-greeting-visible {
+#creamy-widget.creamy-widget .creamy-greeting-bubble.creamy-greeting-visible {
     opacity: 1;
     pointer-events: auto;
     transform: translateY(0);
@@ -320,7 +335,7 @@
 }
 
 /* ── Chat window (desktop) ── */
-#creamy-widget .creamy-window {
+#creamy-widget.creamy-widget .creamy-window {
     position: fixed;
     top: auto;
     right: 24px;
@@ -353,7 +368,7 @@
 }
 
 /* ── Header ── */
-#creamy-widget .creamy-header {
+#creamy-widget.creamy-widget .creamy-header {
     flex-shrink: 0;
     display: flex;
     align-items: center;
@@ -367,7 +382,7 @@
     min-height: unset;
 }
 
-#creamy-widget .creamy-header-avatar {
+#creamy-widget.creamy-widget .creamy-header-avatar {
     width: 42px;
     height: 42px;
     border-radius: 50%;
@@ -380,18 +395,18 @@
     flex-shrink: 0;
 }
 
-#creamy-widget .creamy-header-avatar svg {
+#creamy-widget.creamy-widget .creamy-header-avatar svg {
     width: 28px;
     height: 28px;
     display: block;
 }
 
-#creamy-widget .creamy-header-info {
+#creamy-widget.creamy-widget .creamy-header-info {
     flex: 1;
     min-width: 0;
 }
 
-#creamy-widget .creamy-header-name {
+#creamy-widget.creamy-widget .creamy-header-name {
     margin: 0;
     padding: 0;
     font-size: 15px;
@@ -400,14 +415,14 @@
     color: var(--creamy-white);
 }
 
-#creamy-widget .creamy-header-status {
+#creamy-widget.creamy-widget .creamy-header-status {
     display: flex;
     align-items: center;
     gap: 6px;
     margin-top: 3px;
 }
 
-#creamy-widget .creamy-header-dot {
+#creamy-widget.creamy-widget .creamy-header-dot {
     width: 8px;
     height: 8px;
     border-radius: 50%;
@@ -415,19 +430,19 @@
     flex-shrink: 0;
 }
 
-#creamy-widget .creamy-header-status-text {
+#creamy-widget.creamy-widget .creamy-header-status-text {
     font-size: 11.5px;
     font-weight: 400;
     color: rgba(255, 255, 255, 0.88);
 }
 
-#creamy-widget .creamy-header-actions {
+#creamy-widget.creamy-widget .creamy-header-actions {
     display: flex;
     gap: 6px;
     flex-shrink: 0;
 }
 
-#creamy-widget .creamy-header-btn {
+#creamy-widget.creamy-widget .creamy-header-btn {
     width: 32px;
     height: 32px;
     margin: 0;
@@ -447,12 +462,12 @@
     -webkit-tap-highlight-color: transparent;
 }
 
-#creamy-widget .creamy-header-btn:hover {
+#creamy-widget.creamy-widget .creamy-header-btn:hover {
     background: rgba(255, 255, 255, 0.3);
 }
 
 /* ── Messages ── */
-#creamy-widget .creamy-messages {
+#creamy-widget.creamy-widget .creamy-messages {
     flex: 1 1 auto;
     min-height: 0;
     display: flex;
@@ -466,33 +481,33 @@
     scroll-behavior: smooth;
 }
 
-#creamy-widget .creamy-messages::-webkit-scrollbar {
+#creamy-widget.creamy-widget .creamy-messages::-webkit-scrollbar {
     width: 4px;
 }
 
-#creamy-widget .creamy-messages::-webkit-scrollbar-thumb {
+#creamy-widget.creamy-widget .creamy-messages::-webkit-scrollbar-thumb {
     border-radius: 2px;
     background: var(--creamy-gray-medium);
 }
 
-#creamy-widget .creamy-message {
+#creamy-widget.creamy-widget .creamy-message {
     display: flex;
     flex-direction: column;
     max-width: 85%;
     animation: creamy-msg-in 0.22s ease-out;
 }
 
-#creamy-widget .creamy-message-user {
+#creamy-widget.creamy-widget .creamy-message-user {
     align-self: flex-end;
     align-items: flex-end;
 }
 
-#creamy-widget .creamy-message-bot {
+#creamy-widget.creamy-widget .creamy-message-bot {
     align-self: flex-start;
     align-items: flex-start;
 }
 
-#creamy-widget .creamy-bubble {
+#creamy-widget.creamy-widget .creamy-bubble {
     margin: 0;
     padding: 10px 14px;
     font-size: 13.5px;
@@ -501,26 +516,26 @@
     word-break: break-word;
 }
 
-#creamy-widget .creamy-message-user .creamy-bubble {
+#creamy-widget.creamy-widget .creamy-message-user .creamy-bubble {
     border-radius: 18px 18px 4px 18px;
     background: var(--creamy-blue);
     color: var(--creamy-white);
     box-shadow: 0 2px 8px rgba(30, 155, 192, 0.22);
 }
 
-#creamy-widget .creamy-message-bot .creamy-bubble {
+#creamy-widget.creamy-widget .creamy-message-bot .creamy-bubble {
     border-radius: 4px 18px 18px 18px;
     background: var(--creamy-gray-light);
     color: var(--creamy-text);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
-#creamy-widget .creamy-message-bot .creamy-bubble strong {
+#creamy-widget.creamy-widget .creamy-message-bot .creamy-bubble strong {
     font-weight: 600;
 }
 
 /* ── Typing indicator ── */
-#creamy-widget .creamy-typing {
+#creamy-widget.creamy-widget .creamy-typing {
     display: flex;
     align-items: center;
     gap: 5px;
@@ -531,7 +546,7 @@
     animation: creamy-msg-in 0.22s ease-out;
 }
 
-#creamy-widget .creamy-typing-dot {
+#creamy-widget.creamy-widget .creamy-typing-dot {
     width: 7px;
     height: 7px;
     border-radius: 50%;
@@ -539,23 +554,23 @@
     animation: creamy-typing-bounce 1.2s ease-in-out infinite;
 }
 
-#creamy-widget .creamy-typing-dot:nth-child(2) {
+#creamy-widget.creamy-widget .creamy-typing-dot:nth-child(2) {
     animation-delay: 0.15s;
 }
 
-#creamy-widget .creamy-typing-dot:nth-child(3) {
+#creamy-widget.creamy-widget .creamy-typing-dot:nth-child(3) {
     animation-delay: 0.3s;
 }
 
 /* ── Chips ── */
-#creamy-widget .creamy-chips {
+#creamy-widget.creamy-widget .creamy-chips {
     display: flex;
     flex-wrap: wrap;
     gap: 7px;
     margin-top: 8px;
 }
 
-#creamy-widget .creamy-chip {
+#creamy-widget.creamy-widget .creamy-chip {
     display: inline-flex;
     align-items: center;
     margin: 0;
@@ -574,24 +589,24 @@
     -webkit-tap-highlight-color: transparent;
 }
 
-#creamy-widget .creamy-chip:hover {
+#creamy-widget.creamy-widget .creamy-chip:hover {
     background: var(--creamy-blue);
     color: var(--creamy-white);
 }
 
-#creamy-widget .creamy-chip-cta {
+#creamy-widget.creamy-widget .creamy-chip-cta {
     border-color: var(--creamy-dark);
     color: var(--creamy-dark);
     font-weight: 600;
 }
 
-#creamy-widget .creamy-chip-cta:hover {
+#creamy-widget.creamy-widget .creamy-chip-cta:hover {
     background: var(--creamy-dark);
     color: var(--creamy-white);
 }
 
 /* ── Action buttons ── */
-#creamy-widget .creamy-action-buttons {
+#creamy-widget.creamy-widget .creamy-action-buttons {
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -599,7 +614,7 @@
     margin-top: 10px;
 }
 
-#creamy-widget .creamy-action-btn {
+#creamy-widget.creamy-widget .creamy-action-btn {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -618,38 +633,38 @@
     transition: all 0.18s ease;
 }
 
-#creamy-widget .creamy-action-btn--primary {
+#creamy-widget.creamy-widget .creamy-action-btn--primary {
     background: var(--creamy-blue);
     color: var(--creamy-white);
 }
 
-#creamy-widget .creamy-action-btn--primary:hover {
+#creamy-widget.creamy-widget .creamy-action-btn--primary:hover {
     background: var(--creamy-dark);
 }
 
-#creamy-widget .creamy-action-btn--secondary {
+#creamy-widget.creamy-widget .creamy-action-btn--secondary {
     background: transparent;
     color: var(--creamy-blue);
     border-color: var(--creamy-blue);
 }
 
-#creamy-widget .creamy-action-btn--secondary:hover {
+#creamy-widget.creamy-widget .creamy-action-btn--secondary:hover {
     background: var(--creamy-light);
 }
 
-#creamy-widget .creamy-action-btn--whatsapp {
+#creamy-widget.creamy-widget .creamy-action-btn--whatsapp {
     background: #25D366;
     color: #ffffff;
     border-color: #25D366;
 }
 
-#creamy-widget .creamy-action-btn--whatsapp:hover {
+#creamy-widget.creamy-widget .creamy-action-btn--whatsapp:hover {
     background: #1da851;
     border-color: #1da851;
 }
 
 /* ── Input area ── */
-#creamy-widget .creamy-input-area {
+#creamy-widget.creamy-widget .creamy-input-area {
     flex-shrink: 0;
     margin: 0;
     padding: 12px 14px 10px;
@@ -657,7 +672,7 @@
     background: var(--creamy-white);
 }
 
-#creamy-widget .creamy-input-row {
+#creamy-widget.creamy-widget .creamy-input-row {
     display: flex;
     align-items: flex-end;
     gap: 8px;
@@ -668,12 +683,12 @@
     transition: border-color 0.2s ease, background 0.2s ease;
 }
 
-#creamy-widget .creamy-input-row:focus-within {
+#creamy-widget.creamy-widget .creamy-input-row:focus-within {
     border-color: var(--creamy-blue);
     background: var(--creamy-white);
 }
 
-#creamy-widget .creamy-textarea {
+#creamy-widget.creamy-widget .creamy-textarea {
     flex: 1;
     min-width: 0;
     width: auto;
@@ -696,11 +711,11 @@
     color: var(--creamy-text);
 }
 
-#creamy-widget .creamy-textarea::placeholder {
+#creamy-widget.creamy-widget .creamy-textarea::placeholder {
     color: var(--creamy-text-muted);
 }
 
-#creamy-widget .creamy-send-btn {
+#creamy-widget.creamy-widget .creamy-send-btn {
     width: 36px;
     height: 36px;
     min-width: 36px;
@@ -719,23 +734,23 @@
     -webkit-tap-highlight-color: transparent;
 }
 
-#creamy-widget .creamy-send-btn:hover {
+#creamy-widget.creamy-widget .creamy-send-btn:hover {
     background: var(--creamy-dark);
     transform: scale(1.05);
 }
 
-#creamy-widget .creamy-send-btn:disabled {
+#creamy-widget.creamy-widget .creamy-send-btn:disabled {
     background: var(--creamy-gray-medium);
     cursor: not-allowed;
     transform: none;
 }
 
-#creamy-widget .creamy-send-btn svg {
+#creamy-widget.creamy-widget .creamy-send-btn svg {
     display: block;
 }
 
 /* ── Footer ── */
-#creamy-widget .creamy-powered {
+#creamy-widget.creamy-widget .creamy-powered {
     flex-shrink: 0;
     margin: 0;
     padding: 4px 12px 10px;
@@ -747,44 +762,44 @@
 }
 
 /* ── Focus ── */
-#creamy-widget .creamy-fab:focus-visible,
-#creamy-widget .creamy-chip:focus-visible,
-#creamy-widget .creamy-send-btn:focus-visible,
-#creamy-widget .creamy-header-btn:focus-visible {
+#creamy-widget.creamy-widget .creamy-fab:focus-visible,
+#creamy-widget.creamy-widget .creamy-chip:focus-visible,
+#creamy-widget.creamy-widget .creamy-send-btn:focus-visible,
+#creamy-widget.creamy-widget .creamy-header-btn:focus-visible {
     outline: 2px solid var(--creamy-blue);
     outline-offset: 2px;
 }
 
 /* ── Mobile bottom sheet ── */
 @media (max-width: 768px) {
-    #creamy-widget .creamy-fab {
+    #creamy-widget.creamy-widget .creamy-fab {
         bottom: 20px;
         right: 20px;
         width: 64px;
         height: 64px;
     }
 
-    #creamy-widget .creamy-fab-avatar {
+    #creamy-widget.creamy-widget .creamy-fab-avatar {
         width: 52px;
         height: 52px;
     }
 
-    #creamy-widget .creamy-fab-avatar svg {
+    #creamy-widget.creamy-widget .creamy-fab-avatar svg {
         width: 36px;
         height: 36px;
     }
 
-    #creamy-widget .creamy-fab-tooltip {
+    #creamy-widget.creamy-widget .creamy-fab-tooltip {
         display: none;
     }
 
-    #creamy-widget .creamy-greeting-bubble {
+    #creamy-widget.creamy-widget .creamy-greeting-bubble {
         bottom: 96px;
         right: 20px;
         max-width: calc(100vw - 100px);
     }
 
-    #creamy-widget .creamy-window {
+    #creamy-widget.creamy-widget .creamy-window {
         top: auto;
         right: 0;
         bottom: 0;
@@ -797,18 +812,18 @@
         animation: creamy-window-in 0.35s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
-    #creamy-widget .creamy-header {
+    #creamy-widget.creamy-widget .creamy-header {
         border-radius: 20px 20px 0 0;
     }
 }
 
 @media (max-width: 360px) {
-    #creamy-widget .creamy-window {
+    #creamy-widget.creamy-widget .creamy-window {
         height: 92vh;
         max-height: 92vh;
     }
 
-    #creamy-widget .creamy-chip {
+    #creamy-widget.creamy-widget .creamy-chip {
         padding: 6px 10px;
         font-size: 11.5px;
     }
@@ -816,7 +831,7 @@
 
 /* ── Desktop guard: never full-width bar ── */
 @media (min-width: 769px) {
-    #creamy-widget .creamy-window:not(.creamy-hidden) {
+    #creamy-widget.creamy-widget .creamy-window:not(.creamy-hidden) {
         width: 380px !important;
         max-width: 380px !important;
         left: auto !important;
