@@ -12,6 +12,14 @@
   ],
   "rewrites": [
     {
+      "source": "/assets/creamy/creamy.js",
+      "destination": "/api/creamy/widget"
+    },
+    {
+      "source": "/assets/creamy/creamy.css",
+      "destination": "/api/creamy/widget-css"
+    },
+    {
       "source": "/quienes-somos",
       "destination": "/quienes-somos.html"
     },
