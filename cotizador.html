@@ -47,6 +47,120 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="styles-internal.css" />
   </head>
+  <script>
+let currentStep = 1;
+
+const quoteData = {
+  producto: '',
+  cantidad: '',
+  formula: '',
+  desarrollo: '',
+  envases: '',
+  packaging: ''
+};
+
+function showStep(step) {
+  document.querySelectorAll('.g-wizard-panel').forEach(panel => {
+    panel.classList.remove('active');
+  });
+
+  const nextPanel = document.getElementById('step' + step);
+  if (nextPanel) {
+    nextPanel.classList.add('active');
+    currentStep = step;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  if (step === 7) updateSummary();
+}
+
+function goNext(step) {
+  showStep(step + 1);
+}
+
+function goBack(step) {
+  showStep(step - 1);
+}
+
+function selectOption(el, field) {
+  const parent = el.parentElement;
+
+  parent.querySelectorAll('.g-option-label').forEach(option => {
+    option.classList.remove('selected');
+  });
+
+  el.classList.add('selected');
+  quoteData[field] = el.textContent.trim();
+}
+
+function selectYN(el, field) {
+  const parent = el.parentElement;
+
+  parent.querySelectorAll('.g-yn-label').forEach(option => {
+    option.classList.remove('selected');
+  });
+
+  el.classList.add('selected');
+  quoteData[field] = el.textContent.trim();
+}
+
+function updateSummary() {
+  const summary = document.getElementById('summaryCard');
+  if (!summary) return;
+
+  const nombre = document.getElementById('f_nombre')?.value || '—';
+  const empresa = document.getElementById('f_empresa')?.value || '—';
+  const email = document.getElementById('f_email')?.value || '—';
+  const wa = document.getElementById('f_wa')?.value || '—';
+
+  summary.innerHTML = `
+    <h4>Resumen de su solicitud</h4>
+    <p><strong>Nombre:</strong> ${nombre}</p>
+    <p><strong>Empresa / Marca:</strong> ${empresa}</p>
+    <p><strong>Email:</strong> ${email}</p>
+    <p><strong>WhatsApp:</strong> ${wa}</p>
+    <p><strong>Producto:</strong> ${quoteData.producto || '—'}</p>
+    <p><strong>Cantidad:</strong> ${quoteData.cantidad || '—'}</p>
+    <p><strong>Fórmula:</strong> ${quoteData.formula || '—'}</p>
+    <p><strong>Desarrollo:</strong> ${quoteData.desarrollo || '—'}</p>
+    <p><strong>Envases:</strong> ${quoteData.envases || '—'}</p>
+    <p><strong>Packaging:</strong> ${quoteData.packaging || '—'}</p>
+  `;
+}
+
+function submitQuote() {
+  const nombre = document.getElementById('f_nombre')?.value || '';
+  const empresa = document.getElementById('f_empresa')?.value || '';
+  const email = document.getElementById('f_email')?.value || '';
+  const wa = document.getElementById('f_wa')?.value || '';
+  const comentarios = document.getElementById('f_comentarios')?.value || '';
+
+  const msg =
+`Hola Laboratorio Genus, quiero solicitar una cotización.
+
+DATOS DE CONTACTO
+Nombre: ${nombre}
+Empresa / Marca: ${empresa}
+Email: ${email}
+WhatsApp: ${wa}
+
+PRODUCTO
+Tipo de producto: ${quoteData.producto || '—'}
+Cantidad estimada: ${quoteData.cantidad || '—'}
+¿Posee fórmula?: ${quoteData.formula || '—'}
+¿Necesita desarrollo?: ${quoteData.desarrollo || '—'}
+¿Posee envases?: ${quoteData.envases || '—'}
+¿Necesita que Genus consiga envases?: ${quoteData.packaging || '—'}
+
+COMENTARIOS
+${comentarios || '—'}`;
+
+  const url = 'https://wa.me/5491124980861?text=' + encodeURIComponent(msg);
+  window.open(url, '_blank');
+
+  document.getElementById('successState')?.classList.add('active');
+}
+</script>
 <body>
   <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WTM6WTQM"
