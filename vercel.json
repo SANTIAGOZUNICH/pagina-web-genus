@@ -6,6 +6,10 @@
     },
     "api/creamy-v2/health.js": {
       "includeFiles": "backend/creamy-v2/**"
+    },
+    "api/creamy-v2/debug.js": {
+      "maxDuration": 30,
+      "includeFiles": "backend/creamy-v2/**"
     }
   },
   "headers": [

@@ -6,6 +6,7 @@
     "test:creamy-v2": "node scripts/test-creamy-v2.js",
     "test:creamy-v2-api": "node scripts/test-creamy-v2-api.js",
     "test:creamy-v2-preview": "node scripts/test-creamy-v2-preview.js",
-    "validate:creamy-openai": "node scripts/validate-creamy-openai.js"
+    "validate:creamy-openai": "node scripts/validate-creamy-openai.js",
+    "audit:creamy-openai": "node scripts/audit-creamy-openai.js"
   }
 }

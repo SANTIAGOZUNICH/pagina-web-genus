@@ -53,6 +53,8 @@ export async function chatCompletion({
     const err = new Error(data.error?.message || `OpenAI error ${res.status}`);
     err.status = res.status;
     err.code = data.error?.code;
+    err.type = data.error?.type;
+    err.openaiBody = data.error || data;
     throw err;
   }
 

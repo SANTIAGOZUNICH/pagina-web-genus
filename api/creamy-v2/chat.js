@@ -272,6 +272,8 @@ export default async function handler(req, res) {
       used_fallback: true,
       openai_status: err.status || 'error',
       openai_error_code: err.code || 'openai_error',
+      openai_error_type: err.type || null,
+      openai_error_body: err.openaiBody ? JSON.stringify(err.openaiBody).slice(0, 500) : null,
       error_message: err.message,
     });
 
