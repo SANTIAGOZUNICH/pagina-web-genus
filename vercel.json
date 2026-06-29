@@ -1,7 +1,29 @@
 {
+  "functions": {
+    "api/creamy-v2/chat.js": {
+      "maxDuration": 60,
+      "includeFiles": "backend/creamy-v2/**"
+    },
+    "api/creamy-v2/health.js": {
+      "includeFiles": "backend/creamy-v2/**"
+    },
+    "api/creamy-v2/debug.js": {
+      "maxDuration": 30,
+      "includeFiles": "backend/creamy-v2/**"
+    }
+  },
   "headers": [
     {
       "source": "/assets/creamy/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/assets/creamy-v2/(.*)",
       "headers": [
         {
           "key": "Cache-Control",

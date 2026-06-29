@@ -1,0 +1,116 @@
+{
+  "version": "2.0",
+  "laboratorio": {
+    "nombre": "Laboratorio Genus",
+    "ubicacion": "Buenos Aires, Argentina",
+    "web": "https://www.laboratoriogenus.com.ar",
+    "email": "ventas@laboratoriogenus.com.ar",
+    "whatsapp": "https://wa.me/5491124980861",
+    "telefono": "+54 9 11 2498-0861"
+  },
+  "urls": {
+    "configurador": "/cotizador.html",
+    "cotizacion": "/contacto.html",
+    "whatsapp": "https://wa.me/5491124980861",
+    "reunion": "/contacto.html",
+    "productos": "/productos.html",
+    "llave_en_mano": "/llave-en-mano.html",
+    "calidad": "/calidad.html",
+    "desarrollo": "/desarrolla-tu-producto.html"
+  },
+  "comercial": {
+    "moq_desarrollo_fabricacion": 500,
+    "moq_llave_en_mano": 5000,
+    "unidad_minima": "unidades",
+    "nota_moq": "El MOQ de 500 unidades aplica a desarrollo cosmético y fabricación tercerizada. Llave en mano desde 5.000 unidades."
+  },
+  "servicios": [
+    {
+      "id": "desarrollo",
+      "nombre": "Desarrollo cosmético a medida",
+      "descripcion": "Formulación personalizada según brief. Incluye iteraciones de muestra hasta aprobación.",
+      "moq": 500
+    },
+    {
+      "id": "fabricacion",
+      "nombre": "Fabricación tercerizada",
+      "descripcion": "Producción con fórmula del cliente o desarrollada en el laboratorio.",
+      "moq": 500
+    },
+    {
+      "id": "llave_en_mano",
+      "nombre": "Llave en mano",
+      "descripcion": "Desarrollo + producción + envase + etiqueta. Producto listo para comercializar.",
+      "moq": 5000
+    }
+  ],
+  "proceso": [
+    { "paso": 1, "nombre": "Consulta", "descripcion": "Definimos el producto, objetivos y perfil de marca." },
+    { "paso": 2, "nombre": "Desarrollo", "descripcion": "Formulación a medida o adaptación de banco de desarrollos." },
+    { "paso": 3, "nombre": "Muestra", "descripcion": "Envío de muestra para evaluación y aprobación del cliente." },
+    { "paso": 4, "nombre": "Registros ANMAT", "descripcion": "Gestión de registros sanitarios para comercialización." },
+    { "paso": 5, "nombre": "Producción", "descripcion": "Fabricación bajo estándares de calidad documentados." },
+    { "paso": 6, "nombre": "Entrega", "descripcion": "Producto terminado listo para comercializar." }
+  ],
+  "tiempos_referenciales": {
+    "desarrollo_muestra": "4 a 8 semanas según complejidad",
+    "produccion_post_aprobacion": "3 a 6 semanas según volumen",
+    "registros_anmat": "Variable según categoría de producto",
+    "nota": "Los plazos son orientativos y se confirman en cotización formal."
+  },
+  "lineas_producto": [
+    "Capilar", "Facial", "Corporal", "Serums", "Cremas", "Geles y limpiadores",
+    "Barba", "Protector solar", "Mascarillas", "Lociones", "Aceites"
+  ],
+  "restricciones": {
+    "no_fabricamos": ["bálsamo labial en barra/stick", "balm en formato stick"],
+    "si_fabricamos": ["bálsamos y pomadas en lata", "pomadas en distintos formatos", "protectores solares con evaluación FPS"],
+    "perfumes": "Consultar viabilidad con equipo técnico-comercial",
+    "claims_prohibidos": ["cura", "trata", "sana", "medicamento", "diagnóstico", "terapéutico"]
+  },
+  "calidad": {
+    "descripcion": "Procesos controlados, materias primas seleccionadas, trazabilidad y documentación de calidad.",
+    "certificaciones": "Consultar documentación vigente con el equipo comercial."
+  },
+  "anmat": {
+    "descripcion": "Gestionamos registros sanitarios ante ANMAT para la comercialización legal de cosméticos en Argentina.",
+    "nota": "La categoría regulatoria depende del producto y sus claims."
+  },
+  "activos_destacados": {
+    "niacinamida": { "uso": "Regulación sebo, unificación tono, barrera cutánea", "concentracion": "2-10%", "nota": "Muy versátil. Con vitamina C pura en calor puede generar niazina — se evalúa en fórmula." },
+    "acido_hialuronico": { "uso": "Hidratación profunda y superficial", "concentracion": "0.1-2%", "nota": "Compatible con casi todo." },
+    "retinol": { "uso": "Antiage, renovación celular", "concentracion": "0.1-1%", "nota": "Uso nocturno. No combinar con AHA alta conc ni Vit C pura en mismo producto." },
+    "vitamina_c": { "uso": "Antioxidante, iluminación", "nota": "Formas estables preferidas: ascorbil glucósido, MAP. Vit C pura requiere pH ácido e inestabilidad controlada." },
+    "peptidos": { "uso": "Antiage, firmeza", "nota": "Variedad amplia. Compatibilidad con conservantes según tipo." },
+    "cafeina": { "uso": "Contorno ojos, reafirmantes, capilar", "concentracion": "0.5-3%" }
+  },
+  "criterio_consultor": {
+    "rol": "Ingeniero Químico Senior — formulación cosmética y desarrollo de marcas",
+    "objetivo": "Asesorar para que el cliente desarrolle un mejor producto, no solo responder preguntas",
+    "siempre_que_posible": [
+      "Evaluar si la idea es buena y explicar por qué",
+      "Sugerir mejoras y alternativas con fundamento técnico",
+      "Recomendar activos complementarios",
+      "Advertir incompatibilidades y riesgos",
+      "Explicar ventajas y desventajas",
+      "Anticipar problemas de formulación, producción o comercialización"
+    ],
+    "tono": "Opinión profesional con fundamento — nunca neutral cuando hay criterio técnico. Nunca solo sí/no."
+  },
+  "compatibilidades_clave": [
+    { "combinacion": "Niacinamida + Ácido hialurónico", "veredicto": "Recomendada", "nota": "Excelente sinergia hidratante y barrera." },
+    { "combinacion": "Vitamina C pura + Niacinamida", "veredicto": "Evaluar en fórmula", "nota": "A pH y temperatura controlados puede coexistir. Mitos de incompatibilidad absoluta son exagerados, pero requiere formulación experta." },
+    { "combinacion": "Retinol + AHA alta concentración", "veredicto": "No recomendada en mismo producto", "nota": "Riesgo de irritación. Alternar en rutina o productos separados." },
+    { "combinacion": "Retinol + Vitamina C pura", "veredicto": "No en mismo producto", "nota": "Mejor en productos separados (AM/PM)." }
+  ],
+  "page_hints": {
+    "index": "Usuario en home — puede estar explorando servicios generales.",
+    "productos": "Usuario viendo líneas de producto — interés en tipos de cosméticos.",
+    "cotizador": "Usuario en configurador — alta intención de desarrollo/cotización.",
+    "desarrolla-tu-producto": "Usuario en página de creación de producto — muy alta intención.",
+    "contacto": "Usuario buscando contacto o cotización directa.",
+    "calidad": "Usuario interesado en certificaciones y procesos de calidad.",
+    "llave-en-mano": "Usuario interesado en servicio integral desde 5000 u.",
+    "quienes-somos": "Usuario conociendo al laboratorio."
+  }
+}
