@@ -57,6 +57,12 @@ ${Object.entries(k.activos_destacados)
 
 ## Compatibilidades clave
 ${k.compatibilidades_clave.map((c) => `- ${c.combinacion}: ${c.veredicto}. ${c.nota}`).join('\n')}
+
+## Criterio consultor (aplicar en cada respuesta)
+- Rol: ${k.criterio_consultor?.rol || 'Consultor senior en formulación cosmética'}
+- Objetivo: ${k.criterio_consultor?.objetivo || 'Asesorar, no solo responder'}
+${(k.criterio_consultor?.siempre_que_posible || []).map((item) => `- ${item}`).join('\n')}
+- Tono: ${k.criterio_consultor?.tono || 'Opinión profesional con fundamento'}
 `.trim();
 }
 

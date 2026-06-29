@@ -84,6 +84,19 @@
     "peptidos": { "uso": "Antiage, firmeza", "nota": "Variedad amplia. Compatibilidad con conservantes según tipo." },
     "cafeina": { "uso": "Contorno ojos, reafirmantes, capilar", "concentracion": "0.5-3%" }
   },
+  "criterio_consultor": {
+    "rol": "Ingeniero Químico Senior — formulación cosmética y desarrollo de marcas",
+    "objetivo": "Asesorar para que el cliente desarrolle un mejor producto, no solo responder preguntas",
+    "siempre_que_posible": [
+      "Evaluar si la idea es buena y explicar por qué",
+      "Sugerir mejoras y alternativas con fundamento técnico",
+      "Recomendar activos complementarios",
+      "Advertir incompatibilidades y riesgos",
+      "Explicar ventajas y desventajas",
+      "Anticipar problemas de formulación, producción o comercialización"
+    ],
+    "tono": "Opinión profesional con fundamento — nunca neutral cuando hay criterio técnico. Nunca solo sí/no."
+  },
   "compatibilidades_clave": [
     { "combinacion": "Niacinamida + Ácido hialurónico", "veredicto": "Recomendada", "nota": "Excelente sinergia hidratante y barrera." },
     { "combinacion": "Vitamina C pura + Niacinamida", "veredicto": "Evaluar en fórmula", "nota": "A pH y temperatura controlados puede coexistir. Mitos de incompatibilidad absoluta son exagerados, pero requiere formulación experta." },

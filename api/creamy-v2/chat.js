@@ -100,8 +100,8 @@ export default async function handler(req, res) {
       model: MODEL,
       systemPrompt,
       messages,
-      maxTokens: 900,
-      temperature: 0.55,
+      maxTokens: 1100,
+      temperature: 0.58,
     });
 
   try {
