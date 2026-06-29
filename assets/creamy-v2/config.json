@@ -1,0 +1,27 @@
+{
+  "version": "2.0.0",
+  "apiEndpoint": "/api/creamy-v2/chat",
+  "greetingDelayMs": 6000,
+  "greetingDurationMs": 9000,
+  "typingDelayMin": 350,
+  "typingDelayMax": 900,
+  "statusText": "En línea",
+  "urls": {
+    "configurador": "/cotizador.html",
+    "cotizacion": "/contacto.html",
+    "whatsapp": "https://wa.me/5491124980861",
+    "reunion": "/contacto.html"
+  },
+  "welcomeMessage": "¡Hola!\n\nSoy **Creamy**, tu asistente inteligente de Laboratorio Genus.\n\nEstoy para ayudarte con cualquier consulta relacionada con el desarrollo de productos cosméticos.\n\nPodemos hablar sobre:\n• fórmulas y activos\n• cantidades y MOQ\n• procesos y tiempos\n• envases y texturas\n• compatibilidades e incompatibilidades\n• requisitos ANMAT y calidad\n• cotizaciones\n\no cualquier otra duda que tengas. ¿Por dónde empezamos?",
+  "greetingText": "👋 Hola, soy Creamy. ¿Necesitás ayuda para desarrollar tu producto?",
+  "pageContext": {
+    "index": "Está en la página principal — puede estar explorando servicios.",
+    "productos": "Está viendo líneas de producto — interés en tipos de cosméticos.",
+    "cotizador": "Está en el configurador — alta intención de desarrollo.",
+    "desarrolla-tu-producto": "Está en la página de creación de producto — muy alta intención.",
+    "contacto": "Busca contacto o cotización directa.",
+    "calidad": "Interesado en calidad y procesos del laboratorio.",
+    "llave-en-mano": "Interesado en servicio llave en mano (desde 5000 u.).",
+    "quienes-somos": "Conociendo al laboratorio."
+  }
+}
