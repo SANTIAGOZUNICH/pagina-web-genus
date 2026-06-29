@@ -259,7 +259,7 @@
 
       const payload = {
         message: userMessage,
-        conversation_history: this.history.slice(-24),
+        conversation_history: this.history.slice(-10),
         session_id: this.sessionId,
         page_url: this.pageUrl,
         page_title: this.pageTitle,

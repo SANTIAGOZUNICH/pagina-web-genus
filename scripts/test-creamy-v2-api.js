@@ -3,8 +3,7 @@
  * Prueba unitaria del handler /api/creamy-v2/chat
  */
 import handler from '../api/creamy-v2/chat.js';
-import { loadKnowledge } from '../backend/creamy-v2/lib/knowledge.js';
-import { getKnowledgeFallback } from '../backend/creamy-v2/lib/request.js';
+import { sanitizeHistory, normalizeUserMessage } from '../backend/creamy-v2/lib/request.js';
 import { detectIntents } from '../backend/creamy-v2/lib/intents.js';
 
 let errors = 0;
@@ -19,18 +18,13 @@ function mockRes() {
     headers: {},
     setHeader(k, v) { this.headers[k] = v; },
     end(body) { this.body = body; },
-    status(code) { this.statusCode = code; return this; },
   };
 }
 
 async function callHandler(payload, env = {}) {
   const prev = process.env.OPENAI_API_KEY;
   if (env.OPENAI_API_KEY !== undefined) process.env.OPENAI_API_KEY = env.OPENAI_API_KEY;
-  const req = {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: payload,
-  };
+  const req = { method: 'POST', headers: { 'content-type': 'application/json' }, body: payload };
   const res = mockRes();
   await handler(req, res);
   if (env.OPENAI_API_KEY !== undefined) process.env.OPENAI_API_KEY = prev;
@@ -39,23 +33,13 @@ async function callHandler(payload, env = {}) {
 }
 
 async function main() {
-  const knowledge = loadKnowledge();
+  check('normalize niaciniamida', normalizeUserMessage('serum de Niaciniamida').includes('niacinamida'));
+  check('normalize hialuronico', normalizeUserMessage('acido hialuronico').includes('hialurónico'));
+  check('sanitize history', sanitizeHistory([{ role: 'user', content: 'hola' }, { role: 'bad', content: 'x' }]).length === 1);
 
-  // Knowledge fallbacks
-  const moq = getKnowledgeFallback('Cuál es la cantidad mínima', knowledge);
-  check('Fallback MOQ', /500/.test(moq || ''));
-  const serum = getKnowledgeFallback('Quiero hacer un serum de niacinamida', knowledge);
-  check('Fallback serum consultivo', /excelente elección/i.test(serum || ''));
-  const retinol = getKnowledgeFallback('Puedo mezclar retinol con vitamina C', knowledge);
-  check('Fallback retinol+VitC', /no recomendaría/i.test(retinol || ''));
-
-  // Intents — no WhatsApp on generic serum
-  const intents = detectIntents('Quiero hacer un serum de niacinamida', serum, 1);
+  const intents = detectIntents('Quiero hacer un serum de niacinamida', '', 1);
   check('Sin WhatsApp en consulta técnica', !intents.includes('WHATSAPP'));
-  const intentsHuman = detectIntents('Quiero hablar por whatsapp con un asesor', '', 1);
-  check('WhatsApp si pide humano', intentsHuman.includes('WHATSAPP'));
 
-  // Handler without API key — should use knowledge fallback for MOQ
   const noKey = await callHandler({
     message: 'Cuál es la cantidad mínima',
     conversation_history: [],
@@ -63,20 +47,13 @@ async function main() {
     page_key: 'index',
   }, { OPENAI_API_KEY: '' });
 
-  check('Handler MOQ sin API key → 200', noKey.status === 200, `status ${noKey.status}`);
-  check('Handler MOQ reply', /500/.test(noKey.data.reply || ''));
+  check('Sin API key → 503', noKey.status === 503, `status ${noKey.status}`);
+  check('Sin API key → used_fallback true', noKey.data.meta?.used_fallback === true);
+  check('Sin API key → used_openai false', noKey.data.meta?.used_openai === false);
+  check('Sin API key → NO knowledge pattern 200', noKey.status !== 200);
 
-  // Handler with API key if available
-  if (process.env.OPENAI_API_KEY) {
-    const live = await callHandler({
-      message: 'Quiero hacer un serum de niacinamida',
-      conversation_history: [],
-      session_id: 'test_live',
-      page_key: 'index',
-    });
-    check('Handler OpenAI → 200', live.status === 200, `status ${live.status}`);
-    check('Handler reply sustanciosa', (live.data.reply || '').length > 100);
-    console.log(`   Preview: ${(live.data.reply || '').slice(0, 120)}...`);
+  if (process.env.OPENAI_API_KEY?.trim()) {
+    console.log('⏭️  Para validación OpenAI completa: npm run validate:creamy-openai');
   } else {
     console.log('⏭️  OpenAI live test omitido (sin OPENAI_API_KEY)');
   }

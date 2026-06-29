@@ -24,10 +24,14 @@ export default async function handler(req, res) {
     return json(res, 405, { error: 'Method not allowed' });
   }
 
+  const apiKey = process.env.OPENAI_API_KEY?.trim();
   const checks = {
     knowledge: false,
     system_prompt: false,
-    openai_key: !!process.env.OPENAI_API_KEY,
+    openai_key: !!apiKey,
+    openai_key_prefix: apiKey ? apiKey.slice(0, 7) + '...' : null,
+    mode: 'openai_primary',
+    knowledge_as: 'context_only',
   };
 
   try {

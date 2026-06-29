@@ -29,4 +29,16 @@ export function detectIntents(userMessage, assistantReply, historyLength) {
   return [...new Set(actions)].slice(0, 2);
 }
 
+export function inferIntent(userMessage, historyLength) {
+  const user = (userMessage || '').toLowerCase();
+  if (PATTERNS.human.test(user)) return 'contacto_humano';
+  if (PATTERNS.meeting.test(user)) return 'agendar_reunion';
+  if (PATTERNS.quote.test(user)) return 'cotizacion';
+  if (PATTERNS.develop.test(user) && PATTERNS.ready.test(user)) return 'desarrollo_listo';
+  if (PATTERNS.develop.test(user)) return 'explorando_desarrollo';
+  if (/\b(moq|mínim|minim|unidades)\b/i.test(user)) return 'consulta_comercial';
+  if (historyLength >= 2 && /\b(pero|entonces|y si|mejor|recomendas|recomendás)\b/i.test(user)) return 'follow_up';
+  return 'consulta_tecnica';
+}
+
 export { PATTERNS };

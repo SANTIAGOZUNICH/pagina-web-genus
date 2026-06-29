@@ -1,21 +1,33 @@
 /**
  * Creamy V2 — API Chat
  * POST /api/creamy-v2/chat
+ *
+ * Flujo: Usuario → System Prompt + Knowledge (contexto) → Historial → OpenAI → Respuesta
+ * Knowledge NO genera respuestas hardcodeadas.
  */
 
 import { loadKnowledge } from '../../backend/creamy-v2/lib/knowledge.js';
 import { buildSystemPrompt } from '../../backend/creamy-v2/lib/prompt.js';
 import { chatCompletion } from '../../backend/creamy-v2/lib/openai-client.js';
-import { detectIntents } from '../../backend/creamy-v2/lib/intents.js';
+import { detectIntents, inferIntent } from '../../backend/creamy-v2/lib/intents.js';
 import { StorageAdapter } from '../../backend/creamy-v2/lib/storage.js';
-import { parseJsonBody, getKnowledgeFallback } from '../../backend/creamy-v2/lib/request.js';
+import {
+  parseJsonBody,
+  sanitizeHistory,
+  normalizeUserMessage,
+  getEmergencyMessage,
+} from '../../backend/creamy-v2/lib/request.js';
 
 const MODEL = 'gpt-4o-mini';
-const MAX_HISTORY = 24;
+const MAX_HISTORY_MESSAGES = 10;
 const RATE_LIMIT = { max: 40, windowMs: 3600000 };
-const TECHNICAL_FALLBACK =
-  'Estoy teniendo una demora técnica para responder consultas complejas. Mientras tanto, puedo derivarte con un asesor del laboratorio.';
+const UI_TECHNICAL =
+  'Estoy teniendo una demora técnica para responder consultas complejas. Mientras tanto, puedo ayudarte con información básica del laboratorio o derivarte con un asesor.';
 const rateMap = new Map();
+
+function makeRequestId() {
+  return `cv2_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
+}
 
 function rateLimit(ip) {
   const now = Date.now();
@@ -35,7 +47,41 @@ function json(res, status, body) {
   res.end(JSON.stringify(body));
 }
 
+function buildMeta({
+  requestId,
+  sessionId,
+  knowledge,
+  usedOpenai = false,
+  usedFallback = false,
+  intent = null,
+  model = null,
+  tokens = null,
+  openaiStatus = null,
+  openaiErrorCode = null,
+  historyCount = 0,
+}) {
+  return {
+    request_id: requestId,
+    session_id: sessionId,
+    used_openai: usedOpenai,
+    used_fallback: usedFallback,
+    intent,
+    model: model || MODEL,
+    tokens_used: tokens,
+    openai_status: openaiStatus,
+    openai_error_code: openaiErrorCode,
+    history_messages: historyCount,
+    knowledge_version: knowledge?.version,
+  };
+}
+
+function logEvent(requestId, data) {
+  console.log('[CreamyV2]', JSON.stringify({ request_id: requestId, ...data }));
+}
+
 export default async function handler(req, res) {
+  const requestId = makeRequestId();
+
   if (req.method === 'OPTIONS') {
     res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -48,7 +94,10 @@ export default async function handler(req, res) {
 
   const ip = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.socket?.remoteAddress || 'unknown';
   if (!rateLimit(ip)) {
-    return json(res, 429, { error: 'Demasiadas consultas. Esperá unos minutos e intentá de nuevo.' });
+    return json(res, 429, {
+      error: UI_TECHNICAL,
+      meta: buildMeta({ requestId, sessionId: 'n/a', knowledge: null, usedFallback: true, openaiErrorCode: 'rate_limit' }),
+    });
   }
 
   let body;
@@ -62,16 +111,18 @@ export default async function handler(req, res) {
     return json(res, 400, { error: 'JSON inválido' });
   }
 
-  const message = (body.message || '').trim();
-  if (!message || message.length > 4000) {
+  const rawMessage = (body.message || '').trim();
+  if (!rawMessage || rawMessage.length > 4000) {
     return json(res, 400, { error: 'Mensaje vacío o demasiado largo' });
   }
 
+  const message = normalizeUserMessage(rawMessage);
   const sessionId = body.session_id || `sess_${Date.now()}`;
-  const history = Array.isArray(body.conversation_history) ? body.conversation_history.slice(-MAX_HISTORY) : [];
+  const history = sanitizeHistory(body.conversation_history, MAX_HISTORY_MESSAGES);
   const pageKey = body.page_key || 'index';
   const pageUrl = body.page_url || '';
   const pageTitle = body.page_title || '';
+  const intent = inferIntent(message, history.length);
 
   let knowledge;
   let systemPrompt;
@@ -79,36 +130,56 @@ export default async function handler(req, res) {
     knowledge = loadKnowledge();
     systemPrompt = buildSystemPrompt({ knowledge, pageKey, pageUrl, pageTitle });
   } catch (err) {
-    console.error('[CreamyV2] Error cargando knowledge/prompt:', err.message);
+    logEvent(requestId, { used_openai: false, used_fallback: true, openai_error_code: 'knowledge_load_error', error: err.message });
     return json(res, 500, {
-      error: TECHNICAL_FALLBACK,
-      code: 'knowledge_load_error',
+      error: UI_TECHNICAL,
+      meta: buildMeta({
+        requestId,
+        sessionId,
+        knowledge: null,
+        usedFallback: true,
+        intent,
+        openaiErrorCode: 'knowledge_load_error',
+        historyCount: history.length,
+      }),
     });
   }
 
   const apiKey = process.env.OPENAI_API_KEY?.trim();
+  const keyPresent = !!apiKey;
+  const keyPrefix = apiKey ? apiKey.slice(0, 7) : null;
+
+  logEvent(requestId, {
+    phase: 'request_start',
+    intent,
+    history_count: history.length,
+    message_len: message.length,
+    openai_key_present: keyPresent,
+    openai_key_prefix: keyPrefix,
+  });
+
   if (!apiKey) {
-    console.error('[CreamyV2] OPENAI_API_KEY no configurada');
-    const offline = getKnowledgeFallback(message, knowledge);
-    if (offline) {
-      return json(res, 200, {
-        reply: offline,
-        message: offline,
-        actions: detectIntents(message, offline, history.length + 1),
-        meta: { fallback: 'knowledge', session_id: sessionId },
-      });
-    }
+    logEvent(requestId, { used_openai: false, used_fallback: true, openai_error_code: 'missing_openai_key' });
+    const emergency = getEmergencyMessage(knowledge);
     return json(res, 503, {
-      error: TECHNICAL_FALLBACK,
-      code: 'missing_openai_key',
+      error: emergency,
+      reply: emergency,
+      message: emergency,
+      meta: buildMeta({
+        requestId,
+        sessionId,
+        knowledge,
+        usedFallback: true,
+        intent,
+        openaiErrorCode: 'missing_openai_key',
+        openaiStatus: 'not_configured',
+        historyCount: history.length,
+      }),
       fallback: true,
     });
   }
 
-  const messages = [
-    ...history.map((t) => ({ role: t.role, content: t.content })),
-    { role: 'user', content: message },
-  ];
+  const messages = [...history, { role: 'user', content: message }];
 
   const callOpenAI = () =>
     chatCompletion({
@@ -122,32 +193,51 @@ export default async function handler(req, res) {
 
   try {
     let result;
+    let openaiStatus = 'ok';
+
     try {
       result = await callOpenAI();
     } catch (firstErr) {
-      const retryable = !firstErr.status || firstErr.status >= 500 || firstErr.code === 'ECONNRESET';
+      const retryable = !firstErr.status || firstErr.status >= 500 || firstErr.code === 'ECONNRESET' || firstErr.code === 'timeout';
       if (retryable) {
-        await new Promise((r) => setTimeout(r, 600));
+        logEvent(requestId, { openai_retry: true, openai_error_code: firstErr.code, openai_status: firstErr.status });
+        await new Promise((r) => setTimeout(r, 800));
         result = await callOpenAI();
       } else {
+        openaiStatus = String(firstErr.status || 'error');
         throw firstErr;
       }
     }
 
     if (!result.reply) {
-      const offline = getKnowledgeFallback(message, knowledge);
-      if (offline) {
-        return json(res, 200, {
-          reply: offline,
-          message: offline,
-          actions: detectIntents(message, offline, history.length + 1),
-          meta: { fallback: 'knowledge', session_id: sessionId },
-        });
-      }
-      return json(res, 502, { error: TECHNICAL_FALLBACK, code: 'empty_reply' });
+      logEvent(requestId, { used_openai: true, used_fallback: false, openai_error_code: 'empty_reply' });
+      return json(res, 502, {
+        error: UI_TECHNICAL,
+        meta: buildMeta({
+          requestId,
+          sessionId,
+          knowledge,
+          usedOpenai: true,
+          intent,
+          model: result.model,
+          openaiStatus: 'empty_reply',
+          openaiErrorCode: 'empty_reply',
+          historyCount: history.length,
+        }),
+        fallback: true,
+      });
     }
 
     const actions = detectIntents(message, result.reply, history.length + 1);
+
+    logEvent(requestId, {
+      used_openai: true,
+      used_fallback: false,
+      openai_status: openaiStatus,
+      model: result.model || MODEL,
+      tokens_used: result.usage?.total_tokens,
+      intent,
+    });
 
     await StorageAdapter.saveConversation(sessionId, {
       message_count: history.length + 1,
@@ -163,32 +253,40 @@ export default async function handler(req, res) {
       reply: result.reply,
       message: result.reply,
       actions,
-      meta: {
+      meta: buildMeta({
+        requestId,
+        sessionId,
+        knowledge,
+        usedOpenai: true,
+        usedFallback: false,
+        intent,
         model: result.model || MODEL,
-        tokens_used: result.usage?.total_tokens,
-        knowledge_version: knowledge.version,
-        session_id: sessionId,
-      },
+        tokens: result.usage?.total_tokens,
+        openaiStatus: 'ok',
+        historyCount: history.length,
+      }),
     });
   } catch (err) {
-    console.error('[CreamyV2] OpenAI error:', err.message, err.code, err.status);
+    logEvent(requestId, {
+      used_openai: false,
+      used_fallback: true,
+      openai_status: err.status || 'error',
+      openai_error_code: err.code || 'openai_error',
+      error_message: err.message,
+    });
 
-    const offline = getKnowledgeFallback(message, knowledge);
-    if (offline) {
-      return json(res, 200, {
-        reply: offline,
-        message: offline,
-        actions: detectIntents(message, offline, history.length + 1),
-        meta: { fallback: 'knowledge', session_id: sessionId, openai_error: err.code },
-      });
-    }
-
-    const status = err.status === 429 ? 429 : 502;
-    return json(res, status, {
-      error: status === 429
-        ? 'Alta demanda en este momento. Intentá en unos minutos.'
-        : TECHNICAL_FALLBACK,
-      code: err.code || 'openai_error',
+    return json(res, 502, {
+      error: UI_TECHNICAL,
+      meta: buildMeta({
+        requestId,
+        sessionId,
+        knowledge,
+        usedFallback: true,
+        intent,
+        openaiStatus: String(err.status || 'error'),
+        openaiErrorCode: err.code || 'openai_error',
+        historyCount: history.length,
+      }),
       fallback: true,
     });
   }
