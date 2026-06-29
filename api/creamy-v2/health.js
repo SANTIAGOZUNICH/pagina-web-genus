@@ -5,6 +5,7 @@
 
 import { loadKnowledge } from '../../backend/creamy-v2/lib/knowledge.js';
 import { loadSystemPromptBase } from '../../backend/creamy-v2/lib/prompt.js';
+import { getActiveProviderName, getKeyInfo, getProviderModel } from '../../backend/creamy-v2/lib/ai/provider.js';
 
 function json(res, status, body) {
   res.statusCode = status;
@@ -24,15 +25,24 @@ export default async function handler(req, res) {
     return json(res, 405, { error: 'Method not allowed' });
   }
 
-  const apiKey = process.env.OPENAI_API_KEY?.trim();
+  const provider = getActiveProviderName();
+  const model = getProviderModel(provider);
+  const keyInfo = getKeyInfo(provider);
+
   const checks = {
     knowledge: false,
     system_prompt: false,
-    openai_key: !!apiKey,
-    openai_key_prefix: apiKey ? apiKey.slice(0, 7) + '...' : null,
-    mode: 'openai_primary',
+    provider,
+    model,
+    key_present: keyInfo.key_present || keyInfo.gemini_key_present || false,
+    key_prefix: keyInfo.key_prefix,
+    key_env: keyInfo.key_env,
     knowledge_as: 'context_only',
   };
+
+  if (provider === 'gemini') {
+    checks.gemini_key_present = keyInfo.gemini_key_present;
+  }
 
   try {
     const knowledge = loadKnowledge();
@@ -48,12 +58,14 @@ export default async function handler(req, res) {
     checks.system_prompt_error = err.message;
   }
 
-  const ready = checks.knowledge && checks.system_prompt && checks.openai_key;
+  const ready = checks.knowledge && checks.system_prompt && checks.key_present;
 
   return json(res, ready ? 200 : 503, {
     service: 'creamy-v2',
     status: ready ? 'ready' : 'degraded',
     version: '2.0.0',
+    provider,
+    model,
     checks,
     timestamp: new Date().toISOString(),
   });

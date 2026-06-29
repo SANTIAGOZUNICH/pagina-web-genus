@@ -2,13 +2,12 @@
  * Creamy V2 — API Chat
  * POST /api/creamy-v2/chat
  *
- * Flujo: Usuario → System Prompt + Knowledge (contexto) → Historial → OpenAI → Respuesta
- * Knowledge NO genera respuestas hardcodeadas.
+ * Flujo: Usuario → System Prompt + Knowledge (contexto) → Historial → Gemini → Respuesta
  */
 
 import { loadKnowledge } from '../../backend/creamy-v2/lib/knowledge.js';
 import { buildSystemPrompt } from '../../backend/creamy-v2/lib/prompt.js';
-import { chatCompletion } from '../../backend/creamy-v2/lib/openai-client.js';
+import { generateAIResponse, getActiveProviderName, getProviderModel } from '../../backend/creamy-v2/lib/ai/provider.js';
 import { detectIntents, inferIntent } from '../../backend/creamy-v2/lib/intents.js';
 import { StorageAdapter } from '../../backend/creamy-v2/lib/storage.js';
 import {
@@ -18,7 +17,6 @@ import {
   getEmergencyMessage,
 } from '../../backend/creamy-v2/lib/request.js';
 
-const MODEL = 'gpt-4o-mini';
 const MAX_HISTORY_MESSAGES = 10;
 const RATE_LIMIT = { max: 40, windowMs: 3600000 };
 const UI_TECHNICAL =
@@ -51,25 +49,28 @@ function buildMeta({
   requestId,
   sessionId,
   knowledge,
-  usedOpenai = false,
+  provider,
+  usedAi = false,
   usedFallback = false,
   intent = null,
   model = null,
   tokens = null,
-  openaiStatus = null,
-  openaiErrorCode = null,
+  aiStatus = null,
+  aiErrorCode = null,
   historyCount = 0,
 }) {
   return {
     request_id: requestId,
     session_id: sessionId,
-    used_openai: usedOpenai,
+    provider,
+    model,
+    used_ai: usedAi,
+    used_openai: provider === 'openai' && usedAi,
     used_fallback: usedFallback,
     intent,
-    model: model || MODEL,
     tokens_used: tokens,
-    openai_status: openaiStatus,
-    openai_error_code: openaiErrorCode,
+    ai_status: aiStatus,
+    ai_error_code: aiErrorCode,
     history_messages: historyCount,
     knowledge_version: knowledge?.version,
   };
@@ -81,6 +82,8 @@ function logEvent(requestId, data) {
 
 export default async function handler(req, res) {
   const requestId = makeRequestId();
+  const provider = getActiveProviderName();
+  const model = getProviderModel(provider);
 
   if (req.method === 'OPTIONS') {
     res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -96,7 +99,7 @@ export default async function handler(req, res) {
   if (!rateLimit(ip)) {
     return json(res, 429, {
       error: UI_TECHNICAL,
-      meta: buildMeta({ requestId, sessionId: 'n/a', knowledge: null, usedFallback: true, openaiErrorCode: 'rate_limit' }),
+      meta: buildMeta({ requestId, sessionId: 'n/a', knowledge: null, provider, usedFallback: true, aiErrorCode: 'rate_limit' }),
     });
   }
 
@@ -130,50 +133,41 @@ export default async function handler(req, res) {
     knowledge = loadKnowledge();
     systemPrompt = buildSystemPrompt({ knowledge, pageKey, pageUrl, pageTitle });
   } catch (err) {
-    logEvent(requestId, { used_openai: false, used_fallback: true, openai_error_code: 'knowledge_load_error', error: err.message });
+    logEvent(requestId, { provider, used_ai: false, used_fallback: true, ai_error_code: 'knowledge_load_error', error: err.message });
     return json(res, 500, {
       error: UI_TECHNICAL,
       meta: buildMeta({
-        requestId,
-        sessionId,
-        knowledge: null,
-        usedFallback: true,
-        intent,
-        openaiErrorCode: 'knowledge_load_error',
-        historyCount: history.length,
+        requestId, sessionId, knowledge: null, provider, usedFallback: true, intent,
+        aiErrorCode: 'knowledge_load_error', historyCount: history.length,
       }),
     });
   }
 
-  const apiKey = process.env.OPENAI_API_KEY?.trim();
-  const keyPresent = !!apiKey;
-  const keyPrefix = apiKey ? apiKey.slice(0, 7) : null;
+  const geminiKey = process.env.GEMINI_API_KEY?.trim();
+  const openaiKey = process.env.OPENAI_API_KEY?.trim();
 
   logEvent(requestId, {
     phase: 'request_start',
+    provider,
+    model,
     intent,
     history_count: history.length,
     message_len: message.length,
-    openai_key_present: keyPresent,
-    openai_key_prefix: keyPrefix,
+    gemini_key_present: !!geminiKey,
+    openai_key_present: !!openaiKey,
+    gemini_key_prefix: geminiKey ? `${geminiKey.slice(0, 6)}...` : null,
   });
 
-  if (!apiKey) {
-    logEvent(requestId, { used_openai: false, used_fallback: true, openai_error_code: 'missing_openai_key' });
+  if (provider === 'gemini' && !geminiKey) {
+    logEvent(requestId, { used_ai: false, used_fallback: true, ai_error_code: 'missing_gemini_key' });
     const emergency = getEmergencyMessage(knowledge);
     return json(res, 503, {
       error: emergency,
       reply: emergency,
       message: emergency,
       meta: buildMeta({
-        requestId,
-        sessionId,
-        knowledge,
-        usedFallback: true,
-        intent,
-        openaiErrorCode: 'missing_openai_key',
-        openaiStatus: 'not_configured',
-        historyCount: history.length,
+        requestId, sessionId, knowledge, provider, model, usedFallback: true, intent,
+        aiErrorCode: 'missing_gemini_key', aiStatus: 'not_configured', historyCount: history.length,
       }),
       fallback: true,
     });
@@ -181,48 +175,34 @@ export default async function handler(req, res) {
 
   const messages = [...history, { role: 'user', content: message }];
 
-  const callOpenAI = () =>
-    chatCompletion({
-      apiKey,
-      model: MODEL,
-      systemPrompt,
-      messages,
-      maxTokens: 1100,
-      temperature: 0.58,
-    });
-
   try {
     let result;
-    let openaiStatus = 'ok';
-
     try {
-      result = await callOpenAI();
+      result = await generateAIResponse({
+        systemPrompt,
+        messages,
+        maxTokens: 1100,
+        temperature: 0.58,
+        provider,
+      });
     } catch (firstErr) {
       const retryable = !firstErr.status || firstErr.status >= 500 || firstErr.code === 'ECONNRESET' || firstErr.code === 'timeout';
       if (retryable) {
-        logEvent(requestId, { openai_retry: true, openai_error_code: firstErr.code, openai_status: firstErr.status });
+        logEvent(requestId, { ai_retry: true, ai_error_code: firstErr.code, ai_status: firstErr.status });
         await new Promise((r) => setTimeout(r, 800));
-        result = await callOpenAI();
+        result = await generateAIResponse({ systemPrompt, messages, maxTokens: 1100, temperature: 0.58, provider });
       } else {
-        openaiStatus = String(firstErr.status || 'error');
         throw firstErr;
       }
     }
 
     if (!result.reply) {
-      logEvent(requestId, { used_openai: true, used_fallback: false, openai_error_code: 'empty_reply' });
+      logEvent(requestId, { used_ai: true, used_fallback: false, ai_error_code: 'empty_reply', provider });
       return json(res, 502, {
         error: UI_TECHNICAL,
         meta: buildMeta({
-          requestId,
-          sessionId,
-          knowledge,
-          usedOpenai: true,
-          intent,
-          model: result.model,
-          openaiStatus: 'empty_reply',
-          openaiErrorCode: 'empty_reply',
-          historyCount: history.length,
+          requestId, sessionId, knowledge, provider, model: result.model, usedAi: true, intent,
+          aiStatus: 'empty_reply', aiErrorCode: 'empty_reply', historyCount: history.length,
         }),
         fallback: true,
       });
@@ -231,10 +211,11 @@ export default async function handler(req, res) {
     const actions = detectIntents(message, result.reply, history.length + 1);
 
     logEvent(requestId, {
-      used_openai: true,
+      used_ai: true,
       used_fallback: false,
-      openai_status: openaiStatus,
-      model: result.model || MODEL,
+      provider: result.provider,
+      ai_status: 'ok',
+      model: result.model,
       tokens_used: result.usage?.total_tokens,
       intent,
     });
@@ -254,39 +235,30 @@ export default async function handler(req, res) {
       message: result.reply,
       actions,
       meta: buildMeta({
-        requestId,
-        sessionId,
-        knowledge,
-        usedOpenai: true,
-        usedFallback: false,
-        intent,
-        model: result.model || MODEL,
-        tokens: result.usage?.total_tokens,
-        openaiStatus: 'ok',
-        historyCount: history.length,
+        requestId, sessionId, knowledge, provider: result.provider, model: result.model,
+        usedAi: true, usedFallback: false, intent, tokens: result.usage?.total_tokens,
+        aiStatus: 'ok', historyCount: history.length,
       }),
     });
   } catch (err) {
     logEvent(requestId, {
-      used_openai: false,
+      used_ai: false,
       used_fallback: true,
-      openai_status: err.status || 'error',
-      openai_error_code: err.code || 'openai_error',
-      openai_error_type: err.type || null,
-      openai_error_body: err.openaiBody ? JSON.stringify(err.openaiBody).slice(0, 500) : null,
+      provider,
+      ai_status: err.status || 'error',
+      ai_error_code: err.code || 'ai_error',
+      ai_error_type: err.type || null,
+      ai_error_body: err.providerBody ? JSON.stringify(err.providerBody).slice(0, 500) : null,
       error_message: err.message,
     });
 
     return json(res, 502, {
       error: UI_TECHNICAL,
       meta: buildMeta({
-        requestId,
-        sessionId,
-        knowledge,
-        usedFallback: true,
-        intent,
-        openaiStatus: String(err.status || 'error'),
-        openaiErrorCode: err.code || 'openai_error',
+        requestId, sessionId, knowledge, provider, model,
+        usedFallback: true, intent,
+        aiStatus: String(err.status || 'error'),
+        aiErrorCode: err.code || 'ai_error',
         historyCount: history.length,
       }),
       fallback: true,

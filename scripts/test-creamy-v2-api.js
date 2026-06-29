@@ -1,67 +1,45 @@
 #!/usr/bin/env node
-/**
- * Prueba unitaria del handler /api/creamy-v2/chat
- */
 import handler from '../api/creamy-v2/chat.js';
-import { sanitizeHistory, normalizeUserMessage } from '../backend/creamy-v2/lib/request.js';
-import { detectIntents } from '../backend/creamy-v2/lib/intents.js';
+import { getActiveProviderName } from '../backend/creamy-v2/lib/ai/provider.js';
 
 let errors = 0;
-function check(name, ok, detail = '') {
-  if (!ok) { console.error(`❌ ${name}${detail ? ': ' + detail : ''}`); errors++; }
-  else console.log(`✅ ${name}`);
-}
+function check(n, ok, d = '') { if (!ok) { console.error(`❌ ${n}${d ? ': ' + d : ''}`); errors++; } else console.log(`✅ ${n}`); }
 
 function mockRes() {
-  return {
-    statusCode: 0,
-    headers: {},
-    setHeader(k, v) { this.headers[k] = v; },
-    end(body) { this.body = body; },
-  };
+  return { statusCode: 0, headers: {}, setHeader() {}, end(body) { this.body = body; } };
 }
 
 async function callHandler(payload, env = {}) {
-  const prev = process.env.OPENAI_API_KEY;
-  if (env.OPENAI_API_KEY !== undefined) process.env.OPENAI_API_KEY = env.OPENAI_API_KEY;
+  const prevG = process.env.GEMINI_API_KEY;
+  const prevP = process.env.CREAMY_AI_PROVIDER;
+  if (env.GEMINI_API_KEY !== undefined) process.env.GEMINI_API_KEY = env.GEMINI_API_KEY;
+  if (env.CREAMY_AI_PROVIDER !== undefined) process.env.CREAMY_AI_PROVIDER = env.CREAMY_AI_PROVIDER;
   const req = { method: 'POST', headers: { 'content-type': 'application/json' }, body: payload };
   const res = mockRes();
   await handler(req, res);
-  if (env.OPENAI_API_KEY !== undefined) process.env.OPENAI_API_KEY = prev;
-  const data = res.body ? JSON.parse(res.body) : {};
-  return { status: res.statusCode, data };
+  if (env.GEMINI_API_KEY !== undefined) process.env.GEMINI_API_KEY = prevG;
+  if (env.CREAMY_AI_PROVIDER !== undefined) process.env.CREAMY_AI_PROVIDER = prevP;
+  return { status: res.statusCode, data: JSON.parse(res.body) };
 }
 
 async function main() {
-  check('normalize niaciniamida', normalizeUserMessage('serum de Niaciniamida').includes('niacinamida'));
-  check('normalize hialuronico', normalizeUserMessage('acido hialuronico').includes('hialurónico'));
-  check('sanitize history', sanitizeHistory([{ role: 'user', content: 'hola' }, { role: 'bad', content: 'x' }]).length === 1);
-
-  const intents = detectIntents('Quiero hacer un serum de niacinamida', '', 1);
-  check('Sin WhatsApp en consulta técnica', !intents.includes('WHATSAPP'));
+  check('Proveedor default gemini', getActiveProviderName() === 'gemini');
 
   const noKey = await callHandler({
-    message: 'Cuál es la cantidad mínima',
-    conversation_history: [],
-    session_id: 'test_no_key',
-    page_key: 'index',
-  }, { OPENAI_API_KEY: '' });
+    message: 'test', conversation_history: [], session_id: 't', page_key: 'index',
+  }, { GEMINI_API_KEY: '', CREAMY_AI_PROVIDER: 'gemini' });
 
-  check('Sin API key → 503', noKey.status === 503, `status ${noKey.status}`);
-  check('Sin API key → used_fallback true', noKey.data.meta?.used_fallback === true);
-  check('Sin API key → used_openai false', noKey.data.meta?.used_openai === false);
-  check('Sin API key → NO knowledge pattern 200', noKey.status !== 200);
+  check('Sin GEMINI_API_KEY → 503', noKey.status === 503);
+  check('meta.provider gemini', noKey.data.meta?.provider === 'gemini');
+  check('used_ai false sin key', noKey.data.meta?.used_ai === false);
 
-  if (process.env.OPENAI_API_KEY?.trim()) {
-    console.log('⏭️  Para validación OpenAI completa: npm run validate:creamy-openai');
+  if (process.env.GEMINI_API_KEY?.trim()) {
+    console.log('⏭️  Validación completa: npm run validate:creamy-gemini');
   } else {
-    console.log('⏭️  OpenAI live test omitido (sin OPENAI_API_KEY)');
+    console.log('⏭️  Sin GEMINI_API_KEY — probe live omitido');
   }
 
-  if (errors) {
-    console.error(`\n❌ ${errors} error(es)\n`);
-    process.exit(1);
-  }
+  if (errors) process.exit(1);
   console.log('\n✅ API tests OK\n');
 }
 

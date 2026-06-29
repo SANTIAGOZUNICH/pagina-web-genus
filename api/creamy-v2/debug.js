@@ -1,11 +1,9 @@
 /**
  * Creamy V2 — Debug endpoint (temporal)
  * GET /api/creamy-v2/debug
- *
- * Diagnóstico OpenAI sin exponer API key.
  */
 
-import { probeOpenAI, DEFAULT_MODEL } from '../../backend/creamy-v2/lib/openai-debug.js';
+import { probeAIProvider, getActiveProviderName, getProviderModel } from '../../backend/creamy-v2/lib/ai/provider.js';
 
 function json(res, status, body) {
   res.statusCode = status;
@@ -26,34 +24,35 @@ export default async function handler(req, res) {
   }
 
   try {
-    const report = await probeOpenAI(DEFAULT_MODEL);
+    const provider = getActiveProviderName();
+    const model = getProviderModel(provider);
+    const report = await probeAIProvider(provider);
 
     const payload = {
-      openai_key_present: report.openai_key_present,
-      openai_key_prefix: report.openai_key_prefix,
-      openai_key_has_whitespace: report.openai_key_has_whitespace,
-      model: DEFAULT_MODEL,
-      can_connect_to_openai: report.can_connect_to_openai,
-      openai_status: report.openai_status,
+      provider: report.provider,
+      model: report.model,
+      gemini_key_present: report.gemini_key_present ?? (provider === 'gemini' ? report.key_present : false),
+      openai_key_present: provider === 'openai' ? report.key_present : !!process.env.OPENAI_API_KEY?.trim(),
+      key_prefix: report.key_prefix,
+      can_connect: report.can_connect,
+      status: report.status,
       last_error: report.last_error,
       environment: report.environment,
       diagnosis: report.diagnosis,
-      probes: {
-        models_latency_ms: report.models_probe_latency_ms ?? null,
-        chat_latency_ms: report.chat_probe_latency_ms ?? null,
-        chat_reply: report.chat_probe_reply ?? null,
-      },
+      probe_latency_ms: report.probe_latency_ms ?? null,
+      probe_reply: report.probe_reply ?? null,
       timestamp: report.timestamp,
     };
 
-    const httpStatus = report.can_connect_to_openai && report.openai_status === 'ok' ? 200 : 503;
+    const httpStatus = report.can_connect && report.status === 'ok' ? 200 : 503;
     return json(res, httpStatus, payload);
   } catch (err) {
     return json(res, 500, {
-      openai_key_present: !!process.env.OPENAI_API_KEY?.trim(),
-      model: DEFAULT_MODEL,
-      can_connect_to_openai: false,
-      openai_status: 'handler_error',
+      provider: getActiveProviderName(),
+      model: getProviderModel(),
+      gemini_key_present: !!process.env.GEMINI_API_KEY?.trim(),
+      can_connect: false,
+      status: 'handler_error',
       last_error: { code: 'debug_handler_error', message: err.message },
       environment: process.env.VERCEL_ENV || process.env.NODE_ENV || 'unknown',
     });
