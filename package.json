@@ -3,6 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test:creamy-v2": "node scripts/test-creamy-v2.js"
+    "test:creamy-v2": "node scripts/test-creamy-v2.js",
+    "test:creamy-v2-preview": "node scripts/test-creamy-v2-preview.js"
   }
 }

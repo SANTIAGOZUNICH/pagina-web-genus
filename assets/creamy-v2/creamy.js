@@ -59,7 +59,21 @@
       this._bind();
       this._scheduleGreeting();
       this._scheduleTilt();
+      this._checkHealth();
       this._track('creamy_v2_session_start');
+    }
+
+    async _checkHealth() {
+      try {
+        const res = await fetch('/api/creamy-v2/health', { cache: 'no-store' });
+        const data = await res.json().catch(() => ({}));
+        this._serviceReady = res.ok && data.status === 'ready';
+        if (!this._serviceReady) {
+          console.warn('[CreamyV2] Servicio en modo degradado:', data.checks || data);
+        }
+      } catch (_) {
+        this._serviceReady = null;
+      }
     }
 
     async _loadConfig() {
@@ -215,6 +229,20 @@
       this._api(text);
     }
 
+    async _requestChat(payload, attempt = 0) {
+      const res = await fetch(this.config.apiEndpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const retryable = (res.status === 502 || res.status === 503 || res.status === 504) && attempt < 1;
+      if (retryable) {
+        await new Promise((r) => setTimeout(r, 700));
+        return this._requestChat(payload, attempt + 1);
+      }
+      return res;
+    }
+
     async _api(userMessage) {
       this.isTyping = true;
       this.sendBtn.disabled = true;
@@ -223,28 +251,24 @@
         setTimeout(r, this.config.typingDelayMin + Math.random() * (this.config.typingDelayMax - this.config.typingDelayMin))
       );
 
+      const payload = {
+        message: userMessage,
+        conversation_history: this.history.slice(-24),
+        session_id: this.sessionId,
+        page_url: this.pageUrl,
+        page_title: this.pageTitle,
+        page_key: this.pageKey,
+      };
+
       try {
-        const [res] = await Promise.all([
-          fetch(this.config.apiEndpoint, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              message: userMessage,
-              conversation_history: this.history.slice(-24),
-              session_id: this.sessionId,
-              page_url: this.pageUrl,
-              page_title: this.pageTitle,
-              page_key: this.pageKey,
-            }),
-          }),
-          minWait,
-        ]);
+        const [res] = await Promise.all([this._requestChat(payload), minWait]);
 
         this._typingHide();
 
         if (!res.ok) {
           const err = await res.json().catch(() => ({}));
-          this._bot(err.error || 'Tuve un problema de conexión. Podés escribirnos por WhatsApp.', []);
+          const msg = err.error || 'Tuve un problema de conexión. Escribinos por WhatsApp y te ayudamos al toque.';
+          this._bot(msg, []);
           if (res.status === 429) return;
           this._actions(['WHATSAPP']);
           return;

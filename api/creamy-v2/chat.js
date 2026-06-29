@@ -62,8 +62,10 @@ export default async function handler(req, res) {
 
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
+    console.error('[CreamyV2] OPENAI_API_KEY no configurada en el entorno');
     return json(res, 503, {
-      error: 'Servicio temporalmente no disponible. Escribinos por WhatsApp.',
+      error: 'Estoy teniendo un problema técnico momentáneo. Escribinos por WhatsApp y te respondemos enseguida.',
+      code: 'missing_openai_key',
       fallback: true,
     });
   }
@@ -74,16 +76,26 @@ export default async function handler(req, res) {
   const pageUrl = body.page_url || '';
   const pageTitle = body.page_title || '';
 
-  const knowledge = loadKnowledge();
-  const systemPrompt = buildSystemPrompt({ knowledge, pageKey, pageUrl, pageTitle });
+  let knowledge;
+  let systemPrompt;
+  try {
+    knowledge = loadKnowledge();
+    systemPrompt = buildSystemPrompt({ knowledge, pageKey, pageUrl, pageTitle });
+  } catch (err) {
+    console.error('[CreamyV2] Error cargando knowledge/prompt:', err.message);
+    return json(res, 500, {
+      error: 'Tuve un inconveniente interno. Intentá de nuevo en unos segundos o escribinos por WhatsApp.',
+      code: 'knowledge_load_error',
+    });
+  }
 
   const messages = [
     ...history.map((t) => ({ role: t.role, content: t.content })),
     { role: 'user', content: message },
   ];
 
-  try {
-    const result = await chatCompletion({
+  const callOpenAI = () =>
+    chatCompletion({
       apiKey,
       model: MODEL,
       systemPrompt,
@@ -91,6 +103,20 @@ export default async function handler(req, res) {
       maxTokens: 900,
       temperature: 0.55,
     });
+
+  try {
+    let result;
+    try {
+      result = await callOpenAI();
+    } catch (firstErr) {
+      const retryable = !firstErr.status || firstErr.status >= 500 || firstErr.code === 'ECONNRESET';
+      if (retryable) {
+        await new Promise((r) => setTimeout(r, 600));
+        result = await callOpenAI();
+      } else {
+        throw firstErr;
+      }
+    }
 
     const actions = detectIntents(message, result.reply, history.length + 1);
 
