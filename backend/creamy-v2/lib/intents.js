@@ -1,47 +1,32 @@
 /**
- * Detección de intención comercial — reglas + señales del mensaje.
- * Devuelve array de action keys para el frontend.
+ * Detección de intención comercial — conservadora.
+ * WhatsApp solo cuando el usuario pide contacto humano explícito.
  */
-
-const ACTION_DEFS = {
-  CONFIGURADOR: { label: '🧪 Crear mi producto', style: 'primary', urlKey: 'configurador' },
-  COTIZACION: { label: '📋 Solicitar cotización', style: 'secondary', urlKey: 'cotizacion' },
-  WHATSAPP: { label: '💬 Hablar por WhatsApp', style: 'whatsapp', urlKey: 'whatsapp', external: true },
-  REUNION: { label: '📅 Agendar reunión', style: 'secondary', urlKey: 'reunion' },
-};
 
 const PATTERNS = {
   develop: /\b(desarrroll|crear|formul|mi producto|mi marca|lanzar|fabricar|producir|serum|crema|shampoo|cosmético)\b/i,
   quote: /\b(cotiz|precio|costo|cuánto sale|cuanto sale|presupuesto|tarifa|inversión)\b/i,
-  human: /\b(hablar con|asesor|humano|persona|llamar|whatsapp|wsp|wa\.me)\b/i,
+  human: /\b(hablar con (alguien|una persona|un asesor|humano)|quiero un asesor|contactar|llamame|llámame|whatsapp|wsp|wa\.me|hablar por whatsapp)\b/i,
   meeting: /\b(reunión|reunion|agendar|videollamada|llamada|turno|cita)\b/i,
-  ready: /\b(avanz|siguiente paso|empezar|arrancar|quiero hacerlo|dale|ok perfecto)\b/i,
+  ready: /\b(avanz|siguiente paso|empezar|arrancar|quiero hacerlo|dale|ok perfecto|solicitar|cotizar)\b/i,
 };
 
 export function detectIntents(userMessage, assistantReply, historyLength) {
-  const text = `${userMessage} ${assistantReply}`.toLowerCase();
-  const actions = new Set();
+  const user = (userMessage || '').toLowerCase();
+  const actions = [];
 
-  if (PATTERNS.quote.test(text)) actions.add('COTIZACION');
-  if (PATTERNS.human.test(text)) actions.add('WHATSAPP');
-  if (PATTERNS.meeting.test(text)) actions.add('REUNION');
-  if (PATTERNS.develop.test(text) && (PATTERNS.ready.test(text) || historyLength >= 4)) {
-    actions.add('CONFIGURADOR');
-  }
-  if (PATTERNS.develop.test(text) && historyLength >= 2 && !actions.has('COTIZACION')) {
-    actions.add('COTIZACION');
-  }
+  if (PATTERNS.human.test(user)) actions.push('WHATSAPP');
+  if (PATTERNS.meeting.test(user)) actions.push('REUNION');
+  if (PATTERNS.quote.test(user)) actions.push('COTIZACION');
 
-  if (actions.size === 0 && historyLength >= 6 && PATTERNS.develop.test(text)) {
-    actions.add('CONFIGURADOR');
-    actions.add('WHATSAPP');
+  if (PATTERNS.develop.test(user) && PATTERNS.ready.test(user)) {
+    actions.push('CONFIGURADOR');
+    if (!actions.includes('COTIZACION')) actions.push('COTIZACION');
+  } else if (PATTERNS.develop.test(user) && historyLength >= 5 && PATTERNS.quote.test(assistantReply || '')) {
+    actions.push('COTIZACION');
   }
 
-  return [...actions].slice(0, 3);
+  return [...new Set(actions)].slice(0, 2);
 }
 
-export function getActionDefs() {
-  return ACTION_DEFS;
-}
-
-export { ACTION_DEFS };
+export { PATTERNS };

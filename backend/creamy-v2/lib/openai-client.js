@@ -22,7 +22,7 @@ export async function chatCompletion({
   };
 
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 45000);
+  const timeout = setTimeout(() => controller.abort(), 28000);
 
   let res;
   try {

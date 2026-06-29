@@ -70,6 +70,20 @@ async function visual() {
     const fabSize = name === 'mobile' ? 64 : 72;
     check(`[${name}] FAB ~${fabSize}px`, Math.abs(closed.fabW - fabSize) <= 4);
 
+    await page.hover('#cv2-fab');
+    await page.waitForTimeout(300);
+    const onHover = await page.evaluate(() => {
+      const fab = document.getElementById('cv2-fab');
+      const style = getComputedStyle(fab);
+      return {
+        opacity: style.opacity,
+        visibility: style.visibility,
+        display: style.display,
+        hidden: fab.classList.contains('cv2-fab--hidden'),
+      };
+    });
+    check(`[${name}] Avatar visible en hover`, onHover.opacity !== '0' && onHover.visibility !== 'hidden' && !onHover.hidden);
+
     await page.click('#cv2-fab', { force: true });
     await page.waitForTimeout(400);
 
@@ -78,6 +92,15 @@ async function visual() {
       const wr = win.getBoundingClientRect();
       return { w: Math.round(wr.width), h: Math.round(wr.height), display: getComputedStyle(win).display };
     });
+
+    await page.click('[data-cv2-action="close"]');
+    await page.waitForTimeout(400);
+    const afterMinimize = await page.evaluate(() => {
+      const fab = document.getElementById('cv2-fab');
+      const style = getComputedStyle(fab);
+      return { opacity: style.opacity, hidden: fab.classList.contains('cv2-fab--hidden'), visible: style.visibility };
+    });
+    check(`[${name}] Avatar vuelve al cerrar`, !afterMinimize.hidden && afterMinimize.opacity !== '0');
 
     if (name === 'desktop') {
       check(`[${name}] Ventana 390×580`, open.w >= 385 && open.w <= 395 && open.h >= 575 && open.h <= 585);

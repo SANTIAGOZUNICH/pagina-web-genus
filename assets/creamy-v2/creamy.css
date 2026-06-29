@@ -132,25 +132,26 @@
     justify-content: center;
     cursor: pointer;
     pointer-events: auto;
-    opacity: 0;
-    animation:
-        cv2-fab-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.8s forwards;
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+    animation: cv2-fab-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.8s both;
     transition: box-shadow 0.25s ease, transform 0.25s ease;
     -webkit-tap-highlight-color: transparent;
 }
 
 #creamy-v2 .cv2-fab:hover {
-    transform: scale(1.08) translateY(-2px);
+    transform: scale(1.06) translateY(-2px);
     box-shadow:
         0 12px 36px rgba(22, 154, 176, 0.45),
         0 4px 14px var(--cv2-shadow-lg);
-    animation: none;
 }
 
 #creamy-v2 .cv2-fab--hidden {
+    visibility: hidden !important;
     opacity: 0 !important;
     pointer-events: none !important;
-    transform: scale(0.7) translateY(16px) !important;
+    transform: scale(0.85) translateY(12px) !important;
 }
 
 #creamy-v2 .cv2-fab--tilt .cv2-fab-avatar {

@@ -23,6 +23,9 @@
     REUNION: { label: '📅 Agendar reunión', style: 'secondary', key: 'reunion' },
   };
 
+  const TECHNICAL_FALLBACK =
+    'Estoy teniendo una demora técnica para responder consultas complejas. Mientras tanto, puedo derivarte con un asesor del laboratorio.';
+
   const DEFAULTS = {
     apiEndpoint: '/api/creamy-v2/chat',
     greetingDelayMs: 6000,
@@ -50,6 +53,7 @@
       this.pageKey = this._pageKey();
       this.pageUrl = location.href;
       this.pageTitle = document.title;
+      this._technicalCtaShown = false;
       this._init();
     }
 
@@ -213,6 +217,8 @@
       this.backdrop.classList.add('cv2-hidden');
       this.windowEl.classList.add('cv2-hidden');
       this.fab.classList.remove('cv2-fab--hidden');
+      this.fab.style.visibility = '';
+      this.fab.style.opacity = '';
       this._track('creamy_v2_close');
     }
 
@@ -267,10 +273,9 @@
 
         if (!res.ok) {
           const err = await res.json().catch(() => ({}));
-          const msg = err.error || 'Tuve un problema de conexión. Escribinos por WhatsApp y te ayudamos al toque.';
-          this._bot(msg, []);
-          if (res.status === 429) return;
-          this._actions(['WHATSAPP']);
+          const msg = err.error || TECHNICAL_FALLBACK;
+          this._bot(msg);
+          if (err.fallback) this._maybeTechnicalCta();
           return;
         }
 
@@ -284,12 +289,12 @@
         this.history.push({ role: 'user', content: userMessage });
         this.history.push({ role: 'assistant', content: reply });
         this._bot(reply);
-        if (data.actions?.length) this._actions(data.actions);
+        if (data.actions?.length) this._actions(this._filterActions(data.actions, userMessage));
       } catch (e) {
         this._typingHide();
         console.error('[CreamyV2]', e);
-        this._bot('No pude conectarme. Escribinos por WhatsApp y te ayudamos al toque.');
-        this._actions(['WHATSAPP']);
+        this._bot(TECHNICAL_FALLBACK);
+        this._maybeTechnicalCta();
       } finally {
         this.isTyping = false;
         this.sendBtn.disabled = false;
@@ -304,12 +309,26 @@
       this._scroll();
     }
 
-    _bot(text, actions) {
+    _filterActions(keys, userMessage) {
+      const user = (userMessage || '').toLowerCase();
+      const wantsHuman = /\b(whatsapp|asesor|humano|hablar con|contactar)\b/i.test(user);
+      return keys.filter((key) => {
+        if (key === 'WHATSAPP' && !wantsHuman) return false;
+        return true;
+      });
+    }
+
+    _maybeTechnicalCta() {
+      if (this._technicalCtaShown) return;
+      this._technicalCtaShown = true;
+      this._actions(['WHATSAPP']);
+    }
+
+    _bot(text) {
       const el = document.createElement('div');
       el.className = 'cv2-message cv2-message--bot';
       el.innerHTML = `<div class="cv2-bubble">${this._fmt(text)}</div>`;
       this.messagesEl.appendChild(el);
-      if (actions?.length) this._actions(actions, el);
       this._scroll();
     }
 

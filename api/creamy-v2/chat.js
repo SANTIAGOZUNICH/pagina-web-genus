@@ -8,10 +8,13 @@ import { buildSystemPrompt } from '../../backend/creamy-v2/lib/prompt.js';
 import { chatCompletion } from '../../backend/creamy-v2/lib/openai-client.js';
 import { detectIntents } from '../../backend/creamy-v2/lib/intents.js';
 import { StorageAdapter } from '../../backend/creamy-v2/lib/storage.js';
+import { parseJsonBody, getKnowledgeFallback } from '../../backend/creamy-v2/lib/request.js';
 
 const MODEL = 'gpt-4o-mini';
 const MAX_HISTORY = 24;
 const RATE_LIMIT = { max: 40, windowMs: 3600000 };
+const TECHNICAL_FALLBACK =
+  'Estoy teniendo una demora técnica para responder consultas complejas. Mientras tanto, puedo derivarte con un asesor del laboratorio.';
 const rateMap = new Map();
 
 function rateLimit(ip) {
@@ -50,24 +53,18 @@ export default async function handler(req, res) {
 
   let body;
   try {
-    body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+    body = await parseJsonBody(req);
   } catch {
+    return json(res, 400, { error: 'JSON inválido' });
+  }
+
+  if (!body || typeof body !== 'object') {
     return json(res, 400, { error: 'JSON inválido' });
   }
 
   const message = (body.message || '').trim();
   if (!message || message.length > 4000) {
     return json(res, 400, { error: 'Mensaje vacío o demasiado largo' });
-  }
-
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) {
-    console.error('[CreamyV2] OPENAI_API_KEY no configurada en el entorno');
-    return json(res, 503, {
-      error: 'Estoy teniendo un problema técnico momentáneo. Escribinos por WhatsApp y te respondemos enseguida.',
-      code: 'missing_openai_key',
-      fallback: true,
-    });
   }
 
   const sessionId = body.session_id || `sess_${Date.now()}`;
@@ -84,8 +81,27 @@ export default async function handler(req, res) {
   } catch (err) {
     console.error('[CreamyV2] Error cargando knowledge/prompt:', err.message);
     return json(res, 500, {
-      error: 'Tuve un inconveniente interno. Intentá de nuevo en unos segundos o escribinos por WhatsApp.',
+      error: TECHNICAL_FALLBACK,
       code: 'knowledge_load_error',
+    });
+  }
+
+  const apiKey = process.env.OPENAI_API_KEY?.trim();
+  if (!apiKey) {
+    console.error('[CreamyV2] OPENAI_API_KEY no configurada');
+    const offline = getKnowledgeFallback(message, knowledge);
+    if (offline) {
+      return json(res, 200, {
+        reply: offline,
+        message: offline,
+        actions: detectIntents(message, offline, history.length + 1),
+        meta: { fallback: 'knowledge', session_id: sessionId },
+      });
+    }
+    return json(res, 503, {
+      error: TECHNICAL_FALLBACK,
+      code: 'missing_openai_key',
+      fallback: true,
     });
   }
 
@@ -118,6 +134,19 @@ export default async function handler(req, res) {
       }
     }
 
+    if (!result.reply) {
+      const offline = getKnowledgeFallback(message, knowledge);
+      if (offline) {
+        return json(res, 200, {
+          reply: offline,
+          message: offline,
+          actions: detectIntents(message, offline, history.length + 1),
+          meta: { fallback: 'knowledge', session_id: sessionId },
+        });
+      }
+      return json(res, 502, { error: TECHNICAL_FALLBACK, code: 'empty_reply' });
+    }
+
     const actions = detectIntents(message, result.reply, history.length + 1);
 
     await StorageAdapter.saveConversation(sessionId, {
@@ -142,12 +171,25 @@ export default async function handler(req, res) {
       },
     });
   } catch (err) {
-    console.error('[CreamyV2]', err.message, err.code);
+    console.error('[CreamyV2] OpenAI error:', err.message, err.code, err.status);
+
+    const offline = getKnowledgeFallback(message, knowledge);
+    if (offline) {
+      return json(res, 200, {
+        reply: offline,
+        message: offline,
+        actions: detectIntents(message, offline, history.length + 1),
+        meta: { fallback: 'knowledge', session_id: sessionId, openai_error: err.code },
+      });
+    }
+
     const status = err.status === 429 ? 429 : 502;
     return json(res, status, {
       error: status === 429
         ? 'Alta demanda en este momento. Intentá en unos minutos.'
-        : 'No pude procesar tu consulta. Escribinos por WhatsApp.',
+        : TECHNICAL_FALLBACK,
+      code: err.code || 'openai_error',
+      fallback: true,
     });
   }
 }

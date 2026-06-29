@@ -1,4 +1,13 @@
 {
+  "functions": {
+    "api/creamy-v2/chat.js": {
+      "maxDuration": 60,
+      "includeFiles": "backend/creamy-v2/**"
+    },
+    "api/creamy-v2/health.js": {
+      "includeFiles": "backend/creamy-v2/**"
+    }
+  },
   "headers": [
     {
       "source": "/assets/creamy/(.*)",
