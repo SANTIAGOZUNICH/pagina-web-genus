@@ -30,6 +30,24 @@ function withBypass(url) {
   return u.toString();
 }
 
+async function fetchPreview(url, options = {}) {
+  const res = await fetch(withBypass(url), {
+    redirect: 'manual',
+    ...options,
+    headers: headers(options.headers || {}),
+  });
+  if (res.status >= 300 && res.status < 400) {
+    const location = res.headers.get('location') || '';
+    if (location.includes('vercel.com/sso') || location.includes('vercel.com/login')) {
+      return { blocked: true, status: res.status, location };
+    }
+    if (options.followRedirect !== false) {
+      return fetchPreview(location, { ...options, followRedirect: false });
+    }
+  }
+  return { blocked: false, res };
+}
+
 let errors = 0;
 function check(name, ok, detail = '') {
   if (!ok) {
@@ -46,7 +64,16 @@ async function main() {
   else console.log('⚠️  Sin bypass — si la preview pide login Vercel, configurá VERCEL_AUTOMATION_BYPASS_SECRET\n');
 
   // 1. Health
-  const healthRes = await fetch(withBypass(`${PREVIEW}/api/creamy-v2/health`), { headers: headers() });
+  const healthFetch = await fetchPreview(`${PREVIEW}/api/creamy-v2/health`);
+  if (healthFetch.blocked) {
+    console.error('\n⛔ La preview requiere autenticación Vercel (Deployment Protection).');
+    console.error('   Opciones:');
+    console.error('   1. Abrí el link Preview desde el PR #3 estando logueado en Vercel');
+    console.error('   2. Vercel Dashboard → Project → Settings → Deployment Protection → desactivar para Preview');
+    console.error('   3. Generar VERCEL_AUTOMATION_BYPASS_SECRET y pasarlo como env var\n');
+    process.exit(1);
+  }
+  const healthRes = healthFetch.res;
   const health = await healthRes.json().catch(() => ({}));
   check('Health endpoint responde', healthRes.status === 200 || healthRes.status === 503, `HTTP ${healthRes.status}`);
   if (health.checks) {
@@ -62,28 +89,26 @@ async function main() {
   }
 
   // 2. HTML + assets
-  const htmlRes = await fetch(withBypass(`${PREVIEW}/index.html`), { headers: headers(), redirect: 'follow' });
-  const html = await htmlRes.text();
-  check('index.html accesible', htmlRes.ok, `HTTP ${htmlRes.status}`);
-  if (htmlRes.status === 401 || html.includes('vercel.com/login') || html.includes('sso-api')) {
-    console.error('\n⛔ La preview requiere autenticación Vercel (Deployment Protection).');
-    console.error('   Opciones:');
-    console.error('   1. Abrí el link Preview desde el PR #3 estando logueado en Vercel');
-    console.error('   2. Vercel Dashboard → Project → Settings → Deployment Protection → desactivar para Preview');
-    console.error('   3. Generar VERCEL_AUTOMATION_BYPASS_SECRET y pasarlo como env var\n');
+  const htmlFetch = await fetchPreview(`${PREVIEW}/index.html`);
+  if (htmlFetch.blocked) {
+    console.error('\n⛔ index.html bloqueado por Deployment Protection.\n');
     process.exit(1);
   }
+  const htmlRes = htmlFetch.res;
+  const html = await htmlRes.text();
+  check('index.html accesible', htmlRes.ok, `HTTP ${htmlRes.status}`);
   check('HTML carga creamy-v2', html.includes('creamy-v2'));
   check('HTML sin creamy v1', !html.includes('assets/creamy/creamy.js'));
 
-  const jsRes = await fetch(withBypass(`${PREVIEW}/assets/creamy-v2/creamy.js?v=v2`), { headers: headers() });
+  const jsFetch = await fetchPreview(`${PREVIEW}/assets/creamy-v2/creamy.js?v=v2`);
+  const jsRes = jsFetch.res;
   check('creamy.js accesible', jsRes.ok, `HTTP ${jsRes.status}`);
 
   // 3. Chat API (solo si health ready)
   if (health.status === 'ready') {
-    const chatRes = await fetch(withBypass(`${PREVIEW}/api/creamy-v2/chat`), {
+    const chatFetch = await fetchPreview(`${PREVIEW}/api/creamy-v2/chat`, {
       method: 'POST',
-      headers: headers({ 'Content-Type': 'application/json' }),
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         message: 'Quiero hacer un serum de niacinamida. ¿Cuál es el MOQ?',
         conversation_history: [],
@@ -91,6 +116,7 @@ async function main() {
         page_key: 'index',
       }),
     });
+    const chatRes = chatFetch.res;
     const chat = await chatRes.json().catch(() => ({}));
     check('Chat API responde 200', chatRes.status === 200, `HTTP ${chatRes.status}`);
     const reply = chat.reply || chat.message || '';
