@@ -103,6 +103,10 @@ function apiConfigured() {
   );
 }
 
+export function isApiConfigured() {
+  return apiConfigured();
+}
+
 export function isSheetsConfigured() {
   return webhookConfigured() || apiConfigured();
 }
@@ -161,27 +165,39 @@ async function getServiceAccountToken() {
 }
 
 async function postWebhook(url, body, headers) {
-  let res = await fetch(url, {
-    method: 'POST',
-    headers,
-    body: JSON.stringify(body),
-    redirect: 'manual',
-  });
+  const strategies = [
+    () => fetch(url, { method: 'POST', headers, body: JSON.stringify(body), redirect: 'follow' }),
+    async () => {
+      let res = await fetch(url, { method: 'POST', headers, body: JSON.stringify(body), redirect: 'manual' });
+      if ([301, 302, 303, 307, 308].includes(res.status)) {
+        const location = res.headers.get('location');
+        if (location) {
+          res = await fetch(location, { method: 'POST', headers, body: JSON.stringify(body), redirect: 'follow' });
+        }
+      }
+      return res;
+    },
+  ];
 
-  if ([301, 302, 303, 307, 308].includes(res.status)) {
-    const location = res.headers.get('location');
-    if (location) {
-      res = await fetch(location, {
-        method: 'POST',
-        headers,
-        body: JSON.stringify(body),
-        redirect: 'follow',
-      });
-    }
+  let last = { status: 0, ok: false, text: '' };
+  for (const run of strategies) {
+    const res = await run();
+    const text = await res.text();
+    last = { status: res.status, ok: res.ok, text };
+    if (res.ok) return last;
+    if (res.status === 401 || res.status === 403) return last;
   }
+  return last;
+}
 
-  const text = await res.text();
-  return { status: res.status, ok: res.ok, text };
+async function getWebhookHealth(url) {
+  try {
+    const res = await fetch(url, { method: 'GET', redirect: 'follow' });
+    const text = await res.text();
+    return { status: res.status, ok: res.ok, text: text.slice(0, 500) };
+  } catch (err) {
+    return { status: 'error', ok: false, text: err.message };
+  }
 }
 
 async function appendViaWebhook(row) {
@@ -251,9 +267,20 @@ export async function appendConversationLog(row) {
   }
 
   try {
-    const result = webhookConfigured()
-      ? await appendViaWebhook(row)
-      : await appendViaApi(row);
+    if (webhookConfigured()) {
+      try {
+        return await appendViaWebhook(row);
+      } catch (webhookErr) {
+        if (!apiConfigured()) throw webhookErr;
+        meta.sheets_error = `webhook_failed:${webhookErr.message}`;
+        const apiResult = await appendViaApi(row);
+        meta.sheets_status = apiResult.status ?? 200;
+        meta.sheets_response_text = String(apiResult.response_text || '').slice(0, 300);
+        logSheetsEvent({ ...meta, sheets_event_type: eventType });
+        return { ...apiResult, fallback_from_webhook: true };
+      }
+    }
+    const result = await appendViaApi(row);
 
     meta.sheets_status = result.status ?? 200;
     meta.sheets_response_text = String(result.response_text || '').slice(0, 300);
@@ -269,17 +296,37 @@ export async function appendConversationLog(row) {
 
 export async function probeSheetsWebhook() {
   const sheets_url_present = isSheetsUrlPresent();
+  const api_configured = apiConfigured();
+  const rawUrl = process.env.CREAMY_SHEETS_WEBHOOK_URL?.trim() || '';
   const result = {
     sheets_url_present,
+    api_configured,
+    webhook_url_uses_dev: rawUrl.includes('/dev'),
+    webhook_secret_set: !!process.env.CREAMY_SHEETS_WEBHOOK_SECRET?.trim(),
+    webhook_get_status: null,
+    webhook_get_ok: false,
     webhook_reachable: false,
     webhook_status: null,
     webhook_response: '',
     test_write_ok: false,
   };
 
-  if (!sheets_url_present) {
-    result.webhook_response = 'CREAMY_SHEETS_WEBHOOK_URL no configurada en este entorno';
+  if (!sheets_url_present && !api_configured) {
+    result.webhook_response = 'CREAMY_SHEETS_WEBHOOK_URL ni API credentials configuradas';
     return result;
+  }
+
+  if (sheets_url_present) {
+    const url = normalizeWebhookUrl(rawUrl);
+    const health = await getWebhookHealth(url);
+    result.webhook_get_status = health.status;
+    result.webhook_get_ok = health.ok;
+    try {
+      const parsed = JSON.parse(health.text);
+      result.webhook_get_ok = health.ok && parsed.ok === true;
+    } catch {
+      // keep health.ok
+    }
   }
 
   const testRow = {
