@@ -3,7 +3,7 @@
  * Tests — CRM Sheets + onboarding premium
  */
 import fs from 'fs';
-import { buildSheetRow, rowToValues, isSheetsConfigured, SHEET_HEADERS } from '../backend/creamy-v2/lib/sheets.js';
+import { buildSheetRow, rowToValues, isSheetsConfigured, isSheetsUrlPresent, SHEET_HEADERS } from '../backend/creamy-v2/lib/sheets.js';
 import { extractMentionedEntities, ctaToEventType } from '../backend/creamy-v2/lib/entities.js';
 import {
   registerVisitorSession,
@@ -12,6 +12,7 @@ import {
   crmSnapshot,
 } from '../backend/creamy-v2/lib/session-crm.js';
 import eventHandler from '../api/creamy-v2/event.js';
+import sheetsDebugHandler from '../api/creamy-v2/sheets-debug.js';
 import { loadKnowledge } from '../backend/creamy-v2/lib/knowledge.js';
 import { StorageAdapter } from '../backend/creamy-v2/lib/storage.js';
 
@@ -49,8 +50,9 @@ check('Headers 24 columnas', SHEET_HEADERS.length === 24);
 check('Row url', row.url.includes('laboratoriogenus'));
 check('CTA crear_producto_click', ctaToEventType('CONFIGURADOR') === 'crear_producto_click');
 check('Sheets sin env', isSheetsConfigured() === false);
+check('Sheets URL sin env', isSheetsUrlPresent() === false);
 
-StorageAdapter.logChatTurn({
+await StorageAdapter.logChatTurn({
   session_id: 'crm_test',
   user_first_name: 'Ana',
   user_last_name: 'López',
@@ -90,6 +92,14 @@ async function testVisitorEvent() {
 }
 
 await testVisitorEvent();
+
+async function testSheetsDebug() {
+  const res = mockRes();
+  await sheetsDebugHandler({ method: 'GET' }, res);
+  check('sheets-debug responde', res.statusCode === 503 || res.statusCode === 200);
+}
+
+await testSheetsDebug();
 
 const js = fs.readFileSync('assets/creamy-v2/creamy.js', 'utf-8');
 const css = fs.readFileSync('assets/creamy-v2/creamy.css', 'utf-8');

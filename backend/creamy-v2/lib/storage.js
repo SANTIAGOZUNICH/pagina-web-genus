@@ -17,10 +17,6 @@ const memoryStore = {
   metrics: [],
 };
 
-function scheduleSheetLog(row) {
-  appendConversationLog(row).catch(() => {});
-}
-
 function visitorBase(payload) {
   return {
     session_id: payload.session_id || '',
@@ -56,13 +52,13 @@ export const StorageAdapter = {
     return { ok: true };
   },
 
-  logVisitorRegistered(payload) {
+  async logVisitorRegistered(payload) {
     registerVisitorSession(payload.session_id);
-    scheduleSheetLog(withCrm(payload, { tipo_evento: 'visitor_registered' }));
+    await appendConversationLog(withCrm(payload, { tipo_evento: 'visitor_registered' }));
     return { ok: true };
   },
 
-  logChatTurn(payload) {
+  async logChatTurn(payload) {
     const entities = {
       producto_mencionado: payload.producto_mencionado,
       activos_mencionados: payload.activos_mencionados,
@@ -70,7 +66,7 @@ export const StorageAdapter = {
 
     recordUserMessage(payload.session_id, entities);
 
-    scheduleSheetLog(withCrm(payload, {
+    await appendConversationLog(withCrm(payload, {
       tipo_evento: 'user_message',
       user_message: payload.user_message,
     }));
@@ -78,7 +74,7 @@ export const StorageAdapter = {
     const hadError = !!payload.had_error;
     recordAssistantTurn(payload.session_id, { hadError, entities });
 
-    scheduleSheetLog(withCrm(payload, {
+    await appendConversationLog(withCrm(payload, {
       tipo_evento: 'assistant_message',
       assistant_reply: payload.assistant_reply,
       intent: payload.intent,
@@ -94,17 +90,17 @@ export const StorageAdapter = {
     return { ok: true };
   },
 
-  logCtaClick(payload) {
+  async logCtaClick(payload) {
     const eventType = payload.event_type || payload.tipo_evento || 'cta_click';
     recordCtaEvent(payload.session_id, eventType);
-    scheduleSheetLog(withCrm(payload, {
+    await appendConversationLog(withCrm(payload, {
       tipo_evento: eventType,
       user_message: payload.context_message || '',
     }));
     return { ok: true };
   },
 
-  logMessageTurn(payload) {
+  async logMessageTurn(payload) {
     return this.logChatTurn(payload);
   },
 

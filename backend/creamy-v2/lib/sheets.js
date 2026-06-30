@@ -107,6 +107,27 @@ export function isSheetsConfigured() {
   return webhookConfigured() || apiConfigured();
 }
 
+export function isSheetsUrlPresent() {
+  return webhookConfigured();
+}
+
+export function normalizeWebhookUrl(url) {
+  const trimmed = String(url || '').trim();
+  if (!trimmed) return '';
+  return trimmed.replace(/\/dev(\?|$)/, '/exec$1').replace(/\/dev$/, '/exec');
+}
+
+function logSheetsEvent(meta) {
+  console.log('[CreamyV2:Sheets]', JSON.stringify({
+    sheets_enabled: meta.sheets_enabled ?? isSheetsConfigured(),
+    sheets_url_present: meta.sheets_url_present ?? isSheetsUrlPresent(),
+    sheets_event_type: meta.sheets_event_type || '',
+    sheets_status: meta.sheets_status ?? null,
+    sheets_response_text: meta.sheets_response_text ?? '',
+    sheets_error: meta.sheets_error ?? '',
+  }));
+}
+
 function base64url(input) {
   return Buffer.from(input).toString('base64url');
 }
@@ -139,23 +160,54 @@ async function getServiceAccountToken() {
   return data.access_token;
 }
 
+async function postWebhook(url, body, headers) {
+  let res = await fetch(url, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify(body),
+    redirect: 'manual',
+  });
+
+  if ([301, 302, 303, 307, 308].includes(res.status)) {
+    const location = res.headers.get('location');
+    if (location) {
+      res = await fetch(location, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(body),
+        redirect: 'follow',
+      });
+    }
+  }
+
+  const text = await res.text();
+  return { status: res.status, ok: res.ok, text };
+}
+
 async function appendViaWebhook(row) {
-  const url = process.env.CREAMY_SHEETS_WEBHOOK_URL.trim();
+  const url = normalizeWebhookUrl(process.env.CREAMY_SHEETS_WEBHOOK_URL);
   const headers = { 'Content-Type': 'application/json' };
   const secret = process.env.CREAMY_SHEETS_WEBHOOK_SECRET?.trim();
   if (secret) headers['X-Creamy-Secret'] = secret;
 
-  const res = await fetch(url, {
-    method: 'POST',
-    headers,
-    body: JSON.stringify(buildSheetRow(row)),
-  });
+  const payload = buildSheetRow(row);
+  const { status, ok, text } = await postWebhook(url, payload, headers);
 
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`webhook_${res.status}:${text.slice(0, 200)}`);
+  if (!ok) {
+    throw new Error(`webhook_${status}:${text.slice(0, 200)}`);
   }
-  return { ok: true, via: 'webhook' };
+
+  let parsed = null;
+  try {
+    parsed = JSON.parse(text);
+    if (parsed && parsed.ok === false) {
+      throw new Error(`webhook_rejected:${parsed.error || 'unknown'}`);
+    }
+  } catch (err) {
+    if (err.message.startsWith('webhook_rejected:')) throw err;
+  }
+
+  return { ok: true, via: 'webhook', status, response_text: text, parsed };
 }
 
 async function appendViaApi(row) {
@@ -174,23 +226,76 @@ async function appendViaApi(row) {
     body: JSON.stringify({ values: [rowToValues(row)] }),
   });
 
+  const text = await res.text();
   if (!res.ok) {
-    const text = await res.text();
     throw new Error(`api_${res.status}:${text.slice(0, 200)}`);
   }
-  return { ok: true, via: 'api' };
+  return { ok: true, via: 'api', status: res.status, response_text: text };
 }
 
 export async function appendConversationLog(row) {
+  const eventType = row.tipo_evento || row.event_type || '';
+  const meta = {
+    sheets_enabled: isSheetsConfigured(),
+    sheets_url_present: isSheetsUrlPresent(),
+    sheets_event_type: eventType,
+    sheets_status: null,
+    sheets_response_text: '',
+    sheets_error: '',
+  };
+
   if (!isSheetsConfigured()) {
+    meta.sheets_error = 'not_configured';
+    logSheetsEvent(meta);
     return { ok: false, skipped: true, reason: 'not_configured' };
   }
 
   try {
-    if (webhookConfigured()) return await appendViaWebhook(row);
-    return await appendViaApi(row);
+    const result = webhookConfigured()
+      ? await appendViaWebhook(row)
+      : await appendViaApi(row);
+
+    meta.sheets_status = result.status ?? 200;
+    meta.sheets_response_text = String(result.response_text || '').slice(0, 300);
+    logSheetsEvent(meta);
+    return result;
   } catch (err) {
-    console.warn('[CreamyV2:Sheets]', err.message);
+    meta.sheets_status = 'error';
+    meta.sheets_error = err.message;
+    logSheetsEvent(meta);
     return { ok: false, error: err.message };
   }
+}
+
+export async function probeSheetsWebhook() {
+  const sheets_url_present = isSheetsUrlPresent();
+  const result = {
+    sheets_url_present,
+    webhook_reachable: false,
+    webhook_status: null,
+    webhook_response: '',
+    test_write_ok: false,
+  };
+
+  if (!sheets_url_present) {
+    result.webhook_response = 'CREAMY_SHEETS_WEBHOOK_URL no configurada en este entorno';
+    return result;
+  }
+
+  const testRow = {
+    session_id: `debug_${Date.now()}`,
+    nombre: 'Sheets',
+    apellido: 'Debug',
+    tipo_evento: 'debug_test',
+    página: 'sheets-debug',
+    url: 'api/creamy-v2/sheets-debug',
+    user_agent: 'creamy-v2/sheets-debug',
+  };
+
+  const append = await appendConversationLog(testRow);
+  result.webhook_status = append.status ?? (append.ok ? 200 : 'error');
+  result.webhook_response = String(append.response_text || append.error || append.reason || '').slice(0, 500);
+  result.webhook_reachable = append.ok === true;
+  result.test_write_ok = append.ok === true;
+  return result;
 }

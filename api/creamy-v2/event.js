@@ -50,7 +50,7 @@ export default async function handler(req, res) {
     if (!firstName || !lastName) {
       return json(res, 400, { error: 'Nombre y apellido requeridos' });
     }
-    StorageAdapter.logVisitorRegistered({
+    await StorageAdapter.logVisitorRegistered({
       session_id: sessionId,
       user_first_name: firstName,
       user_last_name: lastName,
@@ -68,7 +68,7 @@ export default async function handler(req, res) {
     return json(res, 400, { error: 'Evento inválido' });
   }
 
-  StorageAdapter.logCtaClick({
+  await StorageAdapter.logCtaClick({
     session_id: sessionId,
     user_first_name: firstName,
     user_last_name: lastName,

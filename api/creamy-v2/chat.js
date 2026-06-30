@@ -169,7 +169,7 @@ export default async function handler(req, res) {
     logEvent(requestId, { used_ai: false, used_fallback: true, ai_error_code: 'missing_gemini_key' });
     const emergency = getEmergencyMessage(knowledge);
     const entities = extractMentionedEntities(message, knowledge);
-    StorageAdapter.logChatTurn({
+    await StorageAdapter.logChatTurn({
       session_id: sessionId,
       user_first_name: userFirstName,
       user_last_name: userLastName,
@@ -254,7 +254,7 @@ export default async function handler(req, res) {
       last_user_preview: message.slice(0, 80),
     });
 
-    StorageAdapter.logChatTurn({
+    await StorageAdapter.logChatTurn({
       session_id: sessionId,
       user_first_name: userFirstName,
       user_last_name: userLastName,
@@ -301,7 +301,7 @@ export default async function handler(req, res) {
     });
 
     const entities = extractMentionedEntities(message, knowledge);
-    StorageAdapter.logChatTurn({
+    await StorageAdapter.logChatTurn({
       session_id: sessionId,
       user_first_name: userFirstName,
       user_last_name: userLastName,
