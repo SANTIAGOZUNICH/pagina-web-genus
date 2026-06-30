@@ -165,96 +165,58 @@ async function getServiceAccountToken() {
 }
 
 async function postWebhook(url, body, headers) {
-  const attempts = [
+  const postAttempts = [
     {
-      label: 'json_follow',
-      run: () => fetch(url, {
-        method: 'POST',
-        headers,
-        body: JSON.stringify(body),
-        redirect: 'follow',
-      }),
+      label: 'json_post_get_redirect',
+      contentType: 'application/json',
+      buildBody: () => JSON.stringify(body),
     },
     {
-      label: 'form_follow',
-      run: () => {
-        const formHeaders = {};
-        if (headers['X-Creamy-Secret']) formHeaders['X-Creamy-Secret'] = headers['X-Creamy-Secret'];
-        return fetch(url, {
-          method: 'POST',
-          headers: { ...formHeaders, 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: new URLSearchParams({ payload: JSON.stringify(body) }),
-          redirect: 'follow',
-        });
-      },
-    },
-    {
-      label: 'json_manual',
-      run: async () => {
-        let res = await fetch(url, {
-          method: 'POST',
-          headers,
-          body: JSON.stringify(body),
-          redirect: 'manual',
-        });
-        if ([301, 302, 303, 307, 308].includes(res.status)) {
-          const location = res.headers.get('location');
-          if (location) {
-            res = await fetch(location, {
-              method: 'POST',
-              headers,
-              body: JSON.stringify(body),
-              redirect: 'follow',
-            });
-          }
-        }
-        return res;
-      },
-    },
-    {
-      label: 'form_manual',
-      run: async () => {
-        const formHeaders = {};
-        if (headers['X-Creamy-Secret']) formHeaders['X-Creamy-Secret'] = headers['X-Creamy-Secret'];
-        let res = await fetch(url, {
-          method: 'POST',
-          headers: { ...formHeaders, 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: new URLSearchParams({ payload: JSON.stringify(body) }),
-          redirect: 'manual',
-        });
-        if ([301, 302, 303, 307, 308].includes(res.status)) {
-          const location = res.headers.get('location');
-          if (location) {
-            res = await fetch(location, {
-              method: 'POST',
-              headers: { ...formHeaders, 'Content-Type': 'application/x-www-form-urlencoded' },
-              body: new URLSearchParams({ payload: JSON.stringify(body) }),
-              redirect: 'follow',
-            });
-          }
-        }
-        return res;
-      },
+      label: 'form_post_get_redirect',
+      contentType: 'application/x-www-form-urlencoded',
+      buildBody: () => new URLSearchParams({ payload: JSON.stringify(body) }),
     },
   ];
 
-  let last = { status: 0, ok: false, text: '', strategy: '' };
-  for (const attempt of attempts) {
-    const res = await attempt.run();
-    const text = await res.text();
-    last = { status: res.status, ok: res.ok, text, strategy: attempt.label };
-    if (res.ok) return last;
-    let rejected = false;
-    try {
-      const parsed = JSON.parse(text);
-      if (parsed && parsed.ok === false) rejected = true;
-    } catch {
-      // not json
+  for (const attempt of postAttempts) {
+    const reqHeaders = { 'Content-Type': attempt.contentType };
+    if (headers['X-Creamy-Secret']) reqHeaders['X-Creamy-Secret'] = headers['X-Creamy-Secret'];
+
+    let res = await fetch(url, {
+      method: 'POST',
+      headers: reqHeaders,
+      body: attempt.buildBody(),
+      redirect: 'manual',
+    });
+
+    if ([301, 302, 303, 307, 308].includes(res.status)) {
+      const location = res.headers.get('location');
+      if (location) {
+        res = await fetch(location, { method: 'GET', redirect: 'follow' });
+      }
     }
-    if (rejected) return last;
-    if (res.status !== 401 && res.status !== 403) return last;
+
+    const text = await res.text();
+    const result = { status: res.status, ok: res.ok, text, strategy: attempt.label };
+
+    if (res.ok) {
+      try {
+        const parsed = JSON.parse(text);
+        if (parsed && parsed.ok === false) {
+          return { ...result, ok: false };
+        }
+      } catch {
+        // non-json ok response
+      }
+      return result;
+    }
+
+    if (res.status !== 401 && res.status !== 403) {
+      return result;
+    }
   }
-  return last;
+
+  return { status: 401, ok: false, text: 'all_post_strategies_failed', strategy: 'failed' };
 }
 
 async function getWebhookHealth(url) {
