@@ -66,3 +66,39 @@ generateAIResponse()
 ```
 
 Knowledge base → solo contexto en system prompt. **No** genera respuestas hardcodeadas.
+
+### Registro de conversaciones en Google Sheets
+
+Creamy V2 guarda cada mensaje y cada click en CTA en una planilla de Google.
+
+**Columnas:** fecha, hora, session_id, nombre, página, pregunta, respuesta, intención, producto mencionado, activos mencionados, proveedor IA, modelo, si usó IA, si usó fallback, evento CTA.
+
+**Nombre del visitante:** Creamy lo pide una sola vez por conversación, de forma natural, antes del primer mensaje al API.
+
+#### Opción A — Apps Script Web App (recomendada)
+
+1. Crear una planilla en Google Sheets.
+2. **Extensiones → Apps Script** → pegar el código de `backend/creamy-v2/google-apps-script/sheets-webhook.gs`.
+3. **Implementar → Nueva implementación → Aplicación web** (acceso: cualquiera).
+4. En Vercel, agregar:
+
+| Variable | Descripción |
+|----------|-------------|
+| `CREAMY_SHEETS_WEBHOOK_URL` | URL del Web App (`https://script.google.com/macros/s/.../exec`) |
+| `CREAMY_SHEETS_WEBHOOK_SECRET` | Opcional. Secreto compartido con el script |
+
+#### Opción B — Google Sheets API (service account)
+
+| Variable | Descripción |
+|----------|-------------|
+| `CREAMY_SHEETS_SPREADSHEET_ID` | ID de la planilla |
+| `CREAMY_SHEETS_CREDENTIALS` | JSON del service account (una línea) |
+| `CREAMY_SHEETS_TAB` | Nombre de la pestaña (default: `Creamy Log`) |
+
+Compartir la planilla con el `client_email` del service account (Editor).
+
+Si no hay variables configuradas, el chat **sigue funcionando** sin guardar en Sheets.
+
+```bash
+npm run test:creamy-sheets
+```

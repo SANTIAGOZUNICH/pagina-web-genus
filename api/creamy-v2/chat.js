@@ -10,6 +10,7 @@ import { buildSystemPrompt } from '../../backend/creamy-v2/lib/prompt.js';
 import { generateAIResponse, getActiveProviderName, getProviderModel } from '../../backend/creamy-v2/lib/ai/provider.js';
 import { detectIntents, inferIntent } from '../../backend/creamy-v2/lib/intents.js';
 import { StorageAdapter } from '../../backend/creamy-v2/lib/storage.js';
+import { extractMentionedEntities } from '../../backend/creamy-v2/lib/entities.js';
 import {
   parseJsonBody,
   sanitizeHistory,
@@ -125,6 +126,7 @@ export default async function handler(req, res) {
   const pageKey = body.page_key || 'index';
   const pageUrl = body.page_url || '';
   const pageTitle = body.page_title || '';
+  const userName = typeof body.user_name === 'string' ? body.user_name.trim().slice(0, 80) : '';
   const intent = inferIntent(message, history.length);
 
   let knowledge;
@@ -161,6 +163,22 @@ export default async function handler(req, res) {
   if (provider === 'gemini' && !geminiKey) {
     logEvent(requestId, { used_ai: false, used_fallback: true, ai_error_code: 'missing_gemini_key' });
     const emergency = getEmergencyMessage(knowledge);
+    const entities = extractMentionedEntities(message, knowledge);
+    StorageAdapter.logMessageTurn({
+      session_id: sessionId,
+      user_name: userName,
+      page_key: pageKey,
+      user_message: message,
+      assistant_reply: emergency,
+      intent,
+      producto_mencionado: entities.producto_mencionado,
+      activos_mencionados: entities.activos_mencionados,
+      provider,
+      model,
+      used_ai: false,
+      used_fallback: true,
+      actions: [],
+    });
     return json(res, 503, {
       error: emergency,
       reply: emergency,
@@ -209,6 +227,7 @@ export default async function handler(req, res) {
     }
 
     const actions = detectIntents(message, result.reply, history.length + 1);
+    const entities = extractMentionedEntities(`${message}\n${result.reply}`, knowledge);
 
     logEvent(requestId, {
       used_ai: true,
@@ -223,11 +242,28 @@ export default async function handler(req, res) {
     await StorageAdapter.saveConversation(sessionId, {
       message_count: history.length + 1,
       page_key: pageKey,
+      user_name: userName,
       last_user_preview: message.slice(0, 80),
     });
 
+    StorageAdapter.logMessageTurn({
+      session_id: sessionId,
+      user_name: userName,
+      page_key: pageKey,
+      user_message: message,
+      assistant_reply: result.reply,
+      intent,
+      producto_mencionado: entities.producto_mencionado,
+      activos_mencionados: entities.activos_mencionados,
+      provider: result.provider,
+      model: result.model,
+      used_ai: true,
+      used_fallback: false,
+      actions,
+    });
+
     if (actions.length) {
-      await StorageAdapter.trackMetric('creamy_v2_lead_signal', { actions, sessionId });
+      await StorageAdapter.trackMetric('creamy_v2_lead_signal', { actions, sessionId, user_name: userName });
     }
 
     return json(res, 200, {
@@ -250,6 +286,23 @@ export default async function handler(req, res) {
       ai_error_type: err.type || null,
       ai_error_body: err.providerBody ? JSON.stringify(err.providerBody).slice(0, 500) : null,
       error_message: err.message,
+    });
+
+    const entities = extractMentionedEntities(message, knowledge);
+    StorageAdapter.logMessageTurn({
+      session_id: sessionId,
+      user_name: userName,
+      page_key: pageKey,
+      user_message: message,
+      assistant_reply: UI_TECHNICAL,
+      intent,
+      producto_mencionado: entities.producto_mencionado,
+      activos_mencionados: entities.activos_mencionados,
+      provider,
+      model,
+      used_ai: false,
+      used_fallback: true,
+      actions: [],
     });
 
     return json(res, 502, {

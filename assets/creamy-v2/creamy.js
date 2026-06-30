@@ -54,6 +54,9 @@
       this.pageUrl = location.href;
       this.pageTitle = document.title;
       this._technicalCtaShown = false;
+      this.userName = this._loadStoredName();
+      this._awaitingName = false;
+      this._namePrompted = false;
       this._init();
     }
 
@@ -100,6 +103,39 @@
       if (p.includes('llave')) return 'llave-en-mano';
       if (p.includes('quienes')) return 'quienes-somos';
       return 'index';
+    }
+
+    _nameStorageKey() {
+      return `cv2_name_${this.sessionId}`;
+    }
+
+    _loadStoredName() {
+      try {
+        const v = sessionStorage.getItem(this._nameStorageKey());
+        return v && v.trim().length >= 2 ? v.trim() : null;
+      } catch (_) {
+        return null;
+      }
+    }
+
+    _saveUserName(name) {
+      const trimmed = (name || '').trim().replace(/\s+/g, ' ');
+      if (trimmed.length < 2 || trimmed.length > 80) return false;
+      this.userName = trimmed;
+      try { sessionStorage.setItem(this._nameStorageKey(), trimmed); } catch (_) {}
+      this._track('creamy_v2_name_collected', { session_id: this.sessionId });
+      return true;
+    }
+
+    _promptForName() {
+      if (this.userName || this._namePrompted) return;
+      this._namePrompted = true;
+      this._awaitingName = true;
+      this._bot('Antes de seguir, ¿me decís tu nombre? Así puedo dejar registrada tu consulta.');
+    }
+
+    _resetInputPlaceholder() {
+      this.inputEl.placeholder = 'Escribí tu consulta...';
     }
 
     _render() {
@@ -207,6 +243,7 @@
       this.windowEl.classList.remove('cv2-hidden');
       this.fab.classList.add('cv2-fab--hidden');
       if (this.history.length === 0) this._welcome();
+      if (!this.userName) this._promptForName();
       this._track('creamy_v2_open');
       setTimeout(() => this.inputEl.focus(), 280);
     }
@@ -229,6 +266,20 @@
     send(override) {
       const text = (override || this.inputEl.value).trim();
       if (!text || this.isTyping) return;
+
+      if (!this.userName) {
+        if (!override) { this.inputEl.value = ''; this.inputEl.style.height = 'auto'; }
+        this._user(text);
+        if (this._saveUserName(text)) {
+          this._awaitingName = false;
+          this._resetInputPlaceholder();
+          this._bot(`¡Gracias, ${this._esc(this.userName)}! Contame qué producto tenés en mente.`);
+        } else {
+          this._bot('¿Me decís tu nombre? Con eso registro tu consulta y seguimos.');
+        }
+        return;
+      }
+
       if (!override) { this.inputEl.value = ''; this.inputEl.style.height = 'auto'; }
       this._user(text);
       this._track('creamy_v2_message');
@@ -261,6 +312,7 @@
         message: userMessage,
         conversation_history: this.history.slice(-10),
         session_id: this.sessionId,
+        user_name: this.userName,
         page_url: this.pageUrl,
         page_title: this.pageTitle,
         page_key: this.pageKey,
@@ -344,7 +396,10 @@
         a.className = `cv2-action-btn cv2-action-btn--${def.style}`;
         a.textContent = def.label;
         if (def.external) { a.target = '_blank'; a.rel = 'noopener noreferrer'; }
-        a.addEventListener('click', () => this._track('creamy_v2_cta_' + key.toLowerCase()));
+        a.addEventListener('click', () => {
+          this._track('creamy_v2_cta_' + key.toLowerCase(), { session_id: this.sessionId, cta: key });
+          this._logCtaEvent(key);
+        });
         container.appendChild(a);
       });
       const target = parentEl || this.messagesEl.querySelector('.cv2-message--bot:last-child');
@@ -390,6 +445,26 @@
         window.fbq?.('trackCustom', name, data || {});
         window.dataLayer?.push({ event: name, ...(data || {}) });
       } catch (_) { /* optional */ }
+    }
+
+    _logCtaEvent(ctaKey) {
+      const lastUser = [...this.history].reverse().find((m) => m.role === 'user');
+      try {
+        fetch('/api/creamy-v2/event', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            event_type: 'cta_click',
+            session_id: this.sessionId,
+            user_name: this.userName || '',
+            page_key: this.pageKey,
+            page_url: this.pageUrl,
+            cta: ctaKey,
+            context_message: lastUser?.content || '',
+          }),
+          keepalive: true,
+        }).catch(() => {});
+      } catch (_) {}
     }
   }
 
