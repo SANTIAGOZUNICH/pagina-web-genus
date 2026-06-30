@@ -183,25 +183,35 @@ async function appendViaGet(url, row, headers) {
     return { status: res.status, ok: false, text, strategy: 'get_payload' };
   }
 
+  let parsed;
   try {
-    const parsed = JSON.parse(text);
-    if (parsed && parsed.ok === false) {
-      return { status: res.status, ok: false, text, strategy: 'get_payload', parsed };
-    }
-    if (parsed && parsed.appended !== true) {
-      return {
-        status: res.status,
-        ok: false,
-        text,
-        strategy: 'get_payload',
-        parsed,
-        needs_apps_script_update: parsed.service === 'creamy-v2-sheets-webhook',
-      };
-    }
-    return { status: res.status, ok: true, text, strategy: 'get_payload', parsed };
+    parsed = JSON.parse(text);
   } catch {
-    return { status: res.status, ok: res.ok, text, strategy: 'get_payload' };
+    return {
+      status: res.status,
+      ok: false,
+      text: text.slice(0, 200),
+      strategy: 'get_payload',
+      error: 'non_json_response',
+    };
   }
+
+  if (parsed && parsed.ok === false) {
+    return { status: res.status, ok: false, text, strategy: 'get_payload', parsed };
+  }
+
+  if (parsed && parsed.appended !== true) {
+    return {
+      status: res.status,
+      ok: false,
+      text,
+      strategy: 'get_payload',
+      parsed,
+      needs_apps_script_update: parsed.service === 'creamy-v2-sheets-webhook',
+    };
+  }
+
+  return { status: res.status, ok: true, text, strategy: 'get_payload', parsed };
 }
 
 async function diagnoseWebhookPost(url, reqHeaders, bodyPayload) {
@@ -462,12 +472,12 @@ export async function probeSheetsWebhook() {
   result.webhook_response = String(append.response_text || append.error || append.reason || '').slice(0, 500);
   result.webhook_reachable = append.ok === true;
   result.test_write_ok = append.ok === true;
+  result.apps_script_update_required = !!append.needs_apps_script_update;
   if (!result.test_write_ok && result.webhook_get_ok && result.webhook_post_diag?.post_status === 401) {
-    result.hint = 'POST bloqueado (401) pero GET funciona. Actualizar Apps Script con doGet+payload y crear NUEVA implementación del Web App.';
+    result.hint = 'POST bloqueado (401). Actualizar Apps Script (doGet+payload) y crear NUEVA implementación con acceso Cualquiera.';
     result.apps_script_update_required = true;
   }
   if (append.needs_apps_script_update) {
-    result.apps_script_update_required = true;
     result.hint = 'Pegar backend/creamy-v2/google-apps-script/sheets-webhook.gs actualizado y crear NUEVA implementación (acceso: Cualquiera).';
   }
   return result;
