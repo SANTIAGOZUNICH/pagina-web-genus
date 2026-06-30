@@ -1,0 +1,668 @@
+/* ============================================================
+   GENUS — PREMIUM POLISH LAYER
+   Carga después de styles.css y styles-internal.css.
+   Solo refinamiento visual — sin cambiar funcionalidad.
+   ============================================================ */
+
+:root {
+  --polish-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --polish-duration: 0.22s;
+  --polish-radius-btn: 10px;
+  --polish-radius-card: 16px;
+  --polish-radius-lg: 20px;
+  --polish-btn-h: 48px;
+  --polish-btn-h-sm: 44px;
+  --polish-shadow-xs: 0 1px 2px rgba(7, 23, 47, 0.04);
+  --polish-shadow-sm: 0 1px 3px rgba(7, 23, 47, 0.05), 0 6px 16px rgba(7, 23, 47, 0.06);
+  --polish-shadow-md: 0 4px 12px rgba(7, 23, 47, 0.07), 0 12px 32px rgba(7, 23, 47, 0.08);
+  --polish-shadow-lg: 0 8px 24px rgba(7, 23, 47, 0.08), 0 24px 48px rgba(7, 23, 47, 0.1);
+  --polish-focus: 0 0 0 3px rgba(22, 154, 176, 0.18);
+  --polish-section-y: clamp(64px, 8vw, 96px);
+  --polish-section-gap: clamp(48px, 6vw, 72px);
+}
+
+/* ---------- Tipografía global ---------- */
+body {
+  font-family: var(--font-main, 'Helvetica Neue', Arial, Helvetica, sans-serif);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  line-height: 1.55;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+p {
+  line-height: 1.65;
+}
+
+/* ---------- Focus accesible (todos los interactivos) ---------- */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[tabindex]:focus-visible {
+  outline: none;
+  box-shadow: var(--polish-focus);
+}
+
+/* ---------- Botones unificados ---------- */
+.hn-cta,
+.hh-btn-cta,
+.hh-btn-wa,
+.g-btn-primary,
+.g-btn-secondary,
+.g-btn-wa,
+.g-btn-cta,
+.g-btn-back,
+.g-btn-next,
+.g-btn-final,
+.g-btn-submit,
+.dtp-btn-back,
+.dtp-btn-next,
+.dtp-btn-pay,
+.product-lines-title a,
+.footer a,
+.g-footer-cta {
+  border-radius: var(--polish-radius-btn) !important;
+  transition:
+    background var(--polish-duration) var(--polish-ease),
+    color var(--polish-duration) var(--polish-ease),
+    border-color var(--polish-duration) var(--polish-ease),
+    box-shadow var(--polish-duration) var(--polish-ease),
+    transform var(--polish-duration) var(--polish-ease) !important;
+}
+
+.hn-cta,
+.hh-btn-cta,
+.g-btn-primary,
+.g-btn-next,
+.g-btn-submit,
+.dtp-btn-next {
+  min-height: var(--polish-btn-h);
+  box-shadow: var(--polish-shadow-xs);
+}
+
+.hn-cta:hover,
+.hh-btn-cta:hover,
+.g-btn-primary:hover,
+.g-btn-next:hover,
+.g-btn-submit:hover,
+.dtp-btn-next:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--polish-shadow-sm);
+}
+
+.hn-cta:active,
+.hh-btn-cta:active,
+.g-btn-primary:active,
+.g-btn-next:active,
+.g-btn-submit:active,
+.dtp-btn-next:active,
+.g-btn-back:active,
+.dtp-btn-back:active {
+  transform: translateY(0) scale(0.99);
+}
+
+.hh-btn-wa,
+.g-btn-secondary,
+.g-btn-back,
+.dtp-btn-back {
+  min-height: var(--polish-btn-h-sm);
+}
+
+.g-btn-final,
+.dtp-btn-pay {
+  min-height: 52px;
+  box-shadow: var(--polish-shadow-sm);
+}
+
+.g-btn-final:hover,
+.dtp-btn-pay:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--polish-shadow-md);
+}
+
+.g-btn-wa,
+.g-btn-cta {
+  min-height: var(--polish-btn-h-sm);
+}
+
+.g-btn-wa:hover,
+.g-btn-cta:hover {
+  transform: translateY(-1px);
+}
+
+/* ---------- Nav premium ---------- */
+.hn {
+  border-bottom-color: rgba(221, 227, 232, 0.9);
+  box-shadow: var(--polish-shadow-xs);
+  backdrop-filter: saturate(180%) blur(8px);
+  -webkit-backdrop-filter: saturate(180%) blur(8px);
+}
+
+.g-nav {
+  box-shadow: var(--polish-shadow-xs);
+  backdrop-filter: saturate(180%) blur(8px);
+  -webkit-backdrop-filter: saturate(180%) blur(8px);
+}
+
+.hn-inner,
+.g-nav-inner {
+  height: 72px;
+}
+
+.hn-links a,
+.g-nav-links a {
+  border-radius: var(--polish-radius-btn);
+  transition:
+    background var(--polish-duration) var(--polish-ease),
+    color var(--polish-duration) var(--polish-ease),
+    box-shadow var(--polish-duration) var(--polish-ease);
+}
+
+.hn-links a:hover {
+  background: rgba(22, 154, 176, 0.08);
+  color: #169ab0;
+}
+
+.hn-links a.act {
+  background: rgba(22, 154, 176, 0.1);
+  border-bottom: none;
+  box-shadow: inset 0 -2px 0 #169ab0;
+}
+
+.g-nav-links a:hover,
+.g-nav-links a.active {
+  transform: translateY(-1px);
+}
+
+.hn-ham span,
+.g-nav-hamburger span {
+  transition: transform var(--polish-duration) var(--polish-ease), opacity var(--polish-duration) var(--polish-ease);
+}
+
+/* ---------- Hero home ---------- */
+.hh {
+  background: linear-gradient(145deg, #e8f4f8 0%, #f2f8fa 45%, #f8fbfc 100%);
+}
+
+.hh-left h1 {
+  letter-spacing: -0.03em;
+  margin-bottom: 12px;
+}
+
+.hh-left p {
+  font-size: 17px;
+  line-height: 1.7;
+  margin-bottom: 40px;
+}
+
+.hh-rule {
+  margin: 24px 0 28px;
+  opacity: 0.9;
+}
+
+.hh-inner {
+  min-height: 540px;
+}
+
+.hh-right {
+  height: 540px;
+}
+
+/* ---------- Features strip ---------- */
+.hf-inner {
+  border-radius: var(--polish-radius-lg);
+  box-shadow: var(--polish-shadow-md);
+  border-color: rgba(221, 227, 232, 0.85);
+  transform: translateY(-36px);
+  transition: box-shadow var(--polish-duration) var(--polish-ease);
+}
+
+.hf-inner:hover {
+  box-shadow: var(--polish-shadow-lg);
+}
+
+.hf-item {
+  padding: 32px 28px;
+  transition: background var(--polish-duration) var(--polish-ease);
+}
+
+.hf-item:hover {
+  background: rgba(245, 248, 250, 0.6);
+}
+
+.hf-icon {
+  box-shadow: 0 4px 14px rgba(22, 154, 176, 0.2);
+  transition: transform var(--polish-duration) var(--polish-ease);
+}
+
+.hf-item:hover .hf-icon {
+  transform: scale(1.03);
+}
+
+/* ---------- Secciones internas ---------- */
+.g-section {
+  padding: var(--polish-section-y) 0;
+}
+
+.g-section + .g-section {
+  border-top: 1px solid rgba(221, 227, 232, 0.65);
+}
+
+.g-section-head {
+  margin-bottom: var(--polish-section-gap);
+}
+
+.g-section-head h2 {
+  letter-spacing: -0.025em;
+}
+
+.g-section-head p {
+  margin-top: 14px;
+  line-height: 1.7;
+}
+
+.g-hero {
+  padding: clamp(72px, 9vw, 96px) 0 clamp(64px, 8vw, 88px);
+}
+
+.g-hero h1 {
+  letter-spacing: -0.03em;
+}
+
+.g-hero p {
+  line-height: 1.7;
+  margin-bottom: 40px;
+}
+
+.g-divider {
+  opacity: 0.85;
+}
+
+/* ---------- Cards unificadas ---------- */
+.product-card,
+.hf-inner,
+.g-product-card,
+.g-mv-card,
+.g-valor-card,
+.g-cert-card,
+.g-contact-item,
+.g-process-step,
+.g-envase-item,
+.g-banco-item,
+.g-porque-item,
+.g-proceso-item,
+.g-summary-card,
+.dtp-product-card,
+.dtp-col-img,
+.dtp-col-form,
+.dtp-order-card,
+.dtp-summary {
+  border-radius: var(--polish-radius-card) !important;
+  transition:
+    box-shadow var(--polish-duration) var(--polish-ease),
+    transform var(--polish-duration) var(--polish-ease),
+    border-color var(--polish-duration) var(--polish-ease),
+    background var(--polish-duration) var(--polish-ease) !important;
+}
+
+.product-card {
+  border-color: rgba(221, 227, 232, 0.95) !important;
+  box-shadow: var(--polish-shadow-xs);
+  overflow: hidden;
+}
+
+.product-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: var(--polish-shadow-md) !important;
+}
+
+.g-product-card:hover,
+.g-mv-card:hover,
+.g-valor-card:hover,
+.g-cert-card:hover,
+.g-process-step:hover,
+.g-envase-item:hover,
+.g-banco-item:hover,
+.g-proceso-item:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--polish-shadow-md) !important;
+}
+
+.g-porque-item:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--polish-shadow-sm) !important;
+}
+
+.dtp-product-card:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: var(--polish-shadow-md) !important;
+}
+
+.dtp-product-card.selected {
+  box-shadow: 0 0 0 3px rgba(22, 154, 176, 0.14), var(--polish-shadow-md) !important;
+}
+
+.g-contact-item {
+  padding: 24px 22px;
+}
+
+.g-contact-item:hover {
+  box-shadow: var(--polish-shadow-sm);
+  border-color: rgba(22, 154, 176, 0.25);
+}
+
+/* ---------- Inputs premium ---------- */
+.g-field input,
+.g-field textarea,
+.g-field select,
+.dtp-field input,
+.dtp-field select,
+.dtp-field textarea {
+  border-radius: var(--polish-radius-btn) !important;
+  padding: 14px 16px !important;
+  border-width: 1.5px !important;
+  border-color: rgba(221, 227, 232, 0.95) !important;
+  transition:
+    border-color var(--polish-duration) var(--polish-ease),
+    box-shadow var(--polish-duration) var(--polish-ease),
+    background var(--polish-duration) var(--polish-ease) !important;
+}
+
+.g-field input::placeholder,
+.g-field textarea::placeholder,
+.dtp-field input::placeholder,
+.dtp-field textarea::placeholder {
+  color: rgba(58, 74, 90, 0.45);
+  font-weight: 400;
+}
+
+.g-field input:hover,
+.g-field textarea:hover,
+.g-field select:hover,
+.dtp-field input:hover,
+.dtp-field textarea:hover,
+.dtp-field select:hover {
+  border-color: rgba(22, 154, 176, 0.35) !important;
+}
+
+.g-field input:focus,
+.g-field textarea:focus,
+.g-field select:focus,
+.dtp-field input:focus,
+.dtp-field textarea:focus,
+.dtp-field select:focus {
+  border-color: var(--aqua, #169ab0) !important;
+  box-shadow: var(--polish-focus) !important;
+}
+
+.g-field label,
+.dtp-field label {
+  margin-bottom: 8px;
+  letter-spacing: 0.06em;
+}
+
+/* ---------- Opciones wizard (cotizador) ---------- */
+.g-option-label,
+.g-yn-label {
+  border-radius: var(--polish-radius-btn) !important;
+  border-width: 1.5px !important;
+  transition:
+    border-color var(--polish-duration) var(--polish-ease),
+    background var(--polish-duration) var(--polish-ease),
+    transform var(--polish-duration) var(--polish-ease),
+    box-shadow var(--polish-duration) var(--polish-ease) !important;
+}
+
+.g-option-label:hover,
+.g-yn-label:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--polish-shadow-xs);
+}
+
+.g-option-label.selected,
+.g-yn-label.selected {
+  box-shadow: 0 0 0 3px rgba(22, 154, 176, 0.12);
+}
+
+.g-wizard-nav,
+.dtp-nav {
+  margin-top: 44px;
+  padding-top: 32px;
+}
+
+.g-step-header h3 {
+  letter-spacing: -0.02em;
+}
+
+/* ---------- Progress cotizador ---------- */
+.g-progress::before {
+  height: 2px !important;
+  background: rgba(221, 227, 232, 0.9) !important;
+}
+
+.g-progress-step span {
+  transition:
+    background var(--polish-duration) var(--polish-ease),
+    border-color var(--polish-duration) var(--polish-ease),
+    transform var(--polish-duration) var(--polish-ease),
+    box-shadow var(--polish-duration) var(--polish-ease) !important;
+  box-shadow: var(--polish-shadow-xs);
+}
+
+.g-progress-step.active span {
+  box-shadow: 0 4px 12px rgba(22, 154, 176, 0.28);
+}
+
+/* ---------- Configurador progress ---------- */
+.dtp-step-num {
+  transition:
+    background var(--polish-duration) var(--polish-ease),
+    border-color var(--polish-duration) var(--polish-ease),
+    transform var(--polish-duration) var(--polish-ease),
+    box-shadow var(--polish-duration) var(--polish-ease) !important;
+}
+
+.dtp-step-item.active .dtp-step-num {
+  box-shadow: 0 4px 12px rgba(22, 154, 176, 0.25);
+}
+
+.dtp-color-swatch {
+  box-shadow: 0 2px 6px rgba(7, 23, 47, 0.1) !important;
+  transition:
+    transform var(--polish-duration) var(--polish-ease),
+    border-color var(--polish-duration) var(--polish-ease),
+    box-shadow var(--polish-duration) var(--polish-ease) !important;
+}
+
+.dtp-color-swatch:hover {
+  transform: scale(1.08) !important;
+}
+
+.dtp-activo-chip {
+  transition:
+    background var(--polish-duration) var(--polish-ease),
+    border-color var(--polish-duration) var(--polish-ease),
+    transform var(--polish-duration) var(--polish-ease),
+    box-shadow var(--polish-duration) var(--polish-ease) !important;
+}
+
+.dtp-activo-chip:hover {
+  transform: translateY(-1px);
+}
+
+/* ---------- Footer ---------- */
+.footer,
+.g-footer {
+  border-top-color: rgba(221, 227, 232, 0.85);
+  padding: 36px 0;
+}
+
+.footer a,
+.g-footer-cta {
+  box-shadow: var(--polish-shadow-sm);
+  padding: 16px 28px !important;
+  letter-spacing: 0.02em;
+}
+
+.footer a:hover,
+.g-footer-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--polish-shadow-md);
+}
+
+/* ---------- Links en contenido ---------- */
+.g-section a:not([class]),
+.g-hero a:not([class]),
+.g-contact-item-body a {
+  transition: color var(--polish-duration) var(--polish-ease);
+}
+
+/* ---------- Proceso home ---------- */
+.hp {
+  padding: 24px 0 72px;
+}
+
+.hp-left h2 {
+  letter-spacing: -0.02em;
+}
+
+.hp-step {
+  transition: transform var(--polish-duration) var(--polish-ease);
+}
+
+.hp-step:hover {
+  transform: translateY(-2px);
+}
+
+.hp-num {
+  box-shadow: var(--polish-shadow-xs);
+  transition: transform var(--polish-duration) var(--polish-ease);
+}
+
+.hp-step:hover .hp-num {
+  transform: scale(1.04);
+}
+
+/* ---------- Product lines home ---------- */
+.product-lines {
+  padding: 48px 0 40px;
+}
+
+.product-lines-title a {
+  box-shadow: var(--polish-shadow-xs);
+  transition:
+    border-color var(--polish-duration) var(--polish-ease),
+    box-shadow var(--polish-duration) var(--polish-ease),
+    transform var(--polish-duration) var(--polish-ease) !important;
+}
+
+.product-lines-title a:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--polish-shadow-sm);
+  border-color: rgba(22, 154, 176, 0.35);
+}
+
+/* ---------- Animaciones de entrada sutiles ---------- */
+@keyframes polish-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.g-wizard-panel.active,
+.dtp-panel.active {
+  animation: polish-fade-up 0.35s var(--polish-ease) both;
+}
+
+.g-success.active {
+  animation: polish-fade-up 0.4s var(--polish-ease) both;
+}
+
+/* ---------- Iconos / SVG consistencia ---------- */
+.hf-icon svg,
+.hp-icon svg,
+.g-contact-icon {
+  flex-shrink: 0;
+}
+
+/* ---------- Scroll suave (sin JS) ---------- */
+html {
+  scroll-behavior: smooth;
+}
+
+/* ---------- Reducir sombras legacy pesadas ---------- */
+.g-product-card,
+.g-valor-card,
+.g-cert-card {
+  box-shadow: var(--polish-shadow-xs) !important;
+}
+
+/* ---------- Responsive polish ---------- */
+@media (max-width: 768px) {
+  :root {
+    --polish-section-y: 52px;
+    --polish-section-gap: 36px;
+  }
+
+  .hh-inner {
+    min-height: auto;
+  }
+
+  .hh-left {
+    padding: 48px 0 32px;
+  }
+
+  .hf-inner {
+    transform: translateY(-24px);
+  }
+
+  .hf-item {
+    padding: 24px 20px;
+  }
+
+  .g-hero {
+    padding: 56px 0 48px;
+  }
+
+  .dtp-wrap {
+    padding: 40px 0 64px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .hn-cta,
+  .hh-btn-cta,
+  .g-btn-primary,
+  .g-btn-next {
+    min-height: 46px;
+  }
+
+  .g-wizard-nav,
+  .dtp-nav {
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
