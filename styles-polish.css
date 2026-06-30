@@ -6,6 +6,7 @@
 
 :root {
   --polish-loaded: 1;
+  --upgrade-v: 2;
   --polish-ease: cubic-bezier(0.4, 0, 0.2, 1);
   --polish-duration: 0.22s;
   --polish-radius-btn: 10px;
@@ -665,5 +666,441 @@ html {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================================
+   GENUS — VISUAL UPGRADE PASS v2
+   Mejora estética visible: fondos, hero, cards, CTAs, secciones
+   ============================================================ */
+
+/* ---------- Canvas global ---------- */
+body {
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(22, 154, 176, 0.07), transparent 55%),
+    linear-gradient(180deg, #f6fafb 0%, #ffffff 38%, #f8fbfc 100%) !important;
+}
+
+/* ---------- Nav glass premium ---------- */
+.hn,
+.g-nav {
+  background: rgba(255, 255, 255, 0.82) !important;
+  border-bottom: 1px solid rgba(22, 154, 176, 0.1) !important;
+  box-shadow: 0 4px 24px rgba(7, 23, 47, 0.06) !important;
+  backdrop-filter: saturate(180%) blur(16px) !important;
+  -webkit-backdrop-filter: saturate(180%) blur(16px) !important;
+}
+
+/* ---------- HERO HOME — impacto visual ---------- */
+.hh {
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(128deg, #d4edf3 0%, #e8f5f9 32%, #f2f9fb 58%, #fafdfe 100%) !important;
+  border-bottom: 1px solid rgba(22, 154, 176, 0.08);
+}
+
+.hh::before,
+.hh::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(72px);
+  z-index: 0;
+}
+
+.hh::before {
+  width: min(560px, 70vw);
+  height: min(560px, 70vw);
+  top: -18%;
+  right: -8%;
+  background: radial-gradient(circle, rgba(22, 154, 176, 0.28) 0%, rgba(22, 154, 176, 0) 68%);
+}
+
+.hh::after {
+  width: min(420px, 55vw);
+  height: min(420px, 55vw);
+  bottom: -12%;
+  left: -6%;
+  background: radial-gradient(circle, rgba(14, 122, 141, 0.16) 0%, transparent 70%);
+}
+
+.hh-inner {
+  position: relative;
+  z-index: 1;
+  min-height: clamp(520px, 72vh, 640px) !important;
+}
+
+.hh-left h1 {
+  font-size: clamp(38px, 5.2vw, 68px) !important;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.hh-left h1 span {
+  background: linear-gradient(135deg, #169ab0 0%, #0e7a8d 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hh-tag {
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(22, 154, 176, 0.22);
+  padding: 8px 16px;
+  border-radius: 100px;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 2px 12px rgba(22, 154, 176, 0.08);
+}
+
+.hh-rule {
+  width: 56px !important;
+  height: 4px !important;
+  background: linear-gradient(90deg, #169ab0, rgba(22, 154, 176, 0.2)) !important;
+  border-radius: 4px;
+}
+
+.hh-img-wrap {
+  filter: drop-shadow(0 24px 48px rgba(7, 23, 47, 0.14));
+}
+
+.hh-right::before {
+  content: '';
+  position: absolute;
+  inset: 8% 0 8% 20%;
+  background: radial-gradient(ellipse at center, rgba(22, 154, 176, 0.14) 0%, transparent 68%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ---------- HERO páginas internas ---------- */
+.g-hero {
+  position: relative;
+  overflow: hidden;
+}
+
+.g-hero::after {
+  content: '';
+  position: absolute;
+  width: 480px;
+  height: 480px;
+  top: -30%;
+  right: -10%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(22, 154, 176, 0.22) 0%, transparent 65%);
+  filter: blur(40px);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.g-hero-tag {
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 16px rgba(22, 154, 176, 0.12);
+}
+
+.g-hero h1 {
+  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.18);
+}
+
+/* ---------- CTAs premium con gradiente ---------- */
+.hn-cta,
+.hh-btn-cta,
+.g-btn-primary,
+.g-btn-next,
+.g-btn-submit,
+.dtp-btn-next {
+  background: linear-gradient(135deg, #1eb3c9 0%, #169ab0 42%, #0e7a8d 100%) !important;
+  color: #fff !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  box-shadow:
+    0 4px 18px rgba(22, 154, 176, 0.38),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28) !important;
+  letter-spacing: 0.04em;
+}
+
+.hn-cta:hover,
+.hh-btn-cta:hover,
+.g-btn-primary:hover,
+.g-btn-next:hover,
+.g-btn-submit:hover,
+.dtp-btn-next:hover {
+  background: linear-gradient(135deg, #22bdd4 0%, #18a8be 40%, #0f8496 100%) !important;
+  box-shadow:
+    0 10px 32px rgba(22, 154, 176, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.32) !important;
+  transform: translateY(-3px) !important;
+}
+
+.g-btn-final,
+.dtp-btn-pay,
+.footer a,
+.g-footer-cta {
+  background: linear-gradient(135deg, #0a1e38 0%, #07172f 55%, #0c2a42 100%) !important;
+  box-shadow: 0 8px 28px rgba(7, 23, 47, 0.28) !important;
+}
+
+.g-btn-final:hover,
+.dtp-btn-pay:hover,
+.footer a:hover,
+.g-footer-cta:hover {
+  background: linear-gradient(135deg, #169ab0 0%, #0e7a8d 100%) !important;
+  box-shadow: 0 12px 36px rgba(22, 154, 176, 0.35) !important;
+}
+
+.hh-btn-wa {
+  background: rgba(255, 255, 255, 0.88) !important;
+  backdrop-filter: blur(8px);
+  border-color: rgba(22, 154, 176, 0.2) !important;
+  box-shadow: 0 4px 16px rgba(7, 23, 47, 0.06);
+}
+
+.hh-btn-wa:hover {
+  border-color: #25d366 !important;
+  box-shadow: 0 8px 24px rgba(37, 211, 102, 0.18) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* ---------- Features strip glass ---------- */
+.hf {
+  background: transparent;
+  position: relative;
+}
+
+.hf-inner {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.94) 0%, rgba(248, 252, 253, 0.88) 100%) !important;
+  border: 1px solid rgba(22, 154, 176, 0.14) !important;
+  box-shadow:
+    0 20px 50px rgba(7, 23, 47, 0.1),
+    0 0 0 1px rgba(255, 255, 255, 0.7) inset !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transform: translateY(-44px) !important;
+}
+
+.hf-icon {
+  background: linear-gradient(145deg, #1eb3c9, #0e7a8d) !important;
+  box-shadow: 0 8px 20px rgba(22, 154, 176, 0.32) !important;
+}
+
+/* ---------- Secciones alternadas ---------- */
+.g-section-white {
+  background:
+    linear-gradient(180deg, #ffffff 0%, #fbfdfe 50%, #f7fafb 100%) !important;
+  position: relative;
+}
+
+.g-section-light {
+  background:
+    linear-gradient(135deg, #eef6f8 0%, #f4f9fb 45%, #eaf3f6 100%) !important;
+  position: relative;
+}
+
+.g-section-light::before,
+.g-section-white::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(22, 154, 176, 0.22), transparent);
+  pointer-events: none;
+}
+
+.g-section-dark {
+  background:
+    linear-gradient(145deg, #061220 0%, #07172f 45%, #0a2238 100%) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.g-section-dark::after {
+  content: '';
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  bottom: -20%;
+  left: -5%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(22, 154, 176, 0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hp {
+  background:
+    linear-gradient(180deg, #f8fbfc 0%, #ffffff 100%) !important;
+  padding: 48px 0 80px !important;
+}
+
+.product-lines {
+  background:
+    radial-gradient(ellipse 70% 40% at 50% 0%, rgba(22, 154, 176, 0.06), transparent 60%),
+    #ffffff !important;
+  padding: 56px 0 48px !important;
+}
+
+.home-exact {
+  background: transparent !important;
+}
+
+/* ---------- Section headers decorativos ---------- */
+.g-section-tag {
+  background: rgba(22, 154, 176, 0.1) !important;
+  border: 1px solid rgba(22, 154, 176, 0.22);
+  padding: 7px 16px !important;
+  border-radius: 100px;
+  box-shadow: 0 2px 10px rgba(22, 154, 176, 0.08);
+}
+
+.g-divider,
+.hp-left .rule,
+.hh-rule {
+  background: linear-gradient(90deg, #169ab0, rgba(22, 154, 176, 0.15)) !important;
+}
+
+.g-section-head h2::after {
+  content: '';
+  display: block;
+  width: 48px;
+  height: 3px;
+  margin-top: 16px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #169ab0, transparent);
+}
+
+.g-section-head.centered h2::after {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ---------- Cards premium glass ---------- */
+.product-card,
+.g-product-card,
+.g-mv-card,
+.g-valor-card,
+.g-cert-card,
+.g-contact-item,
+.g-process-step,
+.g-envase-item,
+.g-banco-item,
+.g-porque-item,
+.g-proceso-item,
+.g-summary-card,
+.dtp-product-card,
+.dtp-col-img,
+.dtp-col-form,
+.dtp-order-card {
+  background: linear-gradient(160deg, #ffffff 0%, #f8fbfc 100%) !important;
+  border: 1px solid rgba(22, 154, 176, 0.14) !important;
+  box-shadow:
+    0 8px 28px rgba(7, 23, 47, 0.07),
+    0 0 0 1px rgba(255, 255, 255, 0.75) inset !important;
+}
+
+.product-card:hover,
+.g-product-card:hover,
+.g-mv-card:hover,
+.g-valor-card:hover,
+.g-cert-card:hover,
+.g-process-step:hover,
+.g-envase-item:hover,
+.g-banco-item:hover,
+.g-porque-item:hover,
+.g-proceso-item:hover,
+.dtp-product-card:hover {
+  transform: translateY(-6px) !important;
+  border-color: rgba(22, 154, 176, 0.32) !important;
+  box-shadow:
+    0 16px 40px rgba(7, 23, 47, 0.11),
+    0 0 0 1px rgba(22, 154, 176, 0.12),
+    0 0 32px rgba(22, 154, 176, 0.08) !important;
+}
+
+.dtp-product-card.selected {
+  border-color: #169ab0 !important;
+  box-shadow:
+    0 0 0 3px rgba(22, 154, 176, 0.2),
+    0 12px 36px rgba(22, 154, 176, 0.15) !important;
+}
+
+.g-contact-icon {
+  background: linear-gradient(145deg, #1eb3c9, #0e7a8d) !important;
+  box-shadow: 0 6px 16px rgba(22, 154, 176, 0.28);
+}
+
+/* ---------- Proceso home ---------- */
+.hp-num {
+  background: linear-gradient(145deg, #0a1e38, #07172f) !important;
+  box-shadow: 0 6px 16px rgba(7, 23, 47, 0.2);
+}
+
+.hp-icon {
+  background: linear-gradient(145deg, #e8f6f9, #dff0f5) !important;
+  border-color: rgba(22, 154, 176, 0.25) !important;
+}
+
+/* ---------- Wizard / configurador fondos ---------- */
+.g-section.g-section-white:has(.g-wizard-wrap),
+.g-section:has(.dtp-wrap) {
+  background:
+    radial-gradient(ellipse 60% 40% at 50% 0%, rgba(22, 154, 176, 0.05), transparent),
+    linear-gradient(180deg, #f8fbfc 0%, #ffffff 100%) !important;
+}
+
+.dtp-progress-bar {
+  background: rgba(255, 255, 255, 0.9) !important;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 16px rgba(7, 23, 47, 0.04);
+}
+
+.dtp-wrap {
+  position: relative;
+}
+
+/* ---------- Footer premium ---------- */
+.footer,
+.g-footer {
+  background: linear-gradient(180deg, #f8fbfc 0%, #f2f7f9 100%) !important;
+  border-top: 1px solid rgba(22, 154, 176, 0.1) !important;
+}
+
+/* ---------- Creamy widget (solo visual) ---------- */
+#creamy-v2 .cv2-fab {
+  box-shadow:
+    0 8px 28px rgba(22, 154, 176, 0.4),
+    0 0 0 4px rgba(22, 154, 176, 0.1) !important;
+}
+
+#creamy-v2 .cv2-window {
+  border: 1px solid rgba(22, 154, 176, 0.12);
+  box-shadow:
+    0 24px 64px rgba(7, 23, 47, 0.18),
+    0 0 0 1px rgba(255, 255, 255, 0.5) inset !important;
+}
+
+#creamy-v2 .cv2-header {
+  box-shadow: 0 4px 16px rgba(7, 23, 47, 0.08);
+}
+
+/* ---------- Mobile upgrade ---------- */
+@media (max-width: 768px) {
+  .hh-inner {
+    min-height: auto !important;
+  }
+
+  .hh::before {
+    width: 320px;
+    height: 320px;
+    top: -10%;
+    right: -20%;
+  }
+
+  .hf-inner {
+    transform: translateY(-28px) !important;
+  }
+
+  .g-section-head h2::after {
+    width: 40px;
+    margin-top: 12px;
   }
 }
