@@ -6,7 +6,7 @@
 
 :root {
   --polish-loaded: 1;
-  --upgrade-v: 2;
+  --upgrade-v: 3;
   --polish-ease: cubic-bezier(0.4, 0, 0.2, 1);
   --polish-duration: 0.22s;
   --polish-radius-btn: 10px;
@@ -1102,5 +1102,430 @@ body {
   .g-section-head h2::after {
     width: 40px;
     margin-top: 12px;
+  }
+}
+
+/* ============================================================
+   GENUS — PREMIUM LABORATORY V3
+   Estética farmacéutica internacional: confianza, ciencia, calidad.
+   Sobrescribe v2 donde sea necesario — sin glass ni efectos llamativos.
+   ============================================================ */
+
+:root {
+  --v3-white: #ffffff;
+  --v3-surface: #f7f9fb;
+  --v3-surface-alt: #f2f5f8;
+  --v3-border: rgba(221, 227, 232, 0.92);
+  --v3-border-accent: rgba(22, 154, 176, 0.18);
+  --v3-texture: rgba(22, 154, 176, 0.035);
+  --v3-shadow-card: 0 1px 2px rgba(7, 23, 47, 0.04), 0 8px 24px rgba(7, 23, 47, 0.05);
+  --v3-shadow-hover: 0 4px 12px rgba(7, 23, 47, 0.06), 0 16px 32px rgba(7, 23, 47, 0.07);
+  --v3-ease: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --v3-panel-w: min(360px, 90vw);
+  --v3-nav-z: 210;
+}
+
+/* ---------- Textura científica (2–5% opacidad) ---------- */
+@keyframes v3-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+body {
+  background:
+    linear-gradient(180deg, var(--v3-surface) 0%, var(--v3-white) 22%, var(--v3-white) 78%, var(--v3-surface) 100%) !important;
+}
+
+/* Textura científica localizada (no global — evita conflictos de stacking) */
+.hp::before,
+.product-lines::before,
+.g-section-light::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='48' viewBox='0 0 56 48'%3E%3Cpath fill='none' stroke='%23169ab0' stroke-opacity='0.04' stroke-width='0.6' d='M28 0l24 14v20L28 48 4 34V14z'/%3E%3C/svg%3E");
+  background-size: 56px 48px;
+  opacity: 0.85;
+}
+
+.product-lines,
+.hp,
+.g-section-light {
+  position: relative;
+  overflow: hidden;
+}
+
+/* ---------- Nav sólida y profesional ---------- */
+.hn,
+.g-nav {
+  background: rgba(255, 255, 255, 0.96) !important;
+  border-bottom: 1px solid var(--v3-border) !important;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.9), 0 4px 20px rgba(7, 23, 47, 0.04) !important;
+  backdrop-filter: blur(6px) saturate(120%) !important;
+  -webkit-backdrop-filter: blur(6px) saturate(120%) !important;
+}
+
+/* ---------- Hero home — profundidad farmacéutica ---------- */
+.hh {
+  background:
+    linear-gradient(155deg, #eef4f7 0%, #f4f8fa 38%, #fafcfd 72%, #ffffff 100%) !important;
+  border-bottom: 1px solid var(--v3-border);
+}
+
+.hh::before {
+  width: min(520px, 65vw) !important;
+  height: min(520px, 65vw) !important;
+  top: -22% !important;
+  right: -6% !important;
+  filter: blur(88px) !important;
+  background: radial-gradient(circle, rgba(22, 154, 176, 0.1) 0%, transparent 72%) !important;
+}
+
+.hh::after {
+  width: min(380px, 50vw) !important;
+  height: min(380px, 50vw) !important;
+  bottom: -14% !important;
+  left: -4% !important;
+  filter: blur(72px) !important;
+  background: radial-gradient(circle, rgba(14, 122, 141, 0.06) 0%, transparent 70%) !important;
+}
+
+.hh-inner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='48' viewBox='0 0 56 48'%3E%3Cpath fill='none' stroke='%23169ab0' stroke-opacity='0.04' stroke-width='0.6' d='M28 0l24 14v20L28 48 4 34V14z'/%3E%3C/svg%3E");
+  background-size: 56px 48px;
+  opacity: 0.9;
+}
+
+.hh-left h1 {
+  text-shadow: none !important;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+}
+
+.hh-left h1 span {
+  background: linear-gradient(135deg, #148fa3 0%, #0e7a8d 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+.hh-tag {
+  background: var(--v3-white) !important;
+  border: 1px solid var(--v3-border-accent) !important;
+  backdrop-filter: none !important;
+  box-shadow: 0 1px 4px rgba(7, 23, 47, 0.04) !important;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+.hh-rule {
+  width: 48px !important;
+  height: 3px !important;
+  background: linear-gradient(90deg, #169ab0, rgba(22, 154, 176, 0.12)) !important;
+}
+
+.hh-img-wrap {
+  filter: drop-shadow(0 16px 40px rgba(7, 23, 47, 0.1)) !important;
+}
+
+.hh-right::before {
+  background: radial-gradient(ellipse at center, rgba(22, 154, 176, 0.06) 0%, transparent 70%) !important;
+}
+
+/* ---------- Hero internas ---------- */
+.g-hero::after {
+  background: radial-gradient(circle, rgba(22, 154, 176, 0.08) 0%, transparent 68%) !important;
+  filter: blur(56px) !important;
+}
+
+.g-hero h1 {
+  text-shadow: none !important;
+}
+
+.g-hero-tag {
+  backdrop-filter: none !important;
+  background: var(--v3-white) !important;
+  border: 1px solid var(--v3-border-accent) !important;
+  box-shadow: 0 1px 4px rgba(7, 23, 47, 0.04) !important;
+}
+
+/* ---------- Botones refinados (sin glow) ---------- */
+.hn-cta,
+.hh-btn-cta,
+.g-btn-primary,
+.g-btn-next,
+.g-btn-submit,
+.dtp-btn-next {
+  background: linear-gradient(180deg, #1aadc2 0%, #169ab0 55%, #128a9e 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 2px 8px rgba(22, 154, 176, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+  letter-spacing: 0.06em !important;
+}
+
+.hn-cta:hover,
+.hh-btn-cta:hover,
+.g-btn-primary:hover,
+.g-btn-next:hover,
+.g-btn-submit:hover,
+.dtp-btn-next:hover {
+  background: linear-gradient(180deg, #1eb8cf 0%, #18a6bb 55%, #1396ab 100%) !important;
+  box-shadow: 0 4px 16px rgba(22, 154, 176, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.24) !important;
+  transform: translateY(-2px) !important;
+}
+
+.g-btn-final,
+.dtp-btn-pay,
+.footer a,
+.g-footer-cta {
+  background: linear-gradient(180deg, #0c2238 0%, #07172f 100%) !important;
+  box-shadow: 0 4px 16px rgba(7, 23, 47, 0.16) !important;
+}
+
+.g-btn-final:hover,
+.dtp-btn-pay:hover,
+.footer a:hover,
+.g-footer-cta:hover {
+  background: linear-gradient(180deg, #169ab0 0%, #0e7a8d 100%) !important;
+  box-shadow: 0 6px 20px rgba(22, 154, 176, 0.22) !important;
+}
+
+.hh-btn-wa {
+  background: var(--v3-white) !important;
+  backdrop-filter: none !important;
+  border-color: var(--v3-border) !important;
+  box-shadow: 0 1px 4px rgba(7, 23, 47, 0.05) !important;
+}
+
+.hh-btn-wa:hover {
+  box-shadow: 0 4px 14px rgba(37, 211, 102, 0.12) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* ---------- Beneficios (hf) — tarjetas blancas sólidas ---------- */
+.hf-inner {
+  background: var(--v3-white) !important;
+  border: 1px solid var(--v3-border) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: var(--v3-shadow-card) !important;
+  transform: translateY(-40px) !important;
+}
+
+.hf-inner:hover {
+  box-shadow: var(--v3-shadow-hover) !important;
+}
+
+.hf-item {
+  padding: 36px 32px !important;
+}
+
+.hf-icon {
+  background: linear-gradient(180deg, #1aadc2, #0e7a8d) !important;
+  box-shadow: 0 4px 12px rgba(22, 154, 176, 0.18) !important;
+}
+
+.hf-item:hover .hf-icon {
+  transform: scale(1.02) !important;
+}
+
+/* ---------- Secciones alternadas sutiles ---------- */
+.g-section-white {
+  background: var(--v3-white) !important;
+}
+
+.g-section-light {
+  background: linear-gradient(180deg, var(--v3-surface) 0%, #f9fbfc 100%) !important;
+}
+
+.g-section-light::before,
+.g-section-white::before {
+  background: linear-gradient(90deg, transparent, rgba(22, 154, 176, 0.08), transparent) !important;
+}
+
+.g-section-dark {
+  background: linear-gradient(180deg, #061220 0%, #07172f 55%, #0a1e32 100%) !important;
+}
+
+.g-section-dark::after {
+  background: radial-gradient(circle, rgba(22, 154, 176, 0.06) 0%, transparent 70%) !important;
+}
+
+.hp {
+  background: linear-gradient(180deg, var(--v3-surface) 0%, var(--v3-white) 100%) !important;
+  padding: 56px 0 88px !important;
+  position: relative;
+}
+
+.product-lines {
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(22, 154, 176, 0.03), transparent 55%),
+    var(--v3-white) !important;
+  padding: 64px 0 56px !important;
+}
+
+.g-section-tag {
+  background: rgba(22, 154, 176, 0.06) !important;
+  border: 1px solid var(--v3-border-accent) !important;
+  box-shadow: none !important;
+}
+
+.g-section-head h2::after {
+  width: 40px !important;
+  height: 2px !important;
+  background: linear-gradient(90deg, #169ab0, rgba(22, 154, 176, 0.08)) !important;
+}
+
+/* ---------- Cards — blanco, borde fino, sombra elegante ---------- */
+.product-card,
+.g-product-card,
+.g-mv-card,
+.g-valor-card,
+.g-cert-card,
+.g-contact-item,
+.g-process-step,
+.g-envase-item,
+.g-banco-item,
+.g-porque-item,
+.g-proceso-item,
+.g-summary-card,
+.dtp-product-card,
+.dtp-col-img,
+.dtp-col-form,
+.dtp-order-card {
+  background: var(--v3-white) !important;
+  border: 1px solid var(--v3-border) !important;
+  box-shadow: var(--v3-shadow-card) !important;
+  backdrop-filter: none !important;
+}
+
+.product-card:hover,
+.g-product-card:hover,
+.g-mv-card:hover,
+.g-valor-card:hover,
+.g-cert-card:hover,
+.g-process-step:hover,
+.g-envase-item:hover,
+.g-banco-item:hover,
+.g-porque-item:hover,
+.g-proceso-item:hover,
+.dtp-product-card:hover {
+  transform: translateY(-3px) !important;
+  border-color: rgba(22, 154, 176, 0.22) !important;
+  box-shadow: var(--v3-shadow-hover) !important;
+}
+
+.dtp-product-card.selected {
+  border-color: #169ab0 !important;
+  box-shadow: 0 0 0 2px rgba(22, 154, 176, 0.12), var(--v3-shadow-hover) !important;
+}
+
+.g-contact-icon {
+  background: linear-gradient(180deg, #1aadc2, #0e7a8d) !important;
+  box-shadow: 0 3px 10px rgba(22, 154, 176, 0.16) !important;
+}
+
+/* ---------- Proceso home ---------- */
+.hp-num {
+  background: linear-gradient(180deg, #0c2238, #07172f) !important;
+  box-shadow: 0 2px 8px rgba(7, 23, 47, 0.12) !important;
+}
+
+.hp-icon {
+  background: #f0f6f8 !important;
+  border-color: var(--v3-border-accent) !important;
+}
+
+.hp-step:hover {
+  transform: translateY(-1px) !important;
+}
+
+/* ---------- Wizard / configurador ---------- */
+.g-section.g-section-white:has(.g-wizard-wrap),
+.g-section:has(.dtp-wrap) {
+  background: linear-gradient(180deg, var(--v3-surface) 0%, var(--v3-white) 100%) !important;
+}
+
+.dtp-progress-bar {
+  background: var(--v3-white) !important;
+  backdrop-filter: none !important;
+  border-bottom: 1px solid var(--v3-border) !important;
+  box-shadow: 0 1px 4px rgba(7, 23, 47, 0.03) !important;
+}
+
+.dtp-wrap {
+  padding-top: 8px !important;
+}
+
+.g-progress-step.active span {
+  box-shadow: 0 2px 8px rgba(22, 154, 176, 0.2) !important;
+}
+
+/* ---------- Footer ---------- */
+.footer,
+.g-footer {
+  background: linear-gradient(180deg, var(--v3-surface) 0%, #eef2f5 100%) !important;
+  border-top: 1px solid var(--v3-border) !important;
+  padding: 44px 0 !important;
+}
+
+/* ---------- Creamy — alineado V3, oculto con menú ---------- */
+#creamy-v2 .cv2-fab {
+  box-shadow: 0 4px 20px rgba(7, 23, 47, 0.14), 0 2px 8px rgba(22, 154, 176, 0.12) !important;
+  transition: opacity 0.35s var(--v3-ease), transform 0.35s var(--v3-ease), box-shadow 0.22s var(--v3-ease) !important;
+}
+
+#creamy-v2 .cv2-greeting {
+  transition: opacity 0.35s var(--v3-ease), transform 0.35s var(--v3-ease) !important;
+}
+
+#creamy-v2 .cv2-window {
+  border: 1px solid var(--v3-border) !important;
+  box-shadow: 0 16px 48px rgba(7, 23, 47, 0.12), 0 4px 16px rgba(7, 23, 47, 0.06) !important;
+}
+
+/* ---------- Espaciado global ---------- */
+.g-section {
+  padding: clamp(72px, 9vw, 104px) 0 !important;
+}
+
+.g-section-head {
+  margin-bottom: clamp(52px, 6vw, 80px) !important;
+}
+
+.g-hero {
+  padding: clamp(80px, 10vw, 108px) 0 clamp(68px, 8vw, 92px) !important;
+}
+
+/* Hero mobile refinado (no menú — ver mobile-menu.css) */
+@media (max-width: 768px) {
+  .hh-left {
+    background: rgba(255, 255, 255, 0.94) !important;
+    border: 1px solid var(--v3-border) !important;
+    box-shadow: var(--v3-shadow-card) !important;
+    padding: 32px 24px !important;
+    margin: 28px 0 !important;
+    border-radius: 14px !important;
+  }
+
+  .hf-inner {
+    transform: translateY(-28px) !important;
+    margin: 0 4px !important;
+  }
+
+  .hf-item {
+    padding: 28px 24px !important;
+  }
+
+  .g-section {
+    padding: 56px 0 !important;
   }
 }

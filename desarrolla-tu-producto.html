@@ -372,7 +372,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 #totalDisplay { display:none !important; }
 .dtp-secure-note { border-top: none !important; margin-top: 0 !important; padding-top: 0 !important; }
 </style>
-  <link rel="stylesheet" href="styles-polish.css?v=upgrade2" />
+  <link rel="stylesheet" href="styles-polish.css?v=v3" />
+  <link rel="stylesheet" href="mobile-menu.css?v=1" />
 </head>
 <body>
   <!-- Google Tag Manager (noscript) -->
@@ -635,17 +636,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 </footer>
 <script src="mockups.js"></script>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-  var hamBtn = document.getElementById('ham');
-  var navLinks = document.querySelector('.hn-links');
-  if (hamBtn && navLinks) {
-    hamBtn.addEventListener('click', function () {
-      navLinks.classList.toggle('open');
-    });
-  }
-});
-</script>
+<script src="assets/mobile-menu.js?v=1" defer></script>
 <script>
 /* ============================================================
    CONFIGURADOR "CREÁ TU PRODUCTO" — lógica del wizard
