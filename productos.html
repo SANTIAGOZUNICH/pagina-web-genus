@@ -47,6 +47,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
  <link rel="stylesheet" href="styles.css" />
  <link rel="stylesheet" href="styles-internal.css" />
  <link rel="stylesheet" href="styles-polish.css?v=v3" />
+ <link rel="stylesheet" href="mobile-menu.css?v=1" />
    </head>
 <body>
    <!-- Google Tag Manager (noscript) -->
@@ -387,41 +388,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 </footer>
 
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-  var hamBtn = document.getElementById('ham');
-  var navLinks = document.querySelector('.hn-links');
-  var navActions = document.querySelector('.hn-right');
-  if (!hamBtn || !navLinks) return;
-
-  function setNavOpen(open) {
-    document.body.classList.toggle('nav-open', open);
-    navLinks.classList.toggle('open', open);
-    hamBtn.classList.toggle('open', open);
-    hamBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
-  }
-
-  hamBtn.addEventListener('click', function (e) {
-    e.stopPropagation();
-    setNavOpen(!document.body.classList.contains('nav-open'));
-  });
-
-  navLinks.querySelectorAll('a').forEach(function (link) {
-    link.addEventListener('click', function () { setNavOpen(false); });
-  });
-
-  document.addEventListener('click', function (e) {
-    if (!document.body.classList.contains('nav-open')) return;
-    if (navLinks.contains(e.target) || hamBtn.contains(e.target)) return;
-    if (navActions && navActions.contains(e.target)) return;
-    setNavOpen(false);
-  });
-
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape') setNavOpen(false);
-  });
-});
-</script>
+<script src="assets/mobile-menu.js?v=1" defer></script>
 
     <!-- Creamy V2 — Asistente Inteligente -->
     <link rel="stylesheet" href="/assets/creamy-v2/creamy.css?v=v2">
