@@ -83,7 +83,7 @@
           '<span class="g-mnav-card-icon">' + sparkleSvg() + '</span>' +
           '<span class="g-mnav-card-body">' +
             '<span class="g-mnav-card-title">Crea tu producto <span class="g-mnav-badge">NUEVO</span></span>' +
-            '<span class="g-mnav-card-desc">Desarrollá tu fórmula personalizada en simples pasos.</span>' +
+            '<span class="g-mnav-card-desc">Fórmula personalizada en simples pasos.</span>' +
           '</span>' +
           '<span class="g-mnav-card-arrow">' + arrowSvg() + '</span>' +
         '</a>';
