@@ -85,7 +85,15 @@ function doPost(e) {
 
     let data;
     try {
-      data = JSON.parse(e.postData.contents);
+      if (e.postData && e.postData.type === 'application/x-www-form-urlencoded' && e.parameter && e.parameter.payload) {
+        data = JSON.parse(e.parameter.payload);
+      } else if (e.postData && e.postData.contents) {
+        data = JSON.parse(e.postData.contents);
+      } else if (e.parameter && e.parameter.payload) {
+        data = JSON.parse(e.parameter.payload);
+      } else {
+        return json_({ ok: false, error: 'empty_body' });
+      }
     } catch (parseErr) {
       return json_({ ok: false, error: 'invalid_json', detail: String(parseErr) });
     }

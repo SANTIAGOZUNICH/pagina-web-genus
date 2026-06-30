@@ -165,27 +165,94 @@ async function getServiceAccountToken() {
 }
 
 async function postWebhook(url, body, headers) {
-  const strategies = [
-    () => fetch(url, { method: 'POST', headers, body: JSON.stringify(body), redirect: 'follow' }),
-    async () => {
-      let res = await fetch(url, { method: 'POST', headers, body: JSON.stringify(body), redirect: 'manual' });
-      if ([301, 302, 303, 307, 308].includes(res.status)) {
-        const location = res.headers.get('location');
-        if (location) {
-          res = await fetch(location, { method: 'POST', headers, body: JSON.stringify(body), redirect: 'follow' });
+  const attempts = [
+    {
+      label: 'json_follow',
+      run: () => fetch(url, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(body),
+        redirect: 'follow',
+      }),
+    },
+    {
+      label: 'form_follow',
+      run: () => {
+        const formHeaders = {};
+        if (headers['X-Creamy-Secret']) formHeaders['X-Creamy-Secret'] = headers['X-Creamy-Secret'];
+        return fetch(url, {
+          method: 'POST',
+          headers: { ...formHeaders, 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams({ payload: JSON.stringify(body) }),
+          redirect: 'follow',
+        });
+      },
+    },
+    {
+      label: 'json_manual',
+      run: async () => {
+        let res = await fetch(url, {
+          method: 'POST',
+          headers,
+          body: JSON.stringify(body),
+          redirect: 'manual',
+        });
+        if ([301, 302, 303, 307, 308].includes(res.status)) {
+          const location = res.headers.get('location');
+          if (location) {
+            res = await fetch(location, {
+              method: 'POST',
+              headers,
+              body: JSON.stringify(body),
+              redirect: 'follow',
+            });
+          }
         }
-      }
-      return res;
+        return res;
+      },
+    },
+    {
+      label: 'form_manual',
+      run: async () => {
+        const formHeaders = {};
+        if (headers['X-Creamy-Secret']) formHeaders['X-Creamy-Secret'] = headers['X-Creamy-Secret'];
+        let res = await fetch(url, {
+          method: 'POST',
+          headers: { ...formHeaders, 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams({ payload: JSON.stringify(body) }),
+          redirect: 'manual',
+        });
+        if ([301, 302, 303, 307, 308].includes(res.status)) {
+          const location = res.headers.get('location');
+          if (location) {
+            res = await fetch(location, {
+              method: 'POST',
+              headers: { ...formHeaders, 'Content-Type': 'application/x-www-form-urlencoded' },
+              body: new URLSearchParams({ payload: JSON.stringify(body) }),
+              redirect: 'follow',
+            });
+          }
+        }
+        return res;
+      },
     },
   ];
 
-  let last = { status: 0, ok: false, text: '' };
-  for (const run of strategies) {
-    const res = await run();
+  let last = { status: 0, ok: false, text: '', strategy: '' };
+  for (const attempt of attempts) {
+    const res = await attempt.run();
     const text = await res.text();
-    last = { status: res.status, ok: res.ok, text };
+    last = { status: res.status, ok: res.ok, text, strategy: attempt.label };
     if (res.ok) return last;
-    if (res.status === 401 || res.status === 403) return last;
+    let rejected = false;
+    try {
+      const parsed = JSON.parse(text);
+      if (parsed && parsed.ok === false) rejected = true;
+    } catch {
+      // not json
+    }
+    if (rejected) return last;
+    if (res.status !== 401 && res.status !== 403) return last;
   }
   return last;
 }
@@ -207,10 +274,10 @@ async function appendViaWebhook(row) {
   if (secret) headers['X-Creamy-Secret'] = secret;
 
   const payload = buildSheetRow(row);
-  const { status, ok, text } = await postWebhook(url, payload, headers);
+  const { status, ok, text, strategy } = await postWebhook(url, payload, headers);
 
   if (!ok) {
-    throw new Error(`webhook_${status}:${text.slice(0, 200)}`);
+    throw new Error(`webhook_${status}${strategy ? `_${strategy}` : ''}:${text.slice(0, 200)}`);
   }
 
   let parsed = null;
@@ -223,7 +290,7 @@ async function appendViaWebhook(row) {
     if (err.message.startsWith('webhook_rejected:')) throw err;
   }
 
-  return { ok: true, via: 'webhook', status, response_text: text, parsed };
+  return { ok: true, via: 'webhook', status, response_text: text, parsed, strategy };
 }
 
 async function appendViaApi(row) {
@@ -341,6 +408,7 @@ export async function probeSheetsWebhook() {
 
   const append = await appendConversationLog(testRow);
   result.webhook_status = append.status ?? (append.ok ? 200 : 'error');
+  result.webhook_strategy = append.strategy || '';
   result.webhook_response = String(append.response_text || append.error || append.reason || '').slice(0, 500);
   result.webhook_reachable = append.ok === true;
   result.test_write_ok = append.ok === true;
