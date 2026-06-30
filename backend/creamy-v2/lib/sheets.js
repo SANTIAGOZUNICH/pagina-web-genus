@@ -443,13 +443,14 @@ export async function probeSheetsWebhook() {
 
   if (sheets_url_present) {
     const url = normalizeWebhookUrl(rawUrl);
-    const health = await getWebhookHealth(url);
-    result.webhook_get_status = health.status;
-    result.webhook_get_ok = health.ok;
+    const healthBefore = await getWebhookHealth(url);
+    result.webhook_get_status = healthBefore.status;
+    result.webhook_get_ok = healthBefore.ok;
     try {
-      const parsed = JSON.parse(health.text);
-      result.webhook_get_ok = health.ok && parsed.ok === true;
-      result.webhook_get_supports_payload = health.ok && parsed.service === 'creamy-v2-sheets-webhook';
+      const parsedBefore = JSON.parse(healthBefore.text);
+      result.webhook_get_ok = healthBefore.ok && parsedBefore.ok === true;
+      result.webhook_get_supports_payload = healthBefore.ok && parsedBefore.service === 'creamy-v2-sheets-webhook';
+      result.webhook_sheet_rows_before = parsedBefore.rows ?? null;
     } catch {
       // keep health.ok
     }
