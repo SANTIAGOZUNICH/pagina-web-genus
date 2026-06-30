@@ -137,7 +137,29 @@
 
     _validateName(value) {
       const t = (value || '').trim().replace(/\s+/g, ' ');
-      return t.length >= 2 && t.length <= 60 ? t : null;
+      if (t.length < 2 || t.length > 60) return null;
+      if (/\d/.test(t)) return null;
+      if (!/^[\p{L}\s'-]+$/u.test(t)) return null;
+      return t;
+    }
+
+    _updateHeader() {
+      const subtitle = this.root?.querySelector('#cv2-header-subtitle');
+      if (!subtitle) return;
+      subtitle.textContent = this.firstName
+        ? `Atendiendo a ${this.firstName}`
+        : 'Asistente Inteligente';
+    }
+
+    _personalGreeting() {
+      const n = this._esc(this.firstName);
+      return `¡Hola ${n}! 👋
+
+Soy Creamy, el asistente inteligente de Laboratorio Genus.
+
+Estoy para ayudarte a desarrollar productos cosméticos, responder consultas técnicas, asesorarte sobre formulaciones o acompañarte durante todo el proceso de creación de tu marca.
+
+¿En qué te gustaría que empecemos?`;
     }
 
     _render() {
@@ -158,10 +180,10 @@
             <span class="cv2-header-avatar" aria-hidden="true">${AVATAR_SVG}</span>
             <div class="cv2-header-info">
               <div class="cv2-header-name">Creamy AI</div>
-              <div class="cv2-header-subtitle">Asistente Inteligente de Laboratorio Genus</div>
+              <div class="cv2-header-subtitle" id="cv2-header-subtitle">Asistente Inteligente</div>
               <div class="cv2-header-status">
                 <span class="cv2-header-dot" aria-hidden="true"></span>
-                <span>En línea</span>
+                <span>🟢 En línea</span>
               </div>
             </div>
             <div class="cv2-header-actions">
@@ -172,8 +194,10 @@
           <div class="cv2-onboard cv2-hidden" id="cv2-onboard">
             <div class="cv2-onboard-inner">
               <div class="cv2-onboard-avatar" aria-hidden="true">${AVATAR_SVG}</div>
-              <h2 class="cv2-onboard-title">Bienvenido/a</h2>
-              <p class="cv2-onboard-sub">Para comenzar, contanos cómo te llamás.</p>
+              <h2 class="cv2-onboard-title">¡Bienvenido!</h2>
+              <p class="cv2-onboard-lead">Soy <strong>Creamy</strong>, el asistente inteligente de Laboratorio Genus.</p>
+              <p class="cv2-onboard-text">Voy a acompañarte durante toda tu consulta para ayudarte a desarrollar el producto ideal para tu marca.</p>
+              <p class="cv2-onboard-ask">Antes de comenzar…<br>¿Me contás cómo te llamás?</p>
               <form class="cv2-onboard-form" id="cv2-onboard-form" novalidate>
                 <label class="cv2-field">
                   <span class="cv2-field-label">Nombre</span>
@@ -184,7 +208,7 @@
                   <input class="cv2-field-input" type="text" id="cv2-last-name" name="apellido" autocomplete="family-name" maxlength="60" placeholder="Tu apellido" required>
                 </label>
                 <p class="cv2-onboard-error cv2-hidden" id="cv2-onboard-error" role="alert"></p>
-                <button class="cv2-onboard-btn" type="submit">Comenzar</button>
+                <button class="cv2-onboard-btn" type="submit">Comenzar conversación</button>
               </form>
             </div>
           </div>
@@ -217,6 +241,7 @@
       this.inputEl = document.getElementById('cv2-textarea');
       this.sendBtn = document.getElementById('cv2-send-btn');
       this.greetingEl = document.getElementById('cv2-greeting');
+      this._updateHeader();
     }
 
     _bind() {
@@ -270,8 +295,9 @@
 
     _showOnboard() {
       this.onboardEl.classList.remove('cv2-hidden');
+      this.onboardEl.classList.add('cv2-onboard--visible');
       this.chatBodyEl.classList.add('cv2-hidden');
-      setTimeout(() => this.firstNameInput.focus(), 200);
+      setTimeout(() => this.firstNameInput.focus(), 280);
     }
 
     _showChat() {
@@ -294,6 +320,7 @@
       }
 
       this._showChat();
+      this._updateHeader();
       setTimeout(() => this.inputEl.focus(), 280);
     }
 
@@ -313,13 +340,14 @@
       const apellido = this._validateName(this.lastNameInput.value);
 
       if (!nombre || !apellido) {
-        this.onboardErrorEl.textContent = 'Completá nombre y apellido para continuar.';
+        this.onboardErrorEl.textContent = 'Ingresá tu nombre y apellido (solo letras, mínimo 2 caracteres).';
         this.onboardErrorEl.classList.remove('cv2-hidden');
         return;
       }
 
       this.onboardErrorEl.classList.add('cv2-hidden');
       this._saveVisitor(nombre, apellido);
+      this._updateHeader();
       this._postEvent({
         event_type: 'visitor_registered',
         user_first_name: nombre,
@@ -335,7 +363,7 @@
       this._showChat();
       if (!this._greetedAfterRegister) {
         this._greetedAfterRegister = true;
-        this._bot(`Hola, ${this._esc(this.firstName)}. Soy Creamy, el asistente inteligente de Laboratorio Genus. ¿En qué puedo ayudarte?`);
+        this._bot(this._personalGreeting());
       }
       setTimeout(() => this.inputEl.focus(), 200);
     }

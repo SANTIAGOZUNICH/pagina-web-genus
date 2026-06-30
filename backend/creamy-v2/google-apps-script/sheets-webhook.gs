@@ -1,16 +1,17 @@
 /**
- * Creamy V2 — Google Apps Script Web App
- * Pegar en Extensions → Apps Script de la planilla.
+ * Creamy V2 — Google Apps Script Web App (CRM)
  */
 
 const SHEET_NAME = 'Creamy Log';
 const WEBHOOK_SECRET = '';
 
 const HEADERS = [
-  'fecha', 'hora', 'session_id', 'nombre', 'apellido', 'página', 'tipo_evento',
+  'fecha', 'hora', 'session_id', 'nombre', 'apellido', 'página', 'url', 'tipo_evento',
   'pregunta del usuario', 'respuesta de Creamy', 'intención detectada',
-  'producto mencionado', 'activos mencionados', 'proveedor IA', 'modelo',
-  'si usó IA', 'si usó fallback', 'user_agent',
+  'producto principal', 'activo principal', 'proveedor IA', 'modelo',
+  'tiempo conversación (seg)', 'cantidad preguntas',
+  'abrió WhatsApp', 'abrió crear producto', 'abrió cotización',
+  'si usó IA', 'si hubo error', 'si usó fallback', 'user_agent',
 ];
 
 function getLogSheet_() {
@@ -45,15 +46,22 @@ function doPost(e) {
       data.nombre || '',
       data.apellido || '',
       data['página'] || data.pagina || '',
+      data.url || '',
       data.tipo_evento || '',
       data['pregunta del usuario'] || '',
       data['respuesta de Creamy'] || '',
       data['intención detectada'] || '',
-      data['producto mencionado'] || '',
-      data['activos mencionados'] || '',
+      data['producto principal'] || '',
+      data['activo principal'] || '',
       data['proveedor IA'] || '',
       data.modelo || '',
+      data['tiempo conversación (seg)'] || '',
+      data['cantidad preguntas'] || '',
+      data['abrió WhatsApp'] || '',
+      data['abrió crear producto'] || '',
+      data['abrió cotización'] || '',
       data['si usó IA'] || '',
+      data['si hubo error'] || '',
       data['si usó fallback'] || '',
       data.user_agent || '',
     ]);

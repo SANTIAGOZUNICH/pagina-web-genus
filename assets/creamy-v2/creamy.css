@@ -380,96 +380,126 @@
     flex-direction: column;
 }
 
-/* ── Onboard (nombre + apellido) ── */
+@keyframes cv2-onboard-in {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Onboard (bienvenida premium) ── */
 #creamy-v2 .cv2-onboard {
     flex: 1 1 auto;
     min-height: 0;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
-    padding: 24px 20px 20px;
-    background: linear-gradient(180deg, var(--cv2-gray-50) 0%, var(--cv2-white) 100%);
+    padding: 28px 24px 24px;
+    background: var(--cv2-white);
+}
+
+#creamy-v2 .cv2-onboard--visible .cv2-onboard-inner {
+    animation: cv2-onboard-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 #creamy-v2 .cv2-onboard-inner {
-    max-width: 320px;
+    max-width: 300px;
     margin: 0 auto;
     text-align: center;
 }
 
 #creamy-v2 .cv2-onboard-avatar {
-    width: 72px;
-    height: 72px;
-    margin: 0 auto 16px;
+    width: 96px;
+    height: 96px;
+    margin: 0 auto 24px;
     border-radius: 50%;
-    background: var(--cv2-primary-light);
+    background: linear-gradient(145deg, var(--cv2-primary-light), #fff);
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 2px solid rgba(22, 154, 176, 0.2);
-    box-shadow: 0 8px 24px rgba(22, 154, 176, 0.15);
+    border: 2px solid rgba(22, 154, 176, 0.18);
+    box-shadow: 0 12px 32px rgba(22, 154, 176, 0.12);
 }
 
 #creamy-v2 .cv2-onboard-avatar svg {
-    width: 48px;
-    height: 48px;
+    width: 64px;
+    height: 64px;
 }
 
 #creamy-v2 .cv2-onboard-title {
-    margin: 0 0 8px;
-    font-size: 20px;
+    margin: 0 0 16px;
+    font-size: 26px;
     font-weight: 700;
     color: var(--cv2-navy);
-    letter-spacing: -0.02em;
+    letter-spacing: -0.03em;
 }
 
-#creamy-v2 .cv2-onboard-sub {
-    margin: 0 0 22px;
+#creamy-v2 .cv2-onboard-lead {
+    margin: 0 0 12px;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--cv2-text);
+}
+
+#creamy-v2 .cv2-onboard-lead strong {
+    color: var(--cv2-primary-dark);
+    font-weight: 600;
+}
+
+#creamy-v2 .cv2-onboard-text {
+    margin: 0 0 28px;
     font-size: 14px;
-    line-height: 1.45;
+    line-height: 1.6;
     color: var(--cv2-text-muted);
+}
+
+#creamy-v2 .cv2-onboard-ask {
+    margin: 0 0 20px;
+    font-size: 15px;
+    line-height: 1.5;
+    font-weight: 600;
+    color: var(--cv2-navy);
 }
 
 #creamy-v2 .cv2-onboard-form {
     text-align: left;
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 16px;
 }
 
 #creamy-v2 .cv2-field {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 8px;
 }
 
 #creamy-v2 .cv2-field-label {
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 600;
-    color: var(--cv2-navy);
-    letter-spacing: 0.02em;
+    color: var(--cv2-text-muted);
+    letter-spacing: 0.06em;
     text-transform: uppercase;
 }
 
 #creamy-v2 .cv2-field-input {
     width: 100%;
-    padding: 12px 14px;
-    border: 1.5px solid var(--cv2-gray-200);
-    border-radius: 12px;
-    background: var(--cv2-white);
+    padding: 14px 16px;
+    border: 1px solid var(--cv2-gray-200);
+    border-radius: 14px;
+    background: var(--cv2-gray-50);
     color: var(--cv2-text);
-    font-size: 15px;
+    font-size: 16px;
     line-height: 1.3;
-    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
     outline: none;
 }
 
 #creamy-v2 .cv2-field-input::placeholder {
-    color: #9aa8b4;
+    color: #a8b4be;
 }
 
 #creamy-v2 .cv2-field-input:focus {
     border-color: var(--cv2-primary);
-    box-shadow: 0 0 0 3px rgba(22, 154, 176, 0.15);
+    background: var(--cv2-white);
+    box-shadow: 0 0 0 4px rgba(22, 154, 176, 0.12);
 }
 
 #creamy-v2 .cv2-onboard-error {
@@ -477,27 +507,28 @@
     font-size: 13px;
     color: #dc2626;
     text-align: center;
+    line-height: 1.4;
 }
 
 #creamy-v2 .cv2-onboard-btn {
-    margin-top: 4px;
+    margin-top: 8px;
     width: 100%;
-    padding: 14px 20px;
+    padding: 16px 20px;
     border: none;
-    border-radius: 12px;
+    border-radius: 14px;
     background: linear-gradient(135deg, var(--cv2-primary), var(--cv2-primary-dark));
     color: var(--cv2-white);
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 700;
     cursor: pointer;
     letter-spacing: 0.01em;
-    box-shadow: 0 6px 20px rgba(22, 154, 176, 0.35);
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    box-shadow: 0 8px 24px rgba(22, 154, 176, 0.32);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 #creamy-v2 .cv2-onboard-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 8px 24px rgba(22, 154, 176, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(22, 154, 176, 0.38);
 }
 
 #creamy-v2 .cv2-onboard-btn:active {

@@ -43,6 +43,7 @@ export default async function handler(req, res) {
   const firstName = pickStr(body.user_first_name || body.nombre, 60);
   const lastName = pickStr(body.user_last_name || body.apellido, 60);
   const pageKey = pickStr(body.page_key, 60);
+  const pageUrl = pickStr(body.page_url, 500);
   const userAgent = pickStr(body.user_agent, 300);
 
   if (eventType === 'visitor_registered') {
@@ -54,6 +55,7 @@ export default async function handler(req, res) {
       user_first_name: firstName,
       user_last_name: lastName,
       page_key: pageKey,
+      page_url: pageUrl,
       user_agent: userAgent,
     });
     res.statusCode = 204;
@@ -71,6 +73,7 @@ export default async function handler(req, res) {
     user_first_name: firstName,
     user_last_name: lastName,
     page_key: pageKey,
+    page_url: pageUrl,
     event_type: ctaToEventType(cta),
     context_message: pickStr(body.context_message, 500),
     user_agent: userAgent,

@@ -1,8 +1,5 @@
 /**
- * Creamy V2 — Google Sheets logging
- *
- * Opción A (recomendada): Apps Script Web App — CREAMY_SHEETS_WEBHOOK_URL
- * Opción B: Google Sheets API + service account
+ * Creamy V2 — Google Sheets logging (CRM)
  */
 
 import crypto from 'crypto';
@@ -14,15 +11,22 @@ export const SHEET_HEADERS = [
   'nombre',
   'apellido',
   'página',
+  'url',
   'tipo_evento',
   'pregunta del usuario',
   'respuesta de Creamy',
   'intención detectada',
-  'producto mencionado',
-  'activos mencionados',
+  'producto principal',
+  'activo principal',
   'proveedor IA',
   'modelo',
+  'tiempo conversación (seg)',
+  'cantidad preguntas',
+  'abrió WhatsApp',
+  'abrió crear producto',
+  'abrió cotización',
   'si usó IA',
+  'si hubo error',
   'si usó fallback',
   'user_agent',
 ];
@@ -62,15 +66,22 @@ export function buildSheetRow(payload = {}) {
     nombre: payload.nombre || payload.user_first_name || payload.user_name || '',
     apellido: payload.apellido || payload.user_last_name || '',
     página: payload.página || payload.page_key || '',
+    url: payload.url || payload.page_url || '',
     tipo_evento: payload.tipo_evento || payload.event_type || '',
     'pregunta del usuario': payload['pregunta del usuario'] || payload.user_message || '',
     'respuesta de Creamy': payload['respuesta de Creamy'] || payload.assistant_reply || '',
     'intención detectada': payload['intención detectada'] || payload.intent || '',
-    'producto mencionado': payload['producto mencionado'] || payload.producto_mencionado || '',
-    'activos mencionados': payload['activos mencionados'] || payload.activos_mencionados || '',
+    'producto principal': payload['producto principal'] || payload.primary_product || payload.producto_mencionado || '',
+    'activo principal': payload['activo principal'] || payload.primary_active || payload.activos_mencionados || '',
     'proveedor IA': payload['proveedor IA'] || payload.provider || '',
     modelo: payload.modelo || payload.model || '',
+    'tiempo conversación (seg)': payload['tiempo conversación (seg)'] ?? payload.conversation_duration_sec ?? '',
+    'cantidad preguntas': payload['cantidad preguntas'] ?? payload.question_count ?? '',
+    'abrió WhatsApp': payload['abrió WhatsApp'] ?? payload.opened_whatsapp ?? '',
+    'abrió crear producto': payload['abrió crear producto'] ?? payload.opened_crear_producto ?? '',
+    'abrió cotización': payload['abrió cotización'] ?? payload.opened_cotizacion ?? '',
     'si usó IA': payload['si usó IA'] ?? (payload.used_ai != null ? boolLabel(!!payload.used_ai) : ''),
+    'si hubo error': payload['si hubo error'] ?? (payload.had_error != null ? boolLabel(!!payload.had_error) : ''),
     'si usó fallback': payload['si usó fallback'] ?? (payload.used_fallback != null ? boolLabel(!!payload.used_fallback) : ''),
     user_agent: payload.user_agent || '',
   };
@@ -150,7 +161,7 @@ async function appendViaWebhook(row) {
 async function appendViaApi(row) {
   const spreadsheetId = process.env.CREAMY_SHEETS_SPREADSHEET_ID.trim();
   const tab = (process.env.CREAMY_SHEETS_TAB || 'Creamy Log').trim();
-  const range = `${tab}!A:Q`;
+  const range = `${tab}!A:X`;
   const token = await getServiceAccountToken();
   const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${encodeURIComponent(range)}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`;
 

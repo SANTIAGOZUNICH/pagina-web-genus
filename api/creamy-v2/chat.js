@@ -174,6 +174,7 @@ export default async function handler(req, res) {
       user_first_name: userFirstName,
       user_last_name: userLastName,
       page_key: pageKey,
+      page_url: pageUrl,
       user_message: message,
       assistant_reply: emergency,
       intent,
@@ -183,6 +184,7 @@ export default async function handler(req, res) {
       model,
       used_ai: false,
       used_fallback: true,
+      had_error: true,
     });
     return json(res, 503, {
       error: emergency,
@@ -257,6 +259,7 @@ export default async function handler(req, res) {
       user_first_name: userFirstName,
       user_last_name: userLastName,
       page_key: pageKey,
+      page_url: pageUrl,
       user_message: message,
       assistant_reply: result.reply,
       intent,
@@ -266,6 +269,7 @@ export default async function handler(req, res) {
       model: result.model,
       used_ai: true,
       used_fallback: false,
+      had_error: false,
     });
 
     if (actions.length) {
@@ -302,6 +306,7 @@ export default async function handler(req, res) {
       user_first_name: userFirstName,
       user_last_name: userLastName,
       page_key: pageKey,
+      page_url: pageUrl,
       user_message: message,
       assistant_reply: UI_TECHNICAL,
       intent,
@@ -311,6 +316,7 @@ export default async function handler(req, res) {
       model,
       used_ai: false,
       used_fallback: true,
+      had_error: true,
     });
 
     return json(res, 502, {
