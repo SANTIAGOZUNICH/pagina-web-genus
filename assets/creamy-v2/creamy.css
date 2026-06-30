@@ -372,6 +372,138 @@
     background: rgba(255, 255, 255, 0.32);
 }
 
+/* ── Chat body (messages + input) ── */
+#creamy-v2 .cv2-chat-body {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ── Onboard (nombre + apellido) ── */
+#creamy-v2 .cv2-onboard {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 24px 20px 20px;
+    background: linear-gradient(180deg, var(--cv2-gray-50) 0%, var(--cv2-white) 100%);
+}
+
+#creamy-v2 .cv2-onboard-inner {
+    max-width: 320px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+#creamy-v2 .cv2-onboard-avatar {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 16px;
+    border-radius: 50%;
+    background: var(--cv2-primary-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid rgba(22, 154, 176, 0.2);
+    box-shadow: 0 8px 24px rgba(22, 154, 176, 0.15);
+}
+
+#creamy-v2 .cv2-onboard-avatar svg {
+    width: 48px;
+    height: 48px;
+}
+
+#creamy-v2 .cv2-onboard-title {
+    margin: 0 0 8px;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--cv2-navy);
+    letter-spacing: -0.02em;
+}
+
+#creamy-v2 .cv2-onboard-sub {
+    margin: 0 0 22px;
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--cv2-text-muted);
+}
+
+#creamy-v2 .cv2-onboard-form {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+#creamy-v2 .cv2-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+#creamy-v2 .cv2-field-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--cv2-navy);
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+}
+
+#creamy-v2 .cv2-field-input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1.5px solid var(--cv2-gray-200);
+    border-radius: 12px;
+    background: var(--cv2-white);
+    color: var(--cv2-text);
+    font-size: 15px;
+    line-height: 1.3;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    outline: none;
+}
+
+#creamy-v2 .cv2-field-input::placeholder {
+    color: #9aa8b4;
+}
+
+#creamy-v2 .cv2-field-input:focus {
+    border-color: var(--cv2-primary);
+    box-shadow: 0 0 0 3px rgba(22, 154, 176, 0.15);
+}
+
+#creamy-v2 .cv2-onboard-error {
+    margin: 0;
+    font-size: 13px;
+    color: #dc2626;
+    text-align: center;
+}
+
+#creamy-v2 .cv2-onboard-btn {
+    margin-top: 4px;
+    width: 100%;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--cv2-primary), var(--cv2-primary-dark));
+    color: var(--cv2-white);
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 0.01em;
+    box-shadow: 0 6px 20px rgba(22, 154, 176, 0.35);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+#creamy-v2 .cv2-onboard-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(22, 154, 176, 0.4);
+}
+
+#creamy-v2 .cv2-onboard-btn:active {
+    transform: translateY(0);
+}
+
 /* ── Messages ── */
 #creamy-v2 .cv2-messages {
     flex: 1 1 auto;

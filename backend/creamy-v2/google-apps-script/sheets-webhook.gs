@@ -1,25 +1,16 @@
 /**
  * Creamy V2 — Google Apps Script Web App
- *
- * 1. Crear una planilla en Google Sheets
- * 2. Extensions → Apps Script → pegar este código
- * 3. Ajustar SHEET_NAME si hace falta
- * 4. Deploy → New deployment → Web app
- *    - Execute as: Me
- *    - Who has access: Anyone
- * 5. Copiar la URL del Web App a Vercel:
- *    CREAMY_SHEETS_WEBHOOK_URL=<url>
- * 6. (Opcional) CREAMY_SHEETS_WEBHOOK_SECRET en Vercel y WEBHOOK_SECRET aquí
+ * Pegar en Extensions → Apps Script de la planilla.
  */
 
 const SHEET_NAME = 'Creamy Log';
-const WEBHOOK_SECRET = ''; // mismo valor que CREAMY_SHEETS_WEBHOOK_SECRET en Vercel
+const WEBHOOK_SECRET = '';
 
 const HEADERS = [
-  'fecha', 'hora', 'session_id', 'nombre', 'página',
+  'fecha', 'hora', 'session_id', 'nombre', 'apellido', 'página', 'tipo_evento',
   'pregunta del usuario', 'respuesta de Creamy', 'intención detectada',
   'producto mencionado', 'activos mencionados', 'proveedor IA', 'modelo',
-  'si usó IA', 'si usó fallback', 'evento CTA',
+  'si usó IA', 'si usó fallback', 'user_agent',
 ];
 
 function getLogSheet_() {
@@ -39,12 +30,8 @@ function getLogSheet_() {
 function doPost(e) {
   try {
     if (WEBHOOK_SECRET) {
-      const secret = (e.parameter && e.parameter.secret)
-        || (e.postData && e.postData.type === 'application/json'
-          ? JSON.parse(e.postData.contents)['x-creamy-secret']
-          : null);
       const header = e && e.headers && (e.headers['X-Creamy-Secret'] || e.headers['x-creamy-secret']);
-      if (secret !== WEBHOOK_SECRET && header !== WEBHOOK_SECRET) {
+      if (header !== WEBHOOK_SECRET) {
         return json_({ ok: false, error: 'unauthorized' });
       }
     }
@@ -56,7 +43,9 @@ function doPost(e) {
       data.hora || '',
       data.session_id || '',
       data.nombre || '',
+      data.apellido || '',
       data['página'] || data.pagina || '',
+      data.tipo_evento || '',
       data['pregunta del usuario'] || '',
       data['respuesta de Creamy'] || '',
       data['intención detectada'] || '',
@@ -66,7 +55,7 @@ function doPost(e) {
       data.modelo || '',
       data['si usó IA'] || '',
       data['si usó fallback'] || '',
-      data['evento CTA'] || '',
+      data.user_agent || '',
     ]);
 
     return json_({ ok: true });

@@ -53,6 +53,13 @@ export const CTA_LABELS = {
   REUNION: 'Reunión',
 };
 
-export function formatCtaEvent(ctaKey) {
-  return CTA_LABELS[ctaKey] || ctaKey || '';
+export const CTA_EVENT_TYPES = {
+  WHATSAPP: 'whatsapp_click',
+  COTIZACION: 'cotizacion_click',
+  CONFIGURADOR: 'crear_producto_click',
+  REUNION: 'reunion_click',
+};
+
+export function ctaToEventType(ctaKey) {
+  return CTA_EVENT_TYPES[ctaKey] || 'cta_click';
 }

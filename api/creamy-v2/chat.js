@@ -126,7 +126,12 @@ export default async function handler(req, res) {
   const pageKey = body.page_key || 'index';
   const pageUrl = body.page_url || '';
   const pageTitle = body.page_title || '';
-  const userName = typeof body.user_name === 'string' ? body.user_name.trim().slice(0, 80) : '';
+  const userFirstName = typeof body.user_first_name === 'string'
+    ? body.user_first_name.trim().slice(0, 60)
+    : (typeof body.user_name === 'string' ? body.user_name.trim().slice(0, 60) : '');
+  const userLastName = typeof body.user_last_name === 'string'
+    ? body.user_last_name.trim().slice(0, 60)
+    : '';
   const intent = inferIntent(message, history.length);
 
   let knowledge;
@@ -164,9 +169,10 @@ export default async function handler(req, res) {
     logEvent(requestId, { used_ai: false, used_fallback: true, ai_error_code: 'missing_gemini_key' });
     const emergency = getEmergencyMessage(knowledge);
     const entities = extractMentionedEntities(message, knowledge);
-    StorageAdapter.logMessageTurn({
+    StorageAdapter.logChatTurn({
       session_id: sessionId,
-      user_name: userName,
+      user_first_name: userFirstName,
+      user_last_name: userLastName,
       page_key: pageKey,
       user_message: message,
       assistant_reply: emergency,
@@ -177,7 +183,6 @@ export default async function handler(req, res) {
       model,
       used_ai: false,
       used_fallback: true,
-      actions: [],
     });
     return json(res, 503, {
       error: emergency,
@@ -242,13 +247,15 @@ export default async function handler(req, res) {
     await StorageAdapter.saveConversation(sessionId, {
       message_count: history.length + 1,
       page_key: pageKey,
-      user_name: userName,
+      user_first_name: userFirstName,
+      user_last_name: userLastName,
       last_user_preview: message.slice(0, 80),
     });
 
-    StorageAdapter.logMessageTurn({
+    StorageAdapter.logChatTurn({
       session_id: sessionId,
-      user_name: userName,
+      user_first_name: userFirstName,
+      user_last_name: userLastName,
       page_key: pageKey,
       user_message: message,
       assistant_reply: result.reply,
@@ -259,11 +266,12 @@ export default async function handler(req, res) {
       model: result.model,
       used_ai: true,
       used_fallback: false,
-      actions,
     });
 
     if (actions.length) {
-      await StorageAdapter.trackMetric('creamy_v2_lead_signal', { actions, sessionId, user_name: userName });
+      await StorageAdapter.trackMetric('creamy_v2_lead_signal', {
+        actions, sessionId, user_first_name: userFirstName, user_last_name: userLastName,
+      });
     }
 
     return json(res, 200, {
@@ -289,9 +297,10 @@ export default async function handler(req, res) {
     });
 
     const entities = extractMentionedEntities(message, knowledge);
-    StorageAdapter.logMessageTurn({
+    StorageAdapter.logChatTurn({
       session_id: sessionId,
-      user_name: userName,
+      user_first_name: userFirstName,
+      user_last_name: userLastName,
       page_key: pageKey,
       user_message: message,
       assistant_reply: UI_TECHNICAL,
@@ -302,7 +311,6 @@ export default async function handler(req, res) {
       model,
       used_ai: false,
       used_fallback: true,
-      actions: [],
     });
 
     return json(res, 502, {

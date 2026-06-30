@@ -5,6 +5,8 @@
 (function () {
   'use strict';
 
+  const VISITOR_KEY = 'cv2_visitor';
+
   const AVATAR_SVG = `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
     <circle cx="24" cy="24" r="22" fill="#dff0f5"/>
     <ellipse cx="24" cy="31" rx="11" ry="9" fill="#169ab0"/>
@@ -49,14 +51,18 @@
       this.isOpen = false;
       this.isTyping = false;
       this.history = [];
-      this.sessionId = 'cv2_' + Date.now() + '_' + Math.random().toString(36).slice(2, 11);
       this.pageKey = this._pageKey();
       this.pageUrl = location.href;
       this.pageTitle = document.title;
       this._technicalCtaShown = false;
-      this.userName = this._loadStoredName();
-      this._awaitingName = false;
-      this._namePrompted = false;
+      this._greetedAfterRegister = false;
+
+      const visitor = this._loadVisitor();
+      this.sessionId = visitor?.session_id || ('cv2_' + Date.now() + '_' + Math.random().toString(36).slice(2, 11));
+      this.firstName = visitor?.nombre || null;
+      this.lastName = visitor?.apellido || null;
+      this.isRegistered = !!(this.firstName && this.lastName);
+
       this._init();
     }
 
@@ -105,37 +111,33 @@
       return 'index';
     }
 
-    _nameStorageKey() {
-      return `cv2_name_${this.sessionId}`;
-    }
-
-    _loadStoredName() {
+    _loadVisitor() {
       try {
-        const v = sessionStorage.getItem(this._nameStorageKey());
-        return v && v.trim().length >= 2 ? v.trim() : null;
-      } catch (_) {
-        return null;
-      }
+        const raw = sessionStorage.getItem(VISITOR_KEY);
+        if (!raw) return null;
+        const v = JSON.parse(raw);
+        if (v?.session_id && v?.nombre?.trim().length >= 2 && v?.apellido?.trim().length >= 2) {
+          return { session_id: v.session_id, nombre: v.nombre.trim(), apellido: v.apellido.trim() };
+        }
+      } catch (_) { /* ignore */ }
+      return null;
     }
 
-    _saveUserName(name) {
-      const trimmed = (name || '').trim().replace(/\s+/g, ' ');
-      if (trimmed.length < 2 || trimmed.length > 80) return false;
-      this.userName = trimmed;
-      try { sessionStorage.setItem(this._nameStorageKey(), trimmed); } catch (_) {}
-      this._track('creamy_v2_name_collected', { session_id: this.sessionId });
-      return true;
+    _saveVisitor(nombre, apellido) {
+      const data = {
+        session_id: this.sessionId,
+        nombre,
+        apellido,
+      };
+      try { sessionStorage.setItem(VISITOR_KEY, JSON.stringify(data)); } catch (_) {}
+      this.firstName = nombre;
+      this.lastName = apellido;
+      this.isRegistered = true;
     }
 
-    _promptForName() {
-      if (this.userName || this._namePrompted) return;
-      this._namePrompted = true;
-      this._awaitingName = true;
-      this._bot('Antes de seguir, ¿me decís tu nombre? Así puedo dejar registrada tu consulta.');
-    }
-
-    _resetInputPlaceholder() {
-      this.inputEl.placeholder = 'Escribí tu consulta...';
+    _validateName(value) {
+      const t = (value || '').trim().replace(/\s+/g, ' ');
+      return t.length >= 2 && t.length <= 60 ? t : null;
     }
 
     _render() {
@@ -167,16 +169,37 @@
               <button class="cv2-header-btn" type="button" data-cv2-action="close" aria-label="Cerrar">&times;</button>
             </div>
           </div>
-          <div class="cv2-messages" id="cv2-messages" role="log" aria-live="polite"></div>
-          <div class="cv2-input-area">
-            <div class="cv2-input-row">
-              <textarea class="cv2-textarea" id="cv2-textarea" placeholder="Escribí tu consulta..." rows="1" maxlength="4000" aria-label="Mensaje"></textarea>
-              <button class="cv2-send-btn" id="cv2-send-btn" type="button" aria-label="Enviar">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 11l18-7-7 18-2-7-9-4z"/></svg>
-              </button>
+          <div class="cv2-onboard cv2-hidden" id="cv2-onboard">
+            <div class="cv2-onboard-inner">
+              <div class="cv2-onboard-avatar" aria-hidden="true">${AVATAR_SVG}</div>
+              <h2 class="cv2-onboard-title">Bienvenido/a</h2>
+              <p class="cv2-onboard-sub">Para comenzar, contanos cómo te llamás.</p>
+              <form class="cv2-onboard-form" id="cv2-onboard-form" novalidate>
+                <label class="cv2-field">
+                  <span class="cv2-field-label">Nombre</span>
+                  <input class="cv2-field-input" type="text" id="cv2-first-name" name="nombre" autocomplete="given-name" maxlength="60" placeholder="Tu nombre" required>
+                </label>
+                <label class="cv2-field">
+                  <span class="cv2-field-label">Apellido</span>
+                  <input class="cv2-field-input" type="text" id="cv2-last-name" name="apellido" autocomplete="family-name" maxlength="60" placeholder="Tu apellido" required>
+                </label>
+                <p class="cv2-onboard-error cv2-hidden" id="cv2-onboard-error" role="alert"></p>
+                <button class="cv2-onboard-btn" type="submit">Comenzar</button>
+              </form>
             </div>
           </div>
-          <div class="cv2-footer">Laboratorio Genus · Asistente con IA</div>
+          <div class="cv2-chat-body" id="cv2-chat-body">
+            <div class="cv2-messages" id="cv2-messages" role="log" aria-live="polite"></div>
+            <div class="cv2-input-area">
+              <div class="cv2-input-row">
+                <textarea class="cv2-textarea" id="cv2-textarea" placeholder="Escribí tu consulta..." rows="1" maxlength="4000" aria-label="Mensaje"></textarea>
+                <button class="cv2-send-btn" id="cv2-send-btn" type="button" aria-label="Enviar">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 11l18-7-7 18-2-7-9-4z"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="cv2-footer">Laboratorio Genus · Asistente con IA</div>
+          </div>
         </div>`;
 
       document.body.appendChild(root);
@@ -184,6 +207,12 @@
       this.fab = document.getElementById('cv2-fab');
       this.backdrop = document.getElementById('cv2-backdrop');
       this.windowEl = document.getElementById('cv2-window');
+      this.onboardEl = document.getElementById('cv2-onboard');
+      this.chatBodyEl = document.getElementById('cv2-chat-body');
+      this.onboardForm = document.getElementById('cv2-onboard-form');
+      this.firstNameInput = document.getElementById('cv2-first-name');
+      this.lastNameInput = document.getElementById('cv2-last-name');
+      this.onboardErrorEl = document.getElementById('cv2-onboard-error');
       this.messagesEl = document.getElementById('cv2-messages');
       this.inputEl = document.getElementById('cv2-textarea');
       this.sendBtn = document.getElementById('cv2-send-btn');
@@ -202,6 +231,10 @@
       this.inputEl.addEventListener('input', () => {
         this.inputEl.style.height = 'auto';
         this.inputEl.style.height = Math.min(this.inputEl.scrollHeight, 80) + 'px';
+      });
+      this.onboardForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        this._submitOnboard();
       });
       document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && this.isOpen) this.minimize();
@@ -235,6 +268,17 @@
       this.greetingEl.classList.add('cv2-hidden');
     }
 
+    _showOnboard() {
+      this.onboardEl.classList.remove('cv2-hidden');
+      this.chatBodyEl.classList.add('cv2-hidden');
+      setTimeout(() => this.firstNameInput.focus(), 200);
+    }
+
+    _showChat() {
+      this.onboardEl.classList.add('cv2-hidden');
+      this.chatBodyEl.classList.remove('cv2-hidden');
+    }
+
     open() {
       this._hideGreeting();
       this.isOpen = true;
@@ -242,9 +286,14 @@
       this.backdrop.classList.remove('cv2-hidden');
       this.windowEl.classList.remove('cv2-hidden');
       this.fab.classList.add('cv2-fab--hidden');
-      if (this.history.length === 0) this._welcome();
-      if (!this.userName) this._promptForName();
       this._track('creamy_v2_open');
+
+      if (!this.isRegistered) {
+        this._showOnboard();
+        return;
+      }
+
+      this._showChat();
       setTimeout(() => this.inputEl.focus(), 280);
     }
 
@@ -259,27 +308,42 @@
       this._track('creamy_v2_close');
     }
 
-    _welcome() {
-      this._bot(this.config.welcomeMessage);
-    }
+    _submitOnboard() {
+      const nombre = this._validateName(this.firstNameInput.value);
+      const apellido = this._validateName(this.lastNameInput.value);
 
-    send(override) {
-      const text = (override || this.inputEl.value).trim();
-      if (!text || this.isTyping) return;
-
-      if (!this.userName) {
-        if (!override) { this.inputEl.value = ''; this.inputEl.style.height = 'auto'; }
-        this._user(text);
-        if (this._saveUserName(text)) {
-          this._awaitingName = false;
-          this._resetInputPlaceholder();
-          this._bot(`¡Gracias, ${this._esc(this.userName)}! Contame qué producto tenés en mente.`);
-        } else {
-          this._bot('¿Me decís tu nombre? Con eso registro tu consulta y seguimos.');
-        }
+      if (!nombre || !apellido) {
+        this.onboardErrorEl.textContent = 'Completá nombre y apellido para continuar.';
+        this.onboardErrorEl.classList.remove('cv2-hidden');
         return;
       }
 
+      this.onboardErrorEl.classList.add('cv2-hidden');
+      this._saveVisitor(nombre, apellido);
+      this._postEvent({
+        event_type: 'visitor_registered',
+        user_first_name: nombre,
+        user_last_name: apellido,
+      });
+      this._track('visitor_registered', {
+        session_id: this.sessionId,
+        nombre,
+        apellido,
+        page_key: this.pageKey,
+      });
+
+      this._showChat();
+      if (!this._greetedAfterRegister) {
+        this._greetedAfterRegister = true;
+        this._bot(`Hola, ${this._esc(this.firstName)}. Soy Creamy, el asistente inteligente de Laboratorio Genus. ¿En qué puedo ayudarte?`);
+      }
+      setTimeout(() => this.inputEl.focus(), 200);
+    }
+
+    send(override) {
+      if (!this.isRegistered) return;
+      const text = (override || this.inputEl.value).trim();
+      if (!text || this.isTyping) return;
       if (!override) { this.inputEl.value = ''; this.inputEl.style.height = 'auto'; }
       this._user(text);
       this._track('creamy_v2_message');
@@ -312,7 +376,8 @@
         message: userMessage,
         conversation_history: this.history.slice(-10),
         session_id: this.sessionId,
-        user_name: this.userName,
+        user_first_name: this.firstName,
+        user_last_name: this.lastName,
         page_url: this.pageUrl,
         page_title: this.pageTitle,
         page_key: this.pageKey,
@@ -447,24 +512,31 @@
       } catch (_) { /* optional */ }
     }
 
-    _logCtaEvent(ctaKey) {
-      const lastUser = [...this.history].reverse().find((m) => m.role === 'user');
+    _postEvent(body) {
       try {
         fetch('/api/creamy-v2/event', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            event_type: 'cta_click',
             session_id: this.sessionId,
-            user_name: this.userName || '',
+            user_first_name: this.firstName || body.user_first_name || '',
+            user_last_name: this.lastName || body.user_last_name || '',
             page_key: this.pageKey,
             page_url: this.pageUrl,
-            cta: ctaKey,
-            context_message: lastUser?.content || '',
+            user_agent: navigator.userAgent || '',
+            ...body,
           }),
           keepalive: true,
         }).catch(() => {});
       } catch (_) {}
+    }
+
+    _logCtaEvent(ctaKey) {
+      const lastUser = [...this.history].reverse().find((m) => m.role === 'user');
+      this._postEvent({
+        cta: ctaKey,
+        context_message: lastUser?.content || '',
+      });
     }
   }
 

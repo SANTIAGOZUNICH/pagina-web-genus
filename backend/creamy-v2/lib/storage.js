@@ -4,7 +4,6 @@
  */
 
 import { appendConversationLog } from './sheets.js';
-import { formatCtaEvent } from './entities.js';
 
 const memoryStore = {
   conversations: new Map(),
@@ -14,6 +13,16 @@ const memoryStore = {
 
 function scheduleSheetLog(row) {
   appendConversationLog(row).catch(() => {});
+}
+
+function visitorBase(payload) {
+  return {
+    session_id: payload.session_id || '',
+    nombre: payload.user_first_name || payload.nombre || '',
+    apellido: payload.user_last_name || payload.apellido || '',
+    página: payload.page_key || payload.página || '',
+    user_agent: payload.user_agent || '',
+  };
 }
 
 export const StorageAdapter = {
@@ -35,25 +44,34 @@ export const StorageAdapter = {
     return { ok: true };
   },
 
-  logMessageTurn(payload) {
-    const ctaShown = Array.isArray(payload.actions)
-      ? payload.actions.map(formatCtaEvent).filter(Boolean).join(', ')
-      : '';
+  logVisitorRegistered(payload) {
+    scheduleSheetLog({
+      ...visitorBase(payload),
+      tipo_evento: 'visitor_registered',
+    });
+    return { ok: true };
+  },
+
+  logChatTurn(payload) {
+    const base = visitorBase(payload);
 
     scheduleSheetLog({
-      session_id: payload.session_id,
-      nombre: payload.user_name,
-      página: payload.page_key,
-      'pregunta del usuario': payload.user_message,
-      'respuesta de Creamy': payload.assistant_reply,
-      'intención detectada': payload.intent,
-      'producto mencionado': payload.producto_mencionado,
-      'activos mencionados': payload.activos_mencionados,
-      'proveedor IA': payload.provider,
-      modelo: payload.model,
+      ...base,
+      tipo_evento: 'user_message',
+      user_message: payload.user_message,
+    });
+
+    scheduleSheetLog({
+      ...base,
+      tipo_evento: 'assistant_message',
+      assistant_reply: payload.assistant_reply,
+      intent: payload.intent,
+      producto_mencionado: payload.producto_mencionado,
+      activos_mencionados: payload.activos_mencionados,
+      provider: payload.provider,
+      model: payload.model,
       used_ai: payload.used_ai,
       used_fallback: payload.used_fallback,
-      'evento CTA': ctaShown,
     });
 
     return { ok: true };
@@ -61,19 +79,18 @@ export const StorageAdapter = {
 
   logCtaClick(payload) {
     scheduleSheetLog({
-      session_id: payload.session_id,
-      nombre: payload.user_name,
-      página: payload.page_key,
-      'pregunta del usuario': payload.context_message || '',
-      'respuesta de Creamy': '',
-      'intención detectada': 'cta_click',
-      'evento CTA': formatCtaEvent(payload.cta),
+      ...visitorBase(payload),
+      tipo_evento: payload.event_type || payload.tipo_evento || 'cta_click',
+      user_message: payload.context_message || '',
     });
-
     return { ok: true };
   },
 
-  /** Para tests / debug */
+  /** @deprecated use logChatTurn */
+  logMessageTurn(payload) {
+    return this.logChatTurn(payload);
+  },
+
   _peek() {
     return {
       conversations: memoryStore.conversations.size,

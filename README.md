@@ -69,11 +69,22 @@ Knowledge base → solo contexto en system prompt. **No** genera respuestas hard
 
 ### Registro de conversaciones en Google Sheets
 
-Creamy V2 guarda cada mensaje y cada click en CTA en una planilla de Google.
+Creamy V2 guarda eventos en una planilla de Google.
 
-**Columnas:** fecha, hora, session_id, nombre, página, pregunta, respuesta, intención, producto mencionado, activos mencionados, proveedor IA, modelo, si usó IA, si usó fallback, evento CTA.
+**Pantalla inicial:** al abrir el chat por primera vez en la sesión, el usuario completa **Nombre** y **Apellido** (sin email, teléfono ni consentimiento).
 
-**Nombre del visitante:** Creamy lo pide una sola vez por conversación, de forma natural, antes del primer mensaje al API.
+**Eventos registrados:**
+
+| tipo_evento | Cuándo |
+|-------------|--------|
+| `visitor_registered` | Al completar nombre y apellido |
+| `user_message` | Cada mensaje del usuario |
+| `assistant_message` | Cada respuesta de Creamy |
+| `whatsapp_click` | Click en WhatsApp |
+| `cotizacion_click` | Click en Cotización |
+| `crear_producto_click` | Click en Crear producto |
+
+**Columnas:** fecha, hora, session_id, nombre, apellido, página, tipo_evento, pregunta, respuesta, intención, producto, activos, proveedor IA, modelo, si usó IA, si usó fallback, user_agent.
 
 #### Opción A — Apps Script Web App (recomendada)
 

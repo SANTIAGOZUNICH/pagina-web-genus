@@ -1,24 +1,20 @@
 /**
  * Creamy V2 — Google Sheets logging
  *
- * Opción A (recomendada): Apps Script Web App
- *   CREAMY_SHEETS_WEBHOOK_URL=https://script.google.com/macros/s/.../exec
- *   CREAMY_SHEETS_WEBHOOK_SECRET=opcional
- *
+ * Opción A (recomendada): Apps Script Web App — CREAMY_SHEETS_WEBHOOK_URL
  * Opción B: Google Sheets API + service account
- *   CREAMY_SHEETS_SPREADSHEET_ID=...
- *   CREAMY_SHEETS_CREDENTIALS={"type":"service_account",...}
- *   CREAMY_SHEETS_TAB=Creamy Log
  */
 
 import crypto from 'crypto';
 
-const SHEET_HEADERS = [
+export const SHEET_HEADERS = [
   'fecha',
   'hora',
   'session_id',
   'nombre',
+  'apellido',
   'página',
+  'tipo_evento',
   'pregunta del usuario',
   'respuesta de Creamy',
   'intención detectada',
@@ -28,7 +24,7 @@ const SHEET_HEADERS = [
   'modelo',
   'si usó IA',
   'si usó fallback',
-  'evento CTA',
+  'user_agent',
 ];
 
 const SCOPES = 'https://www.googleapis.com/auth/spreadsheets';
@@ -63,8 +59,10 @@ export function buildSheetRow(payload = {}) {
     fecha: payload.fecha || fecha,
     hora: payload.hora || hora,
     session_id: payload.session_id || '',
-    nombre: payload.nombre || payload.user_name || '',
+    nombre: payload.nombre || payload.user_first_name || payload.user_name || '',
+    apellido: payload.apellido || payload.user_last_name || '',
     página: payload.página || payload.page_key || '',
+    tipo_evento: payload.tipo_evento || payload.event_type || '',
     'pregunta del usuario': payload['pregunta del usuario'] || payload.user_message || '',
     'respuesta de Creamy': payload['respuesta de Creamy'] || payload.assistant_reply || '',
     'intención detectada': payload['intención detectada'] || payload.intent || '',
@@ -72,9 +70,9 @@ export function buildSheetRow(payload = {}) {
     'activos mencionados': payload['activos mencionados'] || payload.activos_mencionados || '',
     'proveedor IA': payload['proveedor IA'] || payload.provider || '',
     modelo: payload.modelo || payload.model || '',
-    'si usó IA': payload['si usó IA'] ?? boolLabel(!!payload.used_ai),
-    'si usó fallback': payload['si usó fallback'] ?? boolLabel(!!payload.used_fallback),
-    'evento CTA': payload['evento CTA'] || payload.evento_cta || '',
+    'si usó IA': payload['si usó IA'] ?? (payload.used_ai != null ? boolLabel(!!payload.used_ai) : ''),
+    'si usó fallback': payload['si usó fallback'] ?? (payload.used_fallback != null ? boolLabel(!!payload.used_fallback) : ''),
+    user_agent: payload.user_agent || '',
   };
 }
 
@@ -152,7 +150,7 @@ async function appendViaWebhook(row) {
 async function appendViaApi(row) {
   const spreadsheetId = process.env.CREAMY_SHEETS_SPREADSHEET_ID.trim();
   const tab = (process.env.CREAMY_SHEETS_TAB || 'Creamy Log').trim();
-  const range = `${tab}!A:O`;
+  const range = `${tab}!A:Q`;
   const token = await getServiceAccountToken();
   const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${encodeURIComponent(range)}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`;
 
@@ -172,9 +170,6 @@ async function appendViaApi(row) {
   return { ok: true, via: 'api' };
 }
 
-/**
- * Append row to Google Sheets. Never throws — logging must not break chat.
- */
 export async function appendConversationLog(row) {
   if (!isSheetsConfigured()) {
     return { ok: false, skipped: true, reason: 'not_configured' };
@@ -188,5 +183,3 @@ export async function appendConversationLog(row) {
     return { ok: false, error: err.message };
   }
 }
-
-export { SHEET_HEADERS };
