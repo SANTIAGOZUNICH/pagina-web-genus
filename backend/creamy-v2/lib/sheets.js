@@ -164,6 +164,40 @@ async function getServiceAccountToken() {
   return data.access_token;
 }
 
+async function diagnoseWebhookPost(url, reqHeaders, bodyPayload) {
+  const diag = {
+    post_status: null,
+    redirect_followed: false,
+    redirect_get_status: null,
+    post_text: '',
+    redirect_get_text: '',
+  };
+
+  const res1 = await fetch(url, {
+    method: 'POST',
+    headers: reqHeaders,
+    body: bodyPayload,
+    redirect: 'manual',
+  });
+  diag.post_status = res1.status;
+
+  if ([301, 302, 303, 307, 308].includes(res1.status)) {
+    const location = res1.headers.get('location');
+    diag.redirect_followed = !!location;
+    if (location) {
+      const res2 = await fetch(location, { method: 'GET', redirect: 'follow' });
+      diag.redirect_get_status = res2.status;
+      const fullText = await res2.text();
+      diag.redirect_get_text = fullText.slice(0, 200);
+      return { diag, status: res2.status, ok: res2.ok, text: fullText };
+    }
+  }
+
+  const fullPostText = await res1.text();
+  diag.post_text = fullPostText.slice(0, 200);
+  return { diag, status: res1.status, ok: res1.ok, text: fullPostText };
+}
+
 async function postWebhook(url, body, headers) {
   const postAttempts = [
     {
@@ -178,28 +212,17 @@ async function postWebhook(url, body, headers) {
     },
   ];
 
+  let lastDiag = null;
+
   for (const attempt of postAttempts) {
     const reqHeaders = { 'Content-Type': attempt.contentType };
     if (headers['X-Creamy-Secret']) reqHeaders['X-Creamy-Secret'] = headers['X-Creamy-Secret'];
 
-    let res = await fetch(url, {
-      method: 'POST',
-      headers: reqHeaders,
-      body: attempt.buildBody(),
-      redirect: 'manual',
-    });
+    const { diag, status, ok, text } = await diagnoseWebhookPost(url, reqHeaders, attempt.buildBody());
+    lastDiag = diag;
+    const result = { status, ok, text, strategy: attempt.label, diag };
 
-    if ([301, 302, 303, 307, 308].includes(res.status)) {
-      const location = res.headers.get('location');
-      if (location) {
-        res = await fetch(location, { method: 'GET', redirect: 'follow' });
-      }
-    }
-
-    const text = await res.text();
-    const result = { status: res.status, ok: res.ok, text, strategy: attempt.label };
-
-    if (res.ok) {
+    if (ok) {
       try {
         const parsed = JSON.parse(text);
         if (parsed && parsed.ok === false) {
@@ -211,12 +234,12 @@ async function postWebhook(url, body, headers) {
       return result;
     }
 
-    if (res.status !== 401 && res.status !== 403) {
+    if (status !== 401 && status !== 403) {
       return result;
     }
   }
 
-  return { status: 401, ok: false, text: 'all_post_strategies_failed', strategy: 'failed' };
+  return { status: 401, ok: false, text: 'all_post_strategies_failed', strategy: 'failed', diag: lastDiag };
 }
 
 async function getWebhookHealth(url) {
@@ -236,10 +259,12 @@ async function appendViaWebhook(row) {
   if (secret) headers['X-Creamy-Secret'] = secret;
 
   const payload = buildSheetRow(row);
-  const { status, ok, text, strategy } = await postWebhook(url, payload, headers);
+  const { status, ok, text, strategy, diag } = await postWebhook(url, payload, headers);
 
   if (!ok) {
-    throw new Error(`webhook_${status}${strategy ? `_${strategy}` : ''}:${text.slice(0, 200)}`);
+    const err = new Error(`webhook_${status}${strategy ? `_${strategy}` : ''}:${text.slice(0, 200)}`);
+    err.diag = diag;
+    throw err;
   }
 
   let parsed = null;
@@ -252,7 +277,7 @@ async function appendViaWebhook(row) {
     if (err.message.startsWith('webhook_rejected:')) throw err;
   }
 
-  return { ok: true, via: 'webhook', status, response_text: text, parsed, strategy };
+  return { ok: true, via: 'webhook', status, response_text: text, parsed, strategy, diag };
 }
 
 async function appendViaApi(row) {
@@ -319,7 +344,7 @@ export async function appendConversationLog(row) {
     meta.sheets_status = 'error';
     meta.sheets_error = err.message;
     logSheetsEvent(meta);
-    return { ok: false, error: err.message };
+    return { ok: false, error: err.message, diag: err.diag || null };
   }
 }
 
@@ -371,6 +396,7 @@ export async function probeSheetsWebhook() {
   const append = await appendConversationLog(testRow);
   result.webhook_status = append.status ?? (append.ok ? 200 : 'error');
   result.webhook_strategy = append.strategy || '';
+  result.webhook_post_diag = append.diag || null;
   result.webhook_response = String(append.response_text || append.error || append.reason || '').slice(0, 500);
   result.webhook_reachable = append.ok === true;
   result.test_write_ok = append.ok === true;
