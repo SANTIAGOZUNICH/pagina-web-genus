@@ -5,6 +5,7 @@
    ============================================================ */
 
 :root {
+  --polish-loaded: 1;
   --polish-ease: cubic-bezier(0.4, 0, 0.2, 1);
   --polish-duration: 0.22s;
   --polish-radius-btn: 10px;
