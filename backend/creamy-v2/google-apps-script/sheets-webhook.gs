@@ -44,10 +44,41 @@ const HEADERS = [
 
 /**
  * GET — health check / verificación del Web App
- * Útil al probar la URL en el navegador o desde Vercel.
+ * También acepta ?payload=<base64url> para append vía GET (fallback serverless).
  */
 function doGet(e) {
   try {
+    if (e && e.parameter && e.parameter.payload) {
+      if (WEBHOOK_SECRET) {
+        const secret = e.parameter.secret || '';
+        if (secret !== WEBHOOK_SECRET) {
+          return json_({ ok: false, error: 'unauthorized' });
+        }
+      }
+
+      let data;
+      try {
+        const decoded = Utilities.newBlob(Utilities.base64DecodeWebSafe(e.parameter.payload)).getDataAsString();
+        data = JSON.parse(decoded);
+      } catch (parseErr) {
+        return json_({ ok: false, error: 'invalid_payload', detail: String(parseErr) });
+      }
+
+      if (!data || typeof data !== 'object') {
+        return json_({ ok: false, error: 'invalid_payload' });
+      }
+
+      const sheet = getLogSheet_();
+      sheet.appendRow(buildRow_(data));
+      return json_({
+        ok: true,
+        appended: true,
+        via: 'get',
+        tipo_evento: data.tipo_evento || '',
+        session_id: data.session_id || '',
+      });
+    }
+
     const sheet = getLogSheet_();
     return json_({
       ok: true,

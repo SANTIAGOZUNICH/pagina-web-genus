@@ -164,6 +164,46 @@ async function getServiceAccountToken() {
   return data.access_token;
 }
 
+function base64urlEncodeJson(obj) {
+  return Buffer.from(JSON.stringify(obj)).toString('base64url');
+}
+
+async function appendViaGet(url, row, headers) {
+  const payload = buildSheetRow(row);
+  const params = new URLSearchParams();
+  params.set('payload', base64urlEncodeJson(payload));
+  const secret = process.env.CREAMY_SHEETS_WEBHOOK_SECRET?.trim();
+  if (secret) params.set('secret', secret);
+
+  const getUrl = `${url}${url.includes('?') ? '&' : '?'}${params.toString()}`;
+  const res = await fetch(getUrl, { method: 'GET', redirect: 'follow' });
+  const text = await res.text();
+
+  if (!res.ok) {
+    return { status: res.status, ok: false, text, strategy: 'get_payload' };
+  }
+
+  try {
+    const parsed = JSON.parse(text);
+    if (parsed && parsed.ok === false) {
+      return { status: res.status, ok: false, text, strategy: 'get_payload', parsed };
+    }
+    if (parsed && parsed.appended !== true) {
+      return {
+        status: res.status,
+        ok: false,
+        text,
+        strategy: 'get_payload',
+        parsed,
+        needs_apps_script_update: parsed.service === 'creamy-v2-sheets-webhook',
+      };
+    }
+    return { status: res.status, ok: true, text, strategy: 'get_payload', parsed };
+  } catch {
+    return { status: res.status, ok: res.ok, text, strategy: 'get_payload' };
+  }
+}
+
 async function diagnoseWebhookPost(url, reqHeaders, bodyPayload) {
   const diag = {
     post_status: null,
@@ -262,8 +302,29 @@ async function appendViaWebhook(row) {
   const { status, ok, text, strategy, diag } = await postWebhook(url, payload, headers);
 
   if (!ok) {
+    const getResult = await appendViaGet(url, row, headers);
+    if (getResult.ok) {
+      return {
+        ok: true,
+        via: 'webhook_get',
+        status: getResult.status,
+        response_text: getResult.text,
+        parsed: getResult.parsed,
+        strategy: getResult.strategy,
+        post_fallback: true,
+      };
+    }
+
+    if (getResult.needs_apps_script_update) {
+      const err = new Error('webhook_get_needs_apps_script_update:doGet sin soporte payload');
+      err.diag = diag;
+      err.needs_apps_script_update = true;
+      throw err;
+    }
+
     const err = new Error(`webhook_${status}${strategy ? `_${strategy}` : ''}:${text.slice(0, 200)}`);
     err.diag = diag;
+    err.get_fallback = getResult.text?.slice(0, 200) || '';
     throw err;
   }
 
@@ -344,7 +405,7 @@ export async function appendConversationLog(row) {
     meta.sheets_status = 'error';
     meta.sheets_error = err.message;
     logSheetsEvent(meta);
-    return { ok: false, error: err.message, diag: err.diag || null };
+    return { ok: false, error: err.message, diag: err.diag || null, needs_apps_script_update: err.needs_apps_script_update || false };
   }
 }
 
@@ -378,6 +439,7 @@ export async function probeSheetsWebhook() {
     try {
       const parsed = JSON.parse(health.text);
       result.webhook_get_ok = health.ok && parsed.ok === true;
+      result.webhook_get_supports_payload = health.ok && parsed.service === 'creamy-v2-sheets-webhook';
     } catch {
       // keep health.ok
     }
@@ -400,5 +462,13 @@ export async function probeSheetsWebhook() {
   result.webhook_response = String(append.response_text || append.error || append.reason || '').slice(0, 500);
   result.webhook_reachable = append.ok === true;
   result.test_write_ok = append.ok === true;
+  if (!result.test_write_ok && result.webhook_get_ok && result.webhook_post_diag?.post_status === 401) {
+    result.hint = 'POST bloqueado (401) pero GET funciona. Actualizar Apps Script con doGet+payload y crear NUEVA implementación del Web App.';
+    result.apps_script_update_required = true;
+  }
+  if (append.needs_apps_script_update) {
+    result.apps_script_update_required = true;
+    result.hint = 'Pegar backend/creamy-v2/google-apps-script/sheets-webhook.gs actualizado y crear NUEVA implementación (acceso: Cualquiera).';
+  }
   return result;
 }
