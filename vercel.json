@@ -1,50 +1,29 @@
 {
-  "functions": {
-    "api/creamy-v2/chat.js": {
-      "maxDuration": 60,
-      "includeFiles": "backend/creamy-v2/**"
-    },
-    "api/creamy-v2/health.js": {
-      "includeFiles": "backend/creamy-v2/**"
-    },
-    "api/creamy-v2/debug.js": {
-      "maxDuration": 30,
-      "includeFiles": "backend/creamy-v2/**"
-    },
-    "api/creamy-v2/event.js": {
-      "maxDuration": 15,
-      "includeFiles": "backend/creamy-v2/**"
-    },
-    "api/creamy-v2/sheets-debug.js": {
-      "maxDuration": 15,
-      "includeFiles": "backend/creamy-v2/**"
-    }
-  },
   "headers": [
     {
-      "source": "/assets/creamy/(.*)",
+      "source": "/assets/opt/(.*)",
       "headers": [
         {
           "key": "Cache-Control",
-          "value": "public, max-age=0, must-revalidate"
+          "value": "public, max-age=31536000, immutable"
         }
       ]
     },
     {
-      "source": "/assets/creamy-v2/(.*)",
+      "source": "/assets/(.*)\\.(avif|webp|jpg|jpeg|png|svg|js|css)",
       "headers": [
         {
           "key": "Cache-Control",
-          "value": "public, max-age=0, must-revalidate"
+          "value": "public, max-age=31536000, immutable"
         }
       ]
     },
     {
-      "source": "/styles-polish.css",
+      "source": "/styles(.*).css",
       "headers": [
         {
           "key": "Cache-Control",
-          "value": "public, max-age=0, must-revalidate"
+          "value": "public, max-age=86400, must-revalidate"
         }
       ]
     },
@@ -53,20 +32,12 @@
       "headers": [
         {
           "key": "Cache-Control",
-          "value": "public, max-age=0, must-revalidate"
+          "value": "public, max-age=86400, must-revalidate"
         }
       ]
     }
   ],
   "rewrites": [
-    {
-      "source": "/assets/creamy/creamy.js",
-      "destination": "/api/creamy/widget"
-    },
-    {
-      "source": "/assets/creamy/creamy.css",
-      "destination": "/api/creamy/widget-css"
-    },
     {
       "source": "/quienes-somos",
       "destination": "/quienes-somos.html"
@@ -87,11 +58,11 @@
       "source": "/llave-en-mano",
       "destination": "/llave-en-mano.html"
     },
-      {
+    {
       "source": "/crea-tu-producto",
       "destination": "/desarrolla-tu-producto.html"
     },
-      {
+    {
       "source": "/cotizador",
       "destination": "/cotizador.html"
     }

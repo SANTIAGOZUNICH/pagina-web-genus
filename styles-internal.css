@@ -570,6 +570,16 @@ body {
   box-shadow: var(--shadow-md);
   transform: translateY(-4px);
 }
+.g-product-img-wrap {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  background: var(--light);
+}
+.g-product-img-wrap picture {
+  display: block;
+  width: 100%;
+}
 .g-product-img {
   width: 100%;
   height: 220px;

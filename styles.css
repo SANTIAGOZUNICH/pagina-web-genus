@@ -615,6 +615,7 @@ a { text-decoration: none; color: inherit; }
 
 .product-card:hover { transform: translateY(-4px); box-shadow: 0 4px 12px rgba(7,23,47,.07), 0 12px 32px rgba(7,23,47,.08); }
 
+.product-card picture { display: block; width: 100%; }
 .product-card img { width: 100%; height: 140px; object-fit: cover; background: #f1f1f1; }
 
 .product-card strong {
