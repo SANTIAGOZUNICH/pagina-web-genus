@@ -47,7 +47,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="description" content="Contacte a Laboratorio Genus para desarrollar su producto cosmético. WhatsApp, email y formulario directo." />
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="styles-internal.css" />
- <link rel="stylesheet" href="styles-polish.css?v=v3" />
+ <link rel="stylesheet" href="styles-polish.css?v=v4" />
  <link rel="stylesheet" href="mobile-menu.css?v=2" />
    </head>
 <body>
@@ -113,9 +113,33 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="g-contact-grid">
       <!-- FORMULARIO -->
       <div>
-        <div style="margin-bottom:28px;">
+        <div style="margin-bottom:20px;">
           <span class="g-section-tag">Formulario de consulta</span>
           <h2 style="font-size:26px;font-weight:900;margin:8px 0 0;">Envíenos su consulta</h2>
+        </div>
+        <div class="creamy-card" style="margin-bottom:24px;">
+          <svg viewBox="0 0 200 320" class="creamy-figure" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <ellipse cx="100" cy="300" rx="58" ry="10" fill="rgba(5,14,28,.18)"/>
+            <rect x="72" y="230" width="14" height="55" rx="7" fill="#0d1b2a"/>
+            <rect x="114" y="230" width="14" height="55" rx="7" fill="#0d1b2a"/>
+            <rect x="62" y="278" width="34" height="18" rx="9" fill="#07172f"/>
+            <rect x="104" y="278" width="34" height="18" rx="9" fill="#07172f"/>
+            <path d="M148,150 Q168,175 158,205" stroke="#0d1b2a" stroke-width="13" fill="none" stroke-linecap="round"/>
+            <circle cx="156" cy="212" r="12" fill="#fff"/>
+            <path d="M54,150 Q34,132 44,108" stroke="#0d1b2a" stroke-width="13" fill="none" stroke-linecap="round"/>
+            <circle cx="46" cy="102" r="13" fill="#fff"/>
+            <path d="M56,110 Q56,88 80,88 L120,88 Q144,88 144,110 L144,235 Q144,252 126,252 L74,252 Q56,252 56,235 Z" fill="#f4f9fb" stroke="#c9d8de" stroke-width="1.5"/>
+            <rect x="84" y="55" width="32" height="35" rx="6" fill="#f4f9fb" stroke="#c9d8de"/>
+            <rect x="78" y="40" width="44" height="18" rx="8" fill="#c7d2d8"/>
+            <ellipse cx="82" cy="150" rx="8" ry="10" fill="#2b1810"/>
+            <ellipse cx="118" cy="150" rx="8" ry="10" fill="#2b1810"/>
+            <circle cx="79" cy="146" r="2.4" fill="#fff"/>
+            <circle cx="115" cy="146" r="2.4" fill="#fff"/>
+            <path d="M78,172 Q100,192 122,172" stroke="#2b1810" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+            <ellipse cx="70" cy="168" rx="9" ry="6" fill="#ffb4b4" opacity=".55"/>
+            <ellipse cx="130" cy="168" rx="9" ry="6" fill="#ffb4b4" opacity=".55"/>
+          </svg>
+          <p>¿Hablamos de tu proyecto? Completá el formulario o escribinos directo.</p>
         </div>
         <form class="g-form" id="contactForm" onsubmit="handleContact(event)">
           <div class="g-field-group">
@@ -242,6 +266,38 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </footer>
 
 <script src="assets/mobile-menu.js?v=2" defer></script>
+<script>
+/* Envío del formulario de contacto — mismo patrón que el resto del sitio
+   (configurador y cotizador): arma el mensaje y lo envía por WhatsApp,
+   no hay backend propio para este formulario. */
+function handleContact(event) {
+  event.preventDefault();
+  var form = event.target;
+  var data = new FormData(form);
+  var nombre = (data.get('nombre') || '').toString().trim();
+  var email = (data.get('email') || '').toString().trim();
+  var mensaje = (data.get('mensaje') || '').toString().trim();
+  if (!nombre || !email || !mensaje) return;
+
+  var msg =
+    'Hola Laboratorio Genus, quiero hacer una consulta.\n\n' +
+    'Nombre: ' + nombre + '\n' +
+    'Empresa: ' + ((data.get('empresa') || '').toString().trim() || '—') + '\n' +
+    'Email: ' + email + '\n' +
+    'WhatsApp: ' + ((data.get('whatsapp') || '').toString().trim() || '—') + '\n' +
+    'Tema: ' + ((data.get('tema') || '').toString().trim() || '—') + '\n\n' +
+    'Mensaje: ' + mensaje;
+
+  window.open('https://wa.me/5491124980861?text=' + encodeURIComponent(msg), '_blank');
+
+  var success = document.getElementById('contactSuccess');
+  if (success) {
+    success.style.display = 'flex';
+    success.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+  form.reset();
+}
+</script>
 
     <!-- Creamy V2 — Asistente Inteligente -->
     <link rel="stylesheet" href="/assets/creamy-v2/creamy.css?v=v2">
