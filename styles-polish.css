@@ -1799,9 +1799,9 @@ body {
   background-size: cover, cover, cover;
   background-position: center, center, center;
 }
-.pg-calidad .g-hero { --hero-bg-img: url('assets/redesign/05_texturas/fondo_laboratorio_01.png'); }
-.pg-llave .g-hero    { --hero-bg-img: url('assets/redesign/05_texturas/fondo_laboratorio_02.png'); }
-.pg-quienes .g-hero  { --hero-bg-img: url('assets/redesign/01_brand/laboratorio_gotero.png'); }
+.pg-calidad .g-hero { --hero-bg-img: url('assets/redesign/05_texturas/fondo_laboratorio_01.webp'); }
+.pg-llave .g-hero    { --hero-bg-img: url('assets/redesign/05_texturas/fondo_laboratorio_02.webp'); }
+.pg-quienes .g-hero  { --hero-bg-img: url('assets/redesign/01_brand/laboratorio_gotero.webp'); }
 
 /* ---------- Quiénes somos: timeline premium ---------- */
 .g-timeline-line { gap: 4px; padding: 12px 4px 16px; }
@@ -1836,9 +1836,9 @@ body {
 .g-video-block {
   background-image:
     linear-gradient(145deg, rgba(6,18,32,.92) 0%, rgba(7,23,47,.88) 100%),
-    url('assets/redesign/01_brand/hero_productos_genus.png');
+    url('assets/redesign/01_brand/laboratorio_gotero.webp');
   background-size: cover, cover;
-  background-position: center, 30% center;
+  background-position: center, center;
 }
 
 /* ---------- Calidad: certificaciones e indicadores ---------- */
@@ -1957,7 +1957,7 @@ body {
   border-radius: var(--radius-lg, 22px);
   background:
     linear-gradient(180deg, rgba(255,255,255,.55) 0%, rgba(255,255,255,.15) 60%, transparent 100%),
-    url('assets/redesign/05_texturas/pedestal_blanco.png') center bottom / cover no-repeat,
+    url('assets/redesign/05_texturas/pedestal_blanco.webp') center bottom / cover no-repeat,
     radial-gradient(ellipse at 50% 85%, #dfeef3 0%, #f2f8fa 55%, #f8fbfc 100%);
   min-height: 380px;
   display: flex; align-items: flex-end; justify-content: center;
