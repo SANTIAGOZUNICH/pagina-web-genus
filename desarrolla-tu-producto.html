@@ -139,10 +139,34 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       width:auto;
       height:auto;
     }
+    .dtp-product-img-wrap img{
+      width:100%;height:100%;object-fit:cover;display:block;
+    }
+    .dtp-categories-grid .dtp-product-img-wrap{
+      background:linear-gradient(160deg,#eef4f7 0%,#f6fafb 100%);
+    }
     .dtp-product-name{
       font-size:13px;font-weight:900;letter-spacing:.1em;
       text-transform:uppercase;color:var(--dark);
     }
+    /* Tu marca: toggle texto / logo */
+    .dtp-marca-field{margin-bottom:22px;}
+    .dtp-marca-toggle{display:flex;gap:8px;margin-bottom:10px;}
+    .dtp-marca-toggle-btn{
+      flex:1;padding:9px 10px;border:2px solid var(--border);border-radius:8px;
+      background:var(--white);font-size:12.5px;font-weight:700;color:var(--mid);
+      cursor:pointer;font-family:inherit;transition:all .18s;
+    }
+    .dtp-marca-toggle-btn.active{
+      background:var(--aqua);border-color:var(--aqua);color:#fff;
+    }
+    .dtp-upload-logo{
+      display:flex;align-items:center;gap:10px;
+      border:2px dashed var(--border);border-radius:8px;
+      padding:16px;cursor:pointer;color:var(--mid);
+      font-size:13px;font-weight:600;transition:border-color .18s,color .18s;
+    }
+    .dtp-upload-logo:hover{border-color:var(--aqua);color:var(--aqua);}
     /* Paleta de colores */
     .dtp-color-palette{
       display:flex;flex-wrap:wrap;gap:10px;margin-top:6px;
@@ -373,7 +397,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 #totalDisplay { display:none !important; }
 .dtp-secure-note { border-top: none !important; margin-top: 0 !important; padding-top: 0 !important; }
 </style>
-  <link rel="stylesheet" href="styles-polish.css?v=v3" />
+  <link rel="stylesheet" href="styles-polish.css?v=v4" />
   <link rel="stylesheet" href="mobile-menu.css?v=2" />
 </head>
 <body>
@@ -444,28 +468,72 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <!-- PASO 1 -->
   <div class="dtp-panel active" id="panel1">
     <span class="dtp-badge">PASO 1 DE 4</span>
-    <h2 class="dtp-step1-title">¿Qué producto querés desarrollar?</h2>
-    <p class="dtp-step1-sub">Elegí el tipo de producto que querés crear.</p>
-    <div class="dtp-products-grid">
-      <div class="dtp-product-card" data-product="Serum" data-content="30 ml" onclick="selectProduct(this)">
+    <h2 class="dtp-step1-title">¿Qué línea querés desarrollar?</h2>
+    <p class="dtp-step1-sub">Elegí la categoría de tu producto. Vas a poder personalizarlo en el próximo paso.</p>
+    <div class="creamy-card" style="margin-bottom:28px;max-width:520px;">
+      <svg viewBox="0 0 200 320" class="creamy-figure" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <ellipse cx="100" cy="300" rx="58" ry="10" fill="rgba(5,14,28,.18)"/>
+        <rect x="72" y="230" width="14" height="55" rx="7" fill="#0d1b2a"/>
+        <rect x="114" y="230" width="14" height="55" rx="7" fill="#0d1b2a"/>
+        <rect x="62" y="278" width="34" height="18" rx="9" fill="#07172f"/>
+        <rect x="104" y="278" width="34" height="18" rx="9" fill="#07172f"/>
+        <path d="M148,150 Q168,175 158,205" stroke="#0d1b2a" stroke-width="13" fill="none" stroke-linecap="round"/>
+        <circle cx="156" cy="212" r="12" fill="#fff"/>
+        <path d="M54,150 Q34,132 44,108" stroke="#0d1b2a" stroke-width="13" fill="none" stroke-linecap="round"/>
+        <circle cx="46" cy="102" r="13" fill="#fff"/>
+        <path d="M56,110 Q56,88 80,88 L120,88 Q144,88 144,110 L144,235 Q144,252 126,252 L74,252 Q56,252 56,235 Z" fill="#f4f9fb" stroke="#c9d8de" stroke-width="1.5"/>
+        <rect x="84" y="55" width="32" height="35" rx="6" fill="#f4f9fb" stroke="#c9d8de"/>
+        <rect x="78" y="40" width="44" height="18" rx="8" fill="#c7d2d8"/>
+        <ellipse cx="82" cy="150" rx="8" ry="10" fill="#2b1810"/>
+        <ellipse cx="118" cy="150" rx="8" ry="10" fill="#2b1810"/>
+        <circle cx="79" cy="146" r="2.4" fill="#fff"/>
+        <circle cx="115" cy="146" r="2.4" fill="#fff"/>
+        <path d="M78,172 Q100,192 122,172" stroke="#2b1810" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+        <ellipse cx="70" cy="168" rx="9" ry="6" fill="#ffb4b4" opacity=".55"/>
+        <ellipse cx="130" cy="168" rx="9" ry="6" fill="#ffb4b4" opacity=".55"/>
+      </svg>
+      <p>¡Vamos a darle forma a tu idea! Elegí una categoría para empezar.</p>
+    </div>
+    <div class="dtp-products-grid dtp-categories-grid">
+      <div class="dtp-product-card" data-categoria="Capilares" data-product="Shampoo" data-content="250 ml" onclick="selectProduct(this)">
         <div class="dtp-card-check">✓</div>
-        <div class="dtp-product-img-wrap" id="card-Serum"></div>
-        <div class="dtp-product-name">Serum</div>
+        <div class="dtp-product-img-wrap"><img src="assets/redesign/02_categorias/capilares.png" alt="Capilares" loading="lazy"></div>
+        <div class="dtp-product-name">Capilares</div>
       </div>
-      <div class="dtp-product-card" data-product="Crema" data-content="50 gr" onclick="selectProduct(this)">
+      <div class="dtp-product-card" data-categoria="Styling" data-product="Crema" data-content="100 gr" onclick="selectProduct(this)">
         <div class="dtp-card-check">✓</div>
-        <div class="dtp-product-img-wrap" id="card-Crema"></div>
-        <div class="dtp-product-name">Crema</div>
+        <div class="dtp-product-img-wrap"><img src="assets/redesign/02_categorias/styling.png" alt="Styling" loading="lazy"></div>
+        <div class="dtp-product-name">Styling</div>
       </div>
-      <div class="dtp-product-card" data-product="Shampoo" data-content="200 ml" onclick="selectProduct(this)">
+      <div class="dtp-product-card" data-categoria="Faciales" data-product="Crema" data-content="50 gr" onclick="selectProduct(this)">
         <div class="dtp-card-check">✓</div>
-        <div class="dtp-product-img-wrap" id="card-Shampoo"></div>
-        <div class="dtp-product-name">Shampoo</div>
+        <div class="dtp-product-img-wrap"><img src="assets/redesign/02_categorias/faciales.png" alt="Faciales" loading="lazy"></div>
+        <div class="dtp-product-name">Faciales</div>
       </div>
-      <div class="dtp-product-card" data-product="Gel" data-content="250 gr" onclick="selectProduct(this)">
+      <div class="dtp-product-card" data-categoria="Sérums" data-product="Serum" data-content="30 ml" onclick="selectProduct(this)">
         <div class="dtp-card-check">✓</div>
-        <div class="dtp-product-img-wrap" id="card-Gel"></div>
-        <div class="dtp-product-name">Gel</div>
+        <div class="dtp-product-img-wrap"><img src="assets/redesign/02_categorias/serums.png" alt="Sérums" loading="lazy"></div>
+        <div class="dtp-product-name">Sérums</div>
+      </div>
+      <div class="dtp-product-card" data-categoria="Limpieza" data-product="Shampoo" data-content="200 ml" onclick="selectProduct(this)">
+        <div class="dtp-card-check">✓</div>
+        <div class="dtp-product-img-wrap"><img src="assets/redesign/02_categorias/limpieza.png" alt="Limpieza" loading="lazy"></div>
+        <div class="dtp-product-name">Limpieza</div>
+      </div>
+      <div class="dtp-product-card" data-categoria="Corporales" data-product="Shampoo" data-content="250 ml" onclick="selectProduct(this)">
+        <div class="dtp-card-check">✓</div>
+        <div class="dtp-product-img-wrap"><img src="assets/redesign/02_categorias/corporales.png" alt="Corporales" loading="lazy"></div>
+        <div class="dtp-product-name">Corporales</div>
+      </div>
+      <div class="dtp-product-card" data-categoria="Brumas & Sprays" data-product="Serum" data-content="100 ml" onclick="selectProduct(this)">
+        <div class="dtp-card-check">✓</div>
+        <div class="dtp-product-img-wrap"><img src="assets/redesign/02_categorias/brumas_sprays.png" alt="Brumas & Sprays" loading="lazy"></div>
+        <div class="dtp-product-name">Brumas &amp; Sprays</div>
+      </div>
+      <div class="dtp-product-card" data-categoria="Otro producto" data-product="Crema" data-content="A definir" onclick="selectProduct(this)">
+        <div class="dtp-card-check">✓</div>
+        <div class="dtp-product-img-wrap"><img src="assets/redesign/02_categorias/otro_producto.png" alt="Otro producto" loading="lazy"></div>
+        <div class="dtp-product-name">Otro producto</div>
       </div>
     </div>
     <div class="dtp-nav">
@@ -485,10 +553,26 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="dtp-col-img-preview" id="step2ImgPreview"></div>
         <div class="dtp-selected-name" id="step2ProductName">—</div>
         <div class="dtp-selected-content" id="step2ContentLabel">Contenido neto: —</div>
-        <div class="dtp-field">
-          <label>Marca</label>
-          <input type="text" id="f2_marca" placeholder="Escribí el nombre de tu marca" oninput="onLabelInput()">
+
+        <div class="dtp-field dtp-marca-field">
+          <label>Tu marca</label>
+          <div class="dtp-marca-toggle">
+            <button type="button" class="dtp-marca-toggle-btn active" id="marcaModoTexto" onclick="setMarcaModo('texto')">Escribir nombre</button>
+            <button type="button" class="dtp-marca-toggle-btn" id="marcaModoLogo" onclick="setMarcaModo('logo')">Subir logo</button>
+          </div>
+          <div id="marcaTextoPanel">
+            <input type="text" id="f2_marca" placeholder="Escribí el nombre de tu marca" oninput="onLabelInput()">
+            <div class="dtp-color-palette" id="marcaColorPalette" style="margin-top:10px;"></div>
+          </div>
+          <div id="marcaLogoPanel" style="display:none;">
+            <label class="dtp-upload-logo" for="f2_logo">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <span id="f2LogoLabel">Subir logo (PNG, JPG o SVG)</span>
+            </label>
+            <input type="file" id="f2_logo" accept="image/*" style="display:none;" onchange="onLogoUpload(event)">
+          </div>
         </div>
+
         <div class="dtp-field">
           <label>Nombre del producto</label>
           <input type="text" id="f2_nombre" placeholder="Ej. Crema Hidratante Antiage" oninput="onLabelInput()">
@@ -510,6 +594,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
  <select id="f2_textura">
   <option value="">Seleccioná una textura...</option>
 </select>
+        </div>
+        <div class="dtp-field">
+          <label>Envase</label>
+          <select id="f2_envase"></select>
+        </div>
+        <div class="dtp-field">
+          <label>Cierre</label>
+          <select id="f2_cierre"></select>
         </div>
       </div>
       <div class="dtp-col-form">
@@ -549,8 +641,34 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <p class="sub">Solicitá tu muestra.</p>
     </div>
     <div class="dtp-step3-grid">
-      <div class="dtp-render-stage">
-        <div class="dtp-render-svg-wrap" id="step3Render"></div>
+      <div>
+        <div class="dtp-render-stage">
+          <div class="dtp-render-svg-wrap" id="step3Render"></div>
+        </div>
+        <div class="creamy-card" style="margin-top:20px;">
+          <svg viewBox="0 0 200 320" class="creamy-figure" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <ellipse cx="100" cy="300" rx="58" ry="10" fill="rgba(5,14,28,.18)"/>
+            <rect x="72" y="230" width="14" height="55" rx="7" fill="#0d1b2a"/>
+            <rect x="114" y="230" width="14" height="55" rx="7" fill="#0d1b2a"/>
+            <rect x="62" y="278" width="34" height="18" rx="9" fill="#07172f"/>
+            <rect x="104" y="278" width="34" height="18" rx="9" fill="#07172f"/>
+            <path d="M148,150 Q168,175 158,205" stroke="#0d1b2a" stroke-width="13" fill="none" stroke-linecap="round"/>
+            <circle cx="156" cy="212" r="12" fill="#fff"/>
+            <path d="M54,150 Q34,132 44,108" stroke="#0d1b2a" stroke-width="13" fill="none" stroke-linecap="round"/>
+            <circle cx="46" cy="102" r="13" fill="#fff"/>
+            <path d="M56,110 Q56,88 80,88 L120,88 Q144,88 144,110 L144,235 Q144,252 126,252 L74,252 Q56,252 56,235 Z" fill="#f4f9fb" stroke="#c9d8de" stroke-width="1.5"/>
+            <rect x="84" y="55" width="32" height="35" rx="6" fill="#f4f9fb" stroke="#c9d8de"/>
+            <rect x="78" y="40" width="44" height="18" rx="8" fill="#c7d2d8"/>
+            <ellipse cx="82" cy="150" rx="8" ry="10" fill="#2b1810"/>
+            <ellipse cx="118" cy="150" rx="8" ry="10" fill="#2b1810"/>
+            <circle cx="79" cy="146" r="2.4" fill="#fff"/>
+            <circle cx="115" cy="146" r="2.4" fill="#fff"/>
+            <path d="M78,172 Q100,192 122,172" stroke="#2b1810" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+            <ellipse cx="70" cy="168" rx="9" ry="6" fill="#ffb4b4" opacity=".55"/>
+            <ellipse cx="130" cy="168" rx="9" ry="6" fill="#ffb4b4" opacity=".55"/>
+          </svg>
+          <p>¡Excelente elección! Así se ve tu producto. Podés seguir personalizando cada detalle.</p>
+        </div>
       </div>
       <div class="dtp-summary" id="step3Summary">
         <div class="dtp-summary-title">Resumen de tu producto</div>
@@ -648,15 +766,29 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   var dtpState = {
     step: 1,
+    categoria: null,
     producto: null,
     contenido: null,
     marca: '',
+    marcaColor: '#07172f',
     nombre: '',
+    marcaModo: 'texto',
+    logoNombre: '',
+    envase: '',
+    cierre: '',
     activos: [],
     textura: '',
     color: 'Incoloro',
     aroma: ''
   };
+
+  var ENVASE_OPTS = {
+    Serum: ['Frasco gotero', 'Frasco pump (airless)'],
+    Crema: ['Pote / tarro', 'Tubo laminado', 'Envase airless'],
+    Shampoo: ['Botella con pump', 'Botella flip-top']
+  };
+
+  var CIERRE_OPTS = ['Tapa a rosca', 'Flip-top', 'Válvula pump', 'Gotero', 'Válvula spray'];
 
   var TEXTURA_OPTS = ['Ligera', 'Media', 'Densa',];
 
@@ -686,22 +818,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   function $(id) { return document.getElementById(id); }
 
-  /* ---------- PASO 1: tarjetas de producto ---------- */
-  function renderProductCards() {
-    if (!window.GENUS_MOCKUP) return;
-    ['Serum', 'Crema', 'Shampoo', 'Gel'].forEach(function (p) {
-      var el = $('card-' + p);
-      if (el) el.innerHTML = GENUS_MOCKUP.getSVG(p, 'Incoloro', 120);
-    });
-  }
-
   window.selectProduct = function (el) {
     document.querySelectorAll('.dtp-product-card').forEach(function (c) {
       c.classList.remove('selected');
     });
     el.classList.add('selected');
+    dtpState.categoria = el.getAttribute('data-categoria') || el.getAttribute('data-product');
     dtpState.producto = el.getAttribute('data-product');
     dtpState.contenido = el.getAttribute('data-content');
+    dtpState.envase = '';
+    dtpState.cierre = '';
   };
 
   /* ---------- PASO 2: activos (chips, máx. 3) ---------- */
@@ -800,26 +926,99 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     updateStep2Preview();
   };
 
+  /* ---------- PASO 2: marca — texto con color, o logo subido ---------- */
+  var MARCA_COLORS = ['#07172f', '#169ab0', '#ffffff', '#b8955a', '#7a1f2b'];
+
+  function renderMarcaColorPalette() {
+    var wrap = $('marcaColorPalette');
+    if (!wrap) return;
+    wrap.innerHTML = '';
+    MARCA_COLORS.forEach(function (hex) {
+      var sw = document.createElement('div');
+      sw.className = 'dtp-color-swatch';
+      sw.style.background = hex;
+      sw.title = 'Color del nombre';
+      sw.setAttribute('role', 'button');
+      if (hex === dtpState.marcaColor) sw.classList.add('selected');
+      sw.addEventListener('click', function () {
+        dtpState.marcaColor = hex;
+        renderMarcaColorPalette();
+        updateStep2Preview();
+      });
+      wrap.appendChild(sw);
+    });
+  }
+
+  window.setMarcaModo = function (modo) {
+    dtpState.marcaModo = modo;
+    var btnTexto = $('marcaModoTexto'), btnLogo = $('marcaModoLogo');
+    var panelTexto = $('marcaTextoPanel'), panelLogo = $('marcaLogoPanel');
+    if (btnTexto) btnTexto.classList.toggle('active', modo === 'texto');
+    if (btnLogo) btnLogo.classList.toggle('active', modo === 'logo');
+    if (panelTexto) panelTexto.style.display = modo === 'texto' ? '' : 'none';
+    if (panelLogo) panelLogo.style.display = modo === 'logo' ? '' : 'none';
+    updateStep2Preview();
+  };
+
+  window.onLogoUpload = function (event) {
+    var file = event.target.files && event.target.files[0];
+    var label = $('f2LogoLabel');
+    if (file) {
+      dtpState.logoNombre = file.name;
+      if (label) label.textContent = file.name;
+    } else {
+      dtpState.logoNombre = '';
+      if (label) label.textContent = 'Subir logo (PNG, JPG o SVG)';
+    }
+  };
+
   function enterStep2() {
-    if ($('step2ProductName')) $('step2ProductName').textContent = dtpState.producto || '—';
+    if ($('step2ProductName')) $('step2ProductName').textContent = dtpState.categoria || dtpState.producto || '—';
     if ($('step2ContentLabel')) $('step2ContentLabel').textContent = 'Contenido neto: ' + (dtpState.contenido || '—');
     if ($('f2_contenido')) $('f2_contenido').value = dtpState.contenido || '';
+    renderEnvaseCierreOptions();
+    renderMarcaColorPalette();
     updateStep2Preview();
+  }
+
+  /* ---------- PASO 2: envase y cierre según el producto elegido ---------- */
+  function renderEnvaseCierreOptions() {
+    var envaseSel = $('f2_envase'), cierreSel = $('f2_cierre');
+    var envaseList = ENVASE_OPTS[dtpState.producto] || ENVASE_OPTS.Crema;
+    if (envaseSel) {
+      envaseSel.innerHTML = '<option value="">Seleccioná un envase...</option>' +
+        envaseList.map(function (e) { return '<option>' + escapeHtml(e) + '</option>'; }).join('');
+      envaseSel.value = dtpState.envase || '';
+      envaseSel.onchange = function () { dtpState.envase = envaseSel.value; };
+    }
+    if (cierreSel) {
+      cierreSel.innerHTML = '<option value="">Seleccioná un cierre...</option>' +
+        CIERRE_OPTS.map(function (c) { return '<option>' + escapeHtml(c) + '</option>'; }).join('');
+      cierreSel.value = dtpState.cierre || '';
+      cierreSel.onchange = function () { dtpState.cierre = cierreSel.value; };
+    }
+  }
+
+  function marcaParaPreview() {
+    if (dtpState.marcaModo === 'logo') return dtpState.logoNombre ? 'TU LOGO' : 'TU MARCA';
+    return dtpState.marca;
   }
 
   function updateStep2Preview() {
     var wrap = $('step2ImgPreview');
     if (wrap && window.GENUS_MOCKUP && dtpState.producto) {
-      wrap.innerHTML = GENUS_MOCKUP.getSVG(dtpState.producto, dtpState.color, 200, dtpState.marca, dtpState.nombre);
+      wrap.innerHTML = GENUS_MOCKUP.getSVG(dtpState.producto, dtpState.color, 200, marcaParaPreview(), dtpState.nombre, dtpState.marcaModo === 'texto' ? dtpState.marcaColor : null);
     }
   }
 
   /* ---------- Resumen reutilizable (paso 3 y 4) ---------- */
   function buildSummaryRows() {
     var rows = [
-      ['Producto', dtpState.producto || '—'],
+      ['Categoría', dtpState.categoria || dtpState.producto || '—'],
       ['Contenido', dtpState.contenido || '—'],
-      ['Marca', dtpState.marca || 'TU MARCA'],
+      ['Envase', dtpState.envase || '—'],
+      ['Cierre', dtpState.cierre || '—'],
+      ['Marca', dtpState.marcaModo === 'logo' ? (dtpState.logoNombre || 'Logo pendiente de subir') : (dtpState.marca || 'TU MARCA')],
       ['Nombre', dtpState.nombre || '—'],
       ['Activos', dtpState.activos.length ? dtpState.activos.join(', ') : '—'],
       ['Textura', dtpState.textura || '—'],
@@ -835,7 +1034,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   function renderStep3() {
     var stage = $('step3Render');
     if (stage && window.GENUS_MOCKUP && dtpState.producto) {
-      stage.innerHTML = GENUS_MOCKUP.getSVG(dtpState.producto, dtpState.color, 260, dtpState.marca, dtpState.nombre);
+      stage.innerHTML = GENUS_MOCKUP.getSVG(dtpState.producto, dtpState.color, 260, marcaParaPreview(), dtpState.nombre, dtpState.marcaModo === 'texto' ? dtpState.marcaColor : null);
     }
     var summary = $('step3Summary');
     if (summary) {
@@ -847,12 +1046,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   function renderStep4() {
     var img = $('step4Img');
     if (img && window.GENUS_MOCKUP && dtpState.producto) {
-      img.innerHTML = GENUS_MOCKUP.getSVG(dtpState.producto, dtpState.color, 80, dtpState.marca, dtpState.nombre);
+      img.innerHTML = GENUS_MOCKUP.getSVG(dtpState.producto, dtpState.color, 80, marcaParaPreview(), dtpState.nombre, dtpState.marcaModo === 'texto' ? dtpState.marcaColor : null);
     }
     var details = $('step4Details');
     if (details) {
-      details.innerHTML = '<strong>' + escapeHtml(dtpState.nombre || dtpState.producto || 'Producto') + '</strong>' +
-        '<span>' + escapeHtml(dtpState.marca || 'TU MARCA') + '</span>' +
+      details.innerHTML = '<strong>' + escapeHtml(dtpState.nombre || dtpState.categoria || 'Producto') + '</strong>' +
+        '<span>' + escapeHtml(dtpState.marcaModo === 'logo' ? (dtpState.logoNombre || 'Logo pendiente') : (dtpState.marca || 'TU MARCA')) + '</span>' +
         '<span>' + escapeHtml(dtpState.contenido || '') + '</span>';
     }
     var summary = $('step4Summary');
@@ -906,8 +1105,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     var msg =
       'Hola Laboratorio Genus, quiero continuar con el desarrollo de mi producto personalizado.\n\n' +
       '📦 DATOS DEL PRODUCTO\n' +
-      'Producto base: ' + (dtpState.producto || '—') + '\n' +
-      'Marca: ' + (dtpState.marca || 'TU MARCA') + '\n' +
+      'Categoría: ' + (dtpState.categoria || dtpState.producto || '—') + '\n' +
+      'Contenido: ' + (dtpState.contenido || '—') + '\n' +
+      'Envase: ' + (dtpState.envase || '—') + '\n' +
+      'Cierre: ' + (dtpState.cierre || '—') + '\n' +
+      'Marca: ' + (dtpState.marcaModo === 'logo' ? (dtpState.logoNombre ? 'Logo adjunto (' + dtpState.logoNombre + ')' : 'Va a enviar logo') : (dtpState.marca || 'TU MARCA')) + '\n' +
       'Nombre comercial: ' + (dtpState.nombre || '—') + '\n' +
       'Color: ' + (dtpState.color || '—') + '\n' +
       'Textura: ' + (dtpState.textura || '—') + '\n' +
@@ -924,7 +1126,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   /* ---------- Inicialización ---------- */
   document.addEventListener('DOMContentLoaded', function () {
-    renderProductCards();
     renderActivos();
     renderTexturaOptions();
     renderColorPalette();

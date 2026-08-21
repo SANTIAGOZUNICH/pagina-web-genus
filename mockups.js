@@ -91,7 +91,7 @@ function renderLabelText(x, yCenter, text, opts) {
    Inspirado en el estilo de la imagen de referencia:
    frasco corto, ancho, hombros curvos, tapa plateada + bulbo grande
    ============================================================ */
-function svgSerum(color, size, marca, nombreProducto) {
+function svgSerum(color, size, marca, nombreProducto, marcaColor) {
   const c = FILL_COLORS[color] || FILL_COLORS['Incoloro'];
   const marcaLabel = marca || 'TU MARCA';
   nombreProducto = nombreProducto || 'SERUM';
@@ -214,7 +214,7 @@ function svgSerum(color, size, marca, nombreProducto) {
 <rect x="56" y="181" width="68" height="1.5" rx=".75" fill="rgba(175,148,98,.40)"/>
 ${renderLabelText(90, 203, nombreProducto, {maxWidth:68, fontSize:15, letterSpacing:3.5, fontWeight:300, fill:'#1a1a2e', minFontSize:9})}
 <line x1="56" y1="210" x2="124" y2="210" stroke="#aaa" stroke-width=".75"/>
-${renderLabelText(90, 225, marcaLabel, {maxWidth:68, fontSize:14, letterSpacing:2, fill:'#666', minFontSize:8})}
+${renderLabelText(90, 225, marcaLabel, {maxWidth:68, fontSize:14, letterSpacing:2, fill:(marcaColor || '#666'), minFontSize:8})}
 
 <!-- TETINA NEGRA PREMIUM -->
 <path d="
@@ -266,7 +266,7 @@ stroke-linecap="round"/>
 /* ============================================================
    CREMA â pote cilÃ­ndrico de vidrio con crema visible encima
    ============================================================ */
-function svgCrema(color, size, marca, nombreProducto) {
+function svgCrema(color, size, marca, nombreProducto, marcaColor) {
   const c = FILL_COLORS[color] || FILL_COLORS['Incoloro'];
   const marcaLabel = marca || 'TU MARCA';
   nombreProducto = nombreProducto || 'CREMA';
@@ -352,7 +352,7 @@ function svgCrema(color, size, marca, nombreProducto) {
 <rect x="68" y="112" width="124" height="56" rx="2" fill="none" stroke="#ccc" stroke-width=".75"/>
 ${renderLabelText(130, 133, nombreProducto, {maxWidth:102, fontSize:20, letterSpacing:4, fontWeight:300, fill:'#1a1a2e', minFontSize:11})}
 <line x1="78" y1="140" x2="182" y2="140" stroke="#aaa" stroke-width=".75"/>
-${renderLabelText(130, 157, marcaLabel, {maxWidth:102, fontSize:17, letterSpacing:2, fill:'#666', minFontSize:9})}
+${renderLabelText(130, 157, marcaLabel, {maxWidth:102, fontSize:17, letterSpacing:2, fill:(marcaColor || '#666'), minFontSize:9})}
 
 <!-- ââ CAP LAYER â tapa blanca, fija ââ -->
 <ellipse cx="130" cy="84" rx="112" ry="22" fill="#151515"/>
@@ -367,7 +367,7 @@ ${renderLabelText(130, 157, marcaLabel, {maxWidth:102, fontSize:17, letterSpacin
 /* ============================================================
    SHAMPOO â botella redondeada de vidrio con pump plateado
    ============================================================ */
-function svgShampoo(color, size, marca, nombreProducto) {
+function svgShampoo(color, size, marca, nombreProducto, marcaColor) {
   const c = FILL_COLORS[color] || FILL_COLORS['Incoloro'];
   const marcaLabel = marca || 'TU MARCA';
   nombreProducto = nombreProducto || 'SHAMPOO';
@@ -455,7 +455,7 @@ function svgShampoo(color, size, marca, nombreProducto) {
 <rect x="22" y="144" width="92" height="64" rx="2" fill="none" stroke="#ccc" stroke-width=".75"/>
 ${renderLabelText(68, 166, nombreProducto, {maxWidth:74, fontSize:13, letterSpacing:2.5, fontWeight:300, fill:'#1a1a2e', minFontSize:8})}
 <line x1="30" y1="173" x2="106" y2="173" stroke="#aaa" stroke-width=".75"/>
-${renderLabelText(68, 191, marcaLabel, {maxWidth:74, fontSize:10, letterSpacing:2, fill:'#666', minFontSize:7})}
+${renderLabelText(68, 191, marcaLabel, {maxWidth:74, fontSize:10, letterSpacing:2, fill:(marcaColor || '#666'), minFontSize:7})}
 
 <!-- ââ CAP LAYER â pump platino, fijo ââ -->
 <!-- collar platino -->
@@ -477,7 +477,7 @@ ${renderLabelText(68, 191, marcaLabel, {maxWidth:74, fontSize:10, letterSpacing:
 /* ============================================================
    GEL â pote grande ancho de vidrio transparente
    ============================================================ */
-function svgGel(color, size, marca, nombreProducto) {
+function svgGel(color, size, marca, nombreProducto, marcaColor) {
   const c = FILL_COLORS[color] || FILL_COLORS['Incoloro'];
   const marcaLabel = marca || 'TU MARCA';
   nombreProducto = nombreProducto || 'GEL';
@@ -577,7 +577,7 @@ function svgGel(color, size, marca, nombreProducto) {
 <rect x="82" y="110" width="116" height="56" rx="2" fill="none" stroke="#ccc" stroke-width=".75"/>
 ${renderLabelText(140, 131, nombreProducto, {maxWidth:94, fontSize:16, letterSpacing:4, fontWeight:300, fill:'#1a1a2e', minFontSize:10})}
 <line x1="92" y1="138" x2="188" y2="138" stroke="#aaa" stroke-width=".75"/>
-${renderLabelText(140, 156, marcaLabel, {maxWidth:94, fontSize:15, letterSpacing:2, fill:'#666', minFontSize:9})}
+${renderLabelText(140, 156, marcaLabel, {maxWidth:94, fontSize:15, letterSpacing:2, fill:(marcaColor || '#666'), minFontSize:9})}
 
 <!-- ââ CAP LAYER â tapa blanca amplia, fija ââ -->
 <ellipse cx="140" cy="78" rx="128" ry="24" fill="#151515"/>
@@ -593,18 +593,18 @@ ${renderLabelText(140, 156, marcaLabel, {maxWidth:94, fontSize:15, letterSpacing
 /* ââ API pÃºblica ââ */
 /* ââ API pÃºblica ââ */
 window.GENUS_MOCKUP = {
-  getSVG(producto, color, size, marca, nombreProducto) {
+  getSVG(producto, color, size, marca, nombreProducto, marcaColor) {
     const s = size || 200;
     const col = color || 'Incoloro';
     marca = marca || 'TU MARCA';
     nombreProducto = nombreProducto || producto || 'Producto';
 
     switch(producto) {
-      case 'Serum': return svgSerum(col, s, marca, nombreProducto);
-      case 'Crema': return svgCrema(col, s, marca, nombreProducto);
-      case 'Shampoo': return svgShampoo(col, s, marca, nombreProducto);
-      case 'Gel': return svgGel(col, s, marca, nombreProducto);
-      default: return svgCrema(col, s, marca, nombreProducto);
+      case 'Serum': return svgSerum(col, s, marca, nombreProducto, marcaColor);
+      case 'Crema': return svgCrema(col, s, marca, nombreProducto, marcaColor);
+      case 'Shampoo': return svgShampoo(col, s, marca, nombreProducto, marcaColor);
+      case 'Gel': return svgGel(col, s, marca, nombreProducto, marcaColor);
+      default: return svgCrema(col, s, marca, nombreProducto, marcaColor);
     }
   },
   FILL_COLORS: FILL_COLORS
