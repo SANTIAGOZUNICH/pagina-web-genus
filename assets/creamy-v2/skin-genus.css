@@ -1,0 +1,65 @@
+/* ============================================================
+   CREAMY V2 — SKIN GENUS (solo visual)
+   Se carga DESPUÉS de creamy.css para ganar la cascada.
+   No toca creamy.js ni ninguna lógica (Gemini, Sheets, onboarding,
+   acciones, tracking): únicamente redefine colores, gradientes y
+   sombras para alinear el widget con la nueva dirección visual
+   (azul marino profundo + turquesa brillante) del resto del sitio.
+   ============================================================ */
+
+#creamy-v2 {
+  --cv2-primary: #169ab0;
+  --cv2-primary-dark: #0e7a8c;
+  --cv2-navy: #07172f;
+}
+
+/* Fab: gradiente marino con glow turquesa, igual que los CTAs del resto del sitio */
+#creamy-v2 .cv2-fab {
+  background: linear-gradient(145deg, #123452 0%, #07172f 55%, #050e1c 100%);
+  box-shadow:
+    0 8px 26px rgba(5, 14, 28, 0.38),
+    0 0 0 4px rgba(45, 212, 230, 0.14);
+}
+
+#creamy-v2 .cv2-fab:hover {
+  box-shadow:
+    0 12px 34px rgba(5, 14, 28, 0.42),
+    0 0 0 5px rgba(45, 212, 230, 0.2);
+}
+
+#creamy-v2 .cv2-fab-badge {
+  background: #2dd4e6;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.9);
+}
+
+/* Header de la ventana: mismo azul marino profundo del hero */
+#creamy-v2 .cv2-header {
+  background: linear-gradient(135deg, #123452 0%, #07172f 60%, #0a2038 100%);
+}
+
+#creamy-v2 .cv2-header-dot {
+  background: #2dd4e6;
+}
+
+/* Ventana: sombra más profunda, borde sutil turquesa */
+#creamy-v2 .cv2-window {
+  border: 1px solid rgba(45, 212, 230, 0.14);
+  box-shadow:
+    0 24px 64px rgba(5, 14, 28, 0.22),
+    0 4px 16px rgba(5, 14, 28, 0.1);
+}
+
+/* Burbuja de saludo inicial */
+#creamy-v2 .cv2-greeting {
+  border: 1px solid rgba(22, 154, 176, 0.16);
+  box-shadow: 0 14px 36px rgba(5, 14, 28, 0.18);
+}
+
+/* Botones de acción (Configurador / Cotización / WhatsApp) */
+#creamy-v2 .cv2-action-btn--primary {
+  background: linear-gradient(135deg, #1eb3c9, #169ab0);
+}
+
+#creamy-v2 .cv2-send-btn {
+  background: linear-gradient(135deg, #1eb3c9, #0e7a8c);
+}

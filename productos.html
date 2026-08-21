@@ -47,10 +47,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="description" content="Líneas de productos cosméticos que desarrollamos y fabricamos: capilar, facial, corporal, serums, cremas, geles y más." />
  <link rel="stylesheet" href="styles.css" />
  <link rel="stylesheet" href="styles-internal.css" />
- <link rel="stylesheet" href="styles-polish.css?v=v4" />
+ <link rel="stylesheet" href="styles-polish.css?v=v5" />
  <link rel="stylesheet" href="mobile-menu.css?v=2" />
    </head>
-<body>
+<body class="pg-productos">
    <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WTM6WTQM"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
@@ -343,6 +343,44 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 </section>
 
+<!-- COMPOSICIÓN DE PRODUCTOS -->
+<section class="g-section g-section-white comp-section" id="composicion">
+  <div class="g-wrap">
+    <div class="comp-intro-grid">
+      <div>
+        <span class="g-section-tag">Desarrollo de línea</span>
+        <h2 style="font-size:clamp(24px,3vw,34px);font-weight:900;margin:8px 0 14px;">Armá tu línea completa</h2>
+        <p style="font-size:16px;color:var(--mid);line-height:1.7;margin:0;">¿Tenés en mente algo más grande que un solo producto? Elegí los envases que quieras combinar y visualizá cómo se vería tu futura línea junta, con la misma marca en todos los frascos.</p>
+      </div>
+      <div class="comp-intro-img">
+        <img src="assets/redesign/04_composiciones/linea_completa_04.png" alt="Ejemplo de línea completa de productos" loading="lazy">
+      </div>
+    </div>
+
+    <div class="comp-builder">
+      <div>
+        <div class="comp-picker-title">1. Elegí hasta 4 productos</div>
+        <div class="comp-picker-list" id="compPicker"></div>
+        <p class="comp-picker-note" id="compNote">Seleccioná al menos 2 productos para armar tu línea.</p>
+        <div class="comp-marca-field">
+          <label>Marca</label>
+          <input type="text" id="compMarca" placeholder="Escribí el nombre de tu marca" oninput="window.compUpdate && compUpdate()">
+        </div>
+      </div>
+      <div>
+        <div class="comp-picker-title">2. Vista previa de tu línea</div>
+        <div class="comp-stage" id="compStage">
+          <div class="comp-stage-empty" id="compStageEmpty">Elegí productos de la lista para verlos juntos acá.</div>
+        </div>
+      </div>
+      <div class="comp-cta-row">
+        <span style="font-size:13px;color:var(--mid);">Un asesor te va a contactar por WhatsApp para avanzar con el desarrollo de tu línea.</span>
+        <a class="g-btn-primary" id="compWaBtn" href="https://wa.me/5491124980861" target="_blank">Consultar esta línea →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- BANCO DE DESARROLLOS -->
 <section class="g-section g-section-light" id="banco">
   <div class="g-wrap">
@@ -419,10 +457,111 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 </footer>
 
+<script src="mockups.js"></script>
 <script src="assets/mobile-menu.js?v=2" defer></script>
+<script>
+/* ============================================================
+   COMPOSICIÓN DE PRODUCTOS — armá tu línea completa
+   Reutiliza los mismos generadores SVG del configurador
+   (mockups.js) para mostrar varios envases juntos.
+   ============================================================ */
+(function () {
+  var ITEMS = [
+    { id: 'shampoo', label: 'Shampoo', shape: 'Shampoo', size: 150 },
+    { id: 'acond', label: 'Acondicionador', shape: 'Shampoo', size: 150 },
+    { id: 'crema', label: 'Crema hidratante', shape: 'Crema', size: 130 },
+    { id: 'serum', label: 'Sérum facial', shape: 'Serum', size: 140 },
+    { id: 'gel', label: 'Gel de limpieza', shape: 'Gel', size: 130 },
+    { id: 'locion', label: 'Loción corporal', shape: 'Shampoo', size: 150 }
+  ];
+  var MAX_ITEMS = 4;
+  var selected = [];
+
+  function $(id) { return document.getElementById(id); }
+
+  function renderPicker() {
+    var wrap = $('compPicker');
+    if (!wrap) return;
+    wrap.innerHTML = '';
+    ITEMS.forEach(function (item) {
+      var chip = document.createElement('div');
+      chip.className = 'comp-chip' + (selected.indexOf(item.id) > -1 ? ' selected' : '');
+      chip.innerHTML = '<span class="comp-check">✓</span><span>' + item.label + '</span>';
+      chip.addEventListener('click', function () { toggleItem(item.id); });
+      wrap.appendChild(chip);
+    });
+  }
+
+  function toggleItem(id) {
+    var idx = selected.indexOf(id);
+    if (idx > -1) {
+      selected.splice(idx, 1);
+    } else {
+      if (selected.length >= MAX_ITEMS) {
+        var note = $('compNote');
+        if (note) note.textContent = 'Podés combinar hasta ' + MAX_ITEMS + ' productos por línea.';
+        return;
+      }
+      selected.push(id);
+    }
+    renderPicker();
+    compUpdate();
+  }
+
+  window.compUpdate = function () {
+    var stage = $('compStage');
+    var empty = $('compStageEmpty');
+    var note = $('compNote');
+    var marca = ($('compMarca') || {}).value || '';
+    if (!stage) return;
+
+    if (note) {
+      note.textContent = selected.length < 2
+        ? 'Seleccioná al menos 2 productos para armar tu línea.'
+        : 'Combinando ' + selected.length + ' productos.';
+    }
+
+    Array.prototype.slice.call(stage.querySelectorAll('.comp-stage-item')).forEach(function (el) { el.remove(); });
+    if (empty) empty.style.display = selected.length ? 'none' : 'flex';
+
+    if (!window.GENUS_MOCKUP) return;
+    selected.forEach(function (id) {
+      var item = ITEMS.filter(function (i) { return i.id === id; })[0];
+      if (!item) return;
+      var holder = document.createElement('div');
+      holder.className = 'comp-stage-item';
+      holder.innerHTML = GENUS_MOCKUP.getSVG(item.shape, 'Incoloro', item.size, marca, item.label);
+      stage.appendChild(holder);
+    });
+
+    var waBtn = $('compWaBtn');
+    if (waBtn) {
+      if (selected.length) {
+        var nombres = selected.map(function (id) {
+          var item = ITEMS.filter(function (i) { return i.id === id; })[0];
+          return item ? item.label : id;
+        }).join(', ');
+        var msg = 'Hola Laboratorio Genus, quiero consultar por una línea completa.\n\n' +
+          'Productos: ' + nombres + '\n' +
+          'Marca: ' + (marca || 'TU MARCA') + '\n\n' +
+          'Quedo a la espera de información sobre desarrollo y presupuesto.';
+        waBtn.href = 'https://wa.me/5491124980861?text=' + encodeURIComponent(msg);
+      } else {
+        waBtn.href = 'https://wa.me/5491124980861';
+      }
+    }
+  };
+
+  document.addEventListener('DOMContentLoaded', function () {
+    renderPicker();
+    compUpdate();
+  });
+})();
+</script>
 
     <!-- Creamy V2 — Asistente Inteligente -->
     <link rel="stylesheet" href="/assets/creamy-v2/creamy.css?v=v2">
+    <link rel="stylesheet" href="/assets/creamy-v2/skin-genus.css?v=1">
     <script src="/assets/creamy-v2/creamy.js?v=v2" defer></script>
 </body>
 </html>

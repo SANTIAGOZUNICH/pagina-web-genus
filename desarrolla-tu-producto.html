@@ -243,7 +243,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     }
     .dtp-col-img-preview{
       width:100%;aspect-ratio:1;border-radius:12px;
-      background:radial-gradient(ellipse at 50% 85%,#ddeef3 0%,#eef6f9 50%,#f4f8fa 100%);
+      background:
+        linear-gradient(180deg,rgba(255,255,255,.35) 0%,rgba(255,255,255,.05) 55%,transparent 100%),
+        url('assets/redesign/05_texturas/pedestal_blanco.png') center bottom / cover no-repeat,
+        radial-gradient(ellipse at 50% 85%,#ddeef3 0%,#eef6f9 50%,#f4f8fa 100%);
       display:flex;align-items:center;justify-content:center;
       margin-bottom:18px;overflow:hidden;
     }
@@ -310,22 +313,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     }
     .dtp-step3-banner h2{
       font-size:clamp(28px,4vw,46px);font-weight:900;
-      color:var(--dark);margin:0 0 10px;position:relative;z-/:1;
+      color:var(--dark);margin:0 0 10px;position:relative;z-index:1;
     }
     .dtp-step3-banner p{
       font-size:17px;color:var(--mid);margin:0 0 6px;
-      position:relative;z-/:1;
+      position:relative;z-index:1;
     }
     .dtp-step3-banner .sub{
       font-size:22px;font-weight:700;color:var(--aqua);
-      margin:0;position:relative;z-/:1;
+      margin:0;position:relative;z-index:1;
     }
     .dtp-step3-grid{display:grid;grid-template-columns:1fr 360px;gap:40px;align-items:start;}
     .dtp-render-stage{
       display:flex;align-items:center;justify-content:center;
       min-height:360px;padding:40px;
       min-width:0;
-      background:radial-gradient(ellipse at 50% 75%,#ddeef4 0%,#eef6f9 45%,#f4f8fa 100%);
+      background:
+        linear-gradient(180deg,rgba(255,255,255,.4) 0%,rgba(255,255,255,.08) 55%,transparent 100%),
+        url('assets/redesign/05_texturas/pedestal_azul.png') center bottom / cover no-repeat,
+        radial-gradient(ellipse at 50% 75%,#ddeef4 0%,#eef6f9 45%,#f4f8fa 100%);
       border-radius:20px;position:relative;
     }
     .dtp-render-stage::after{
@@ -334,8 +340,33 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       width:180px;height:18px;border-radius:50%;
       background:radial-gradient(ellipse,rgba(7,23,47,.18) 0%,transparent 70%);
     }
-    .dtp-render-svg-wrap{position:relative;z-/:1;filter:drop-shadow(0 24px 40px rgba(7,23,47,.18));max-width:100%;}
+    .dtp-render-svg-wrap{position:relative;z-index:1;filter:drop-shadow(0 24px 40px rgba(7,23,47,.18));max-width:100%;cursor:zoom-in;transition:transform .2s;}
+    .dtp-render-svg-wrap:hover{transform:scale(1.03);}
     .dtp-render-svg-wrap svg{max-width:100%;height:auto;}
+    .dtp-zoom-hint{
+      position:absolute;top:14px;right:14px;z-index:2;
+      display:flex;align-items:center;gap:6px;
+      background:rgba(255,255,255,.92);border-radius:100px;
+      padding:7px 12px;font-size:11px;font-weight:700;color:var(--mid);
+      box-shadow:0 4px 12px rgba(7,23,47,.1);pointer-events:none;
+    }
+    .dtp-lightbox{
+      display:none;position:fixed;inset:0;z-index:9999;
+      background:rgba(5,14,28,.82);
+      align-items:center;justify-content:center;padding:40px;
+      cursor:zoom-out;
+    }
+    .dtp-lightbox.active{display:flex;}
+    .dtp-lightbox-inner{
+      max-width:min(520px,90vw);max-height:85vh;
+      filter:drop-shadow(0 30px 60px rgba(0,0,0,.5));
+    }
+    .dtp-lightbox-inner svg{width:100%;height:auto;max-height:85vh;}
+    .dtp-lightbox-close{
+      position:absolute;top:24px;right:28px;width:44px;height:44px;
+      border-radius:50%;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.3);
+      color:#fff;font-size:20px;display:flex;align-items:center;justify-content:center;cursor:pointer;
+    }
     .dtp-summary{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:28px 24px;}
     .dtp-summary-title{font-size:11px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--aqua);margin-bottom:20px;}
     .dtp-summary-row{
@@ -397,7 +428,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 #totalDisplay { display:none !important; }
 .dtp-secure-note { border-top: none !important; margin-top: 0 !important; padding-top: 0 !important; }
 </style>
-  <link rel="stylesheet" href="styles-polish.css?v=v4" />
+  <link rel="stylesheet" href="styles-polish.css?v=v5" />
   <link rel="stylesheet" href="mobile-menu.css?v=2" />
 </head>
 <body>
@@ -643,7 +674,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="dtp-step3-grid">
       <div>
         <div class="dtp-render-stage">
-          <div class="dtp-render-svg-wrap" id="step3Render"></div>
+          <div class="dtp-zoom-hint">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+            Ver en grande
+          </div>
+          <div class="dtp-render-svg-wrap" id="step3Render" onclick="window.dtpOpenZoom && dtpOpenZoom()"></div>
+        </div>
+        <div class="dtp-lightbox" id="dtpLightbox" onclick="window.dtpCloseZoom && dtpCloseZoom()">
+          <div class="dtp-lightbox-close">✕</div>
+          <div class="dtp-lightbox-inner" id="dtpLightboxInner"></div>
         </div>
         <div class="creamy-card" style="margin-top:20px;">
           <svg viewBox="0 0 200 320" class="creamy-figure" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -1042,6 +1081,22 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     }
   }
 
+  /* ---------- Zoom del render (lightbox real, sin simular rotación 3D) ---------- */
+  window.dtpOpenZoom = function () {
+    if (!window.GENUS_MOCKUP || !dtpState.producto) return;
+    var inner = $('dtpLightboxInner');
+    if (inner) {
+      inner.innerHTML = GENUS_MOCKUP.getSVG(dtpState.producto, dtpState.color, 480, marcaParaPreview(), dtpState.nombre, dtpState.marcaModo === 'texto' ? dtpState.marcaColor : null);
+    }
+    var box = $('dtpLightbox');
+    if (box) box.classList.add('active');
+  };
+
+  window.dtpCloseZoom = function () {
+    var box = $('dtpLightbox');
+    if (box) box.classList.remove('active');
+  };
+
   /* ---------- PASO 4: tarjeta de pedido ---------- */
   function renderStep4() {
     var img = $('step4Img');
@@ -1132,6 +1187,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     var aromaSel = $('f2_aroma');
     if (aromaSel) aromaSel.addEventListener('change', function () { dtpState.aroma = aromaSel.value; });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') dtpCloseZoom();
+    });
   });
 
 })();
@@ -1139,6 +1198,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <!-- Creamy V2 — Asistente Inteligente -->
     <link rel="stylesheet" href="/assets/creamy-v2/creamy.css?v=v2">
+    <link rel="stylesheet" href="/assets/creamy-v2/skin-genus.css?v=1">
     <script src="/assets/creamy-v2/creamy.js?v=v2" defer></script>
 </body>
 </html>

@@ -1779,3 +1779,206 @@ body {
     text-align: center;
   }
 }
+
+/* ============================================================
+   GENUS — PÁGINAS INTERNAS: REDISEÑO DEDICADO v5
+   Calidad, Llave en mano, Quiénes somos, Cotizador, Productos.
+   No solo heredan el design system: cada hero suma una imagen de
+   fondo real (assets/redesign/05_texturas, sin marca ni logo) y
+   los componentes propios de cada página se refuerzan a mano.
+   ============================================================ */
+
+/* ---------- Hero con fondo fotográfico por página ---------- */
+.pg-calidad .g-hero,
+.pg-llave .g-hero,
+.pg-quienes .g-hero {
+  background-image:
+    radial-gradient(ellipse 70% 60% at 78% 0%, rgba(45, 212, 230, 0.16) 0%, transparent 60%),
+    linear-gradient(120deg, rgba(5, 14, 28, 0.94) 0%, rgba(7, 23, 47, 0.90) 55%, rgba(10, 42, 66, 0.88) 100%),
+    var(--hero-bg-img) !important;
+  background-size: cover, cover, cover;
+  background-position: center, center, center;
+}
+.pg-calidad .g-hero { --hero-bg-img: url('assets/redesign/05_texturas/fondo_laboratorio_01.png'); }
+.pg-llave .g-hero    { --hero-bg-img: url('assets/redesign/05_texturas/fondo_laboratorio_02.png'); }
+.pg-quienes .g-hero  { --hero-bg-img: url('assets/redesign/01_brand/laboratorio_gotero.png'); }
+
+/* ---------- Quiénes somos: timeline premium ---------- */
+.g-timeline-line { gap: 4px; padding: 12px 4px 16px; }
+.g-tl-item::after {
+  top: 24px;
+  height: 3px;
+  background: linear-gradient(90deg, rgba(22,154,176,.5), rgba(22,154,176,.08)) !important;
+}
+.g-tl-dot {
+  width: 48px; height: 48px;
+  font-size: 0;
+  background: var(--white) !important;
+  border-width: 3px !important;
+  box-shadow: 0 6px 18px rgba(7,23,47,.10);
+  transition: transform .22s cubic-bezier(.4,0,.2,1), box-shadow .22s cubic-bezier(.4,0,.2,1);
+}
+.g-tl-item:hover .g-tl-dot { transform: translateY(-3px) scale(1.06); box-shadow: 0 12px 28px rgba(22,154,176,.22); }
+.g-tl-item.active .g-tl-dot {
+  background: linear-gradient(145deg,#1eb3c9,#0e7a8d) !important;
+  box-shadow: 0 8px 22px rgba(22,154,176,.35);
+}
+.g-tl-year { font-size: 26px; letter-spacing: -.02em; }
+.g-mv-card { transition: transform .22s cubic-bezier(.4,0,.2,1), box-shadow .22s cubic-bezier(.4,0,.2,1); }
+.g-mv-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+.g-valor-icon {
+  font-size: 26px;
+  background: linear-gradient(145deg, var(--aqua-light), #dff0f5) !important;
+  border: 1px solid rgba(22,154,176,.18);
+  transition: transform .22s cubic-bezier(.4,0,.2,1);
+}
+.g-valor-card:hover .g-valor-icon { transform: scale(1.08) rotate(-4deg); }
+.g-video-block {
+  background-image:
+    linear-gradient(145deg, rgba(6,18,32,.92) 0%, rgba(7,23,47,.88) 100%),
+    url('assets/redesign/01_brand/hero_productos_genus.png');
+  background-size: cover, cover;
+  background-position: center, 30% center;
+}
+
+/* ---------- Calidad: certificaciones e indicadores ---------- */
+.g-cert-card { position: relative; overflow: hidden; }
+.g-cert-card::before {
+  content: '';
+  position: absolute; inset: 0 0 auto 0; height: 4px;
+  background: linear-gradient(90deg, #169ab0, var(--v4-aqua-bright, #2dd4e6));
+}
+.g-cert-badge {
+  background: linear-gradient(145deg, var(--v4-navy-800, #0d2740), var(--v4-navy-900, #07172f)) !important;
+  border: 3px solid transparent !important;
+  background-clip: padding-box;
+  box-shadow: 0 8px 22px rgba(7,23,47,.22), 0 0 0 3px rgba(22,154,176,.18);
+}
+.g-indicador {
+  background: linear-gradient(160deg, rgba(22,154,176,.09), rgba(22,154,176,.02)) !important;
+  transition: transform .22s cubic-bezier(.4,0,.2,1), box-shadow .22s cubic-bezier(.4,0,.2,1);
+}
+.g-indicador:hover { transform: translateY(-3px); box-shadow: var(--shadow-sm); }
+.g-indicador-num { font-size: 60px; letter-spacing: -.03em; }
+.g-proceso-item { transition: transform .18s cubic-bezier(.4,0,.2,1); }
+.g-proceso-item:hover { transform: translateX(3px); }
+
+/* ---------- Llave en mano: proceso numerado + envases ---------- */
+.g-process-grid { position: relative; }
+.g-process-step { position: relative; }
+.g-process-num {
+  background: linear-gradient(145deg, #1eb3c9, #0e7a8d) !important;
+  box-shadow: 0 6px 16px rgba(22,154,176,.3);
+}
+.g-envase-item { position: relative; overflow: hidden; }
+.g-envase-icon {
+  font-size: 34px;
+  width: 64px; height: 64px; margin: 0 auto 16px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(22,154,176,.12), transparent 72%);
+}
+
+/* ---------- Cotizador: progreso alineado al configurador ---------- */
+.pg-cotizador .g-progress-step span {
+  background: var(--white) !important;
+  border-color: var(--border) !important;
+}
+.pg-cotizador .g-progress-step.active span {
+  background: linear-gradient(145deg, #1eb3c9, #169ab0) !important;
+  border-color: #169ab0 !important;
+  box-shadow: 0 4px 14px rgba(22,154,176,.32) !important;
+}
+.pg-cotizador .g-progress-step.done span {
+  background: var(--dark) !important;
+  border-color: var(--dark) !important;
+}
+.pg-cotizador .g-hero { padding: clamp(56px,7vw,76px) 0 clamp(44px,5vw,56px) !important; }
+
+/* ============================================================
+   COMPOSICIÓN DE PRODUCTOS — armá tu línea completa
+   ============================================================ */
+.comp-section { position: relative; }
+.comp-intro-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  align-items: center;
+  margin-bottom: 44px;
+}
+.comp-intro-img {
+  border-radius: var(--radius-lg, 22px);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg, 0 20px 60px rgba(7,23,47,.13));
+}
+.comp-intro-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.comp-builder {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg, 22px);
+  box-shadow: var(--shadow-md);
+  padding: 32px;
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 32px;
+}
+.comp-picker-title {
+  font-size: 11px; font-weight: 900; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--aqua); margin-bottom: 16px;
+}
+.comp-picker-list { display: flex; flex-direction: column; gap: 8px; }
+.comp-chip {
+  display: flex; align-items: center; gap: 10px;
+  border: 2px solid var(--border); border-radius: 10px;
+  padding: 10px 14px; cursor: pointer; user-select: none;
+  font-size: 13.5px; font-weight: 700; color: var(--mid);
+  transition: all .18s;
+  background: var(--white);
+}
+.comp-chip:hover { border-color: rgba(22,154,176,.5); }
+.comp-chip.selected { background: var(--aqua-light); border-color: var(--aqua); color: var(--aqua); }
+.comp-chip .comp-check {
+  width: 18px; height: 18px; border-radius: 5px; flex-shrink: 0;
+  border: 2px solid var(--border); display: flex; align-items: center; justify-content: center;
+  font-size: 11px; color: #fff; transition: all .18s;
+}
+.comp-chip.selected .comp-check { background: var(--aqua); border-color: var(--aqua); }
+.comp-picker-note { font-size: 12px; color: var(--mid); margin-top: 12px; line-height: 1.6; }
+.comp-marca-field { margin-top: 18px; }
+.comp-marca-field label {
+  display: block; font-size: 11px; font-weight: 900; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--mid); margin-bottom: 7px;
+}
+.comp-marca-field input {
+  width: 100%; padding: 11px 14px; border: 2px solid var(--border);
+  border-radius: 8px; font-size: 14px; font-family: inherit;
+}
+.comp-stage {
+  border-radius: var(--radius-lg, 22px);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.55) 0%, rgba(255,255,255,.15) 60%, transparent 100%),
+    url('assets/redesign/05_texturas/pedestal_blanco.png') center bottom / cover no-repeat,
+    radial-gradient(ellipse at 50% 85%, #dfeef3 0%, #f2f8fa 55%, #f8fbfc 100%);
+  min-height: 380px;
+  display: flex; align-items: flex-end; justify-content: center;
+  gap: 6px;
+  padding: 40px 24px 36px;
+  position: relative;
+  overflow: hidden;
+}
+.comp-stage-empty {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 10px; text-align: center; padding: 24px;
+  color: var(--mid); font-size: 14px; font-weight: 600;
+}
+.comp-stage-item { display: flex; align-items: flex-end; filter: drop-shadow(0 14px 18px rgba(7,23,47,.16)); }
+.comp-cta-row {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; flex-wrap: wrap; margin-top: 20px;
+  grid-column: 1 / -1;
+  border-top: 1px solid var(--border); padding-top: 20px;
+}
+@media (max-width: 900px) {
+  .comp-intro-grid { grid-template-columns: 1fr; }
+  .comp-builder { grid-template-columns: 1fr; }
+}
