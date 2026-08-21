@@ -55,7 +55,7 @@
   <meta name="description" content="Laboratorio cosmetológico en Buenos Aires. Desarrollo y fabricación de cosméticos para tu marca." />
 
   <link rel="stylesheet" href="styles.css" />
-  <link rel="stylesheet" href="styles-polish.css?v=v7" />
+  <link rel="stylesheet" href="styles-polish.css?v=v8" />
   <link rel="stylesheet" href="mobile-menu.css?v=2" />
 </head>
 <body>
@@ -121,19 +121,26 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <a class="hh-btn-cta" href="cotizador">SOLICITAR COTIZACIÓN →</a>
         <a class="hh-btn-ghost" href="#proceso">CONOCÉ MÁS</a>
       </div>
+      <div class="hh-mini-list">
+        <span>✓ Desarrollo integral</span>
+        <span>✓ Fabricación propia</span>
+        <span>✓ Acompañamiento</span>
+      </div>
     </div>
 
     <div class="hh-composition" aria-hidden="true">
+      <div class="hh-pedestal"></div>
       <div class="hh-comp-glow"></div>
 
-      <div class="hh-comp-item hh-comp-creamy">
-        <img src="assets/redesign/07_creamy/creamy_hero_clean.webp" alt="" width="300" height="450" loading="eager">
-        <div class="hh-greet-card">¡Hola!<br>Bienvenido a Genus.</div>
-      </div>
+      <picture class="hh-comp-products">
+        <source type="image/webp" srcset="assets/redesign/01_brand/hero_products_vignette.webp">
+        <img src="assets/redesign/01_brand/hero_products_vignette.png" alt="Shampoo, sérum y crema para tu marca" width="900" height="658" loading="eager">
+      </picture>
 
-      <div class="hh-comp-item hh-comp-p1" id="heroProd1"></div>
-      <div class="hh-comp-item hh-comp-p2" id="heroProd2"></div>
-      <div class="hh-comp-item hh-comp-p3" id="heroProd3"></div>
+      <div class="hh-comp-creamy">
+        <img src="assets/redesign/07_creamy/creamy_hero_clean.webp" alt="Creamy, el asistente de Laboratorio Genus" width="300" height="450" loading="eager">
+        <div class="hh-greet-card">¡Hola!<br>Soy Creamy AI</div>
+      </div>
     </div>
 
   </div>
@@ -161,52 +168,48 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 </section>
 
-<!-- ============ FEATURES STRIP ============ -->
-<section class="hf">
-  <div class="hf-card">
-    <div class="hf-inner">
-      <div class="hf-item">
-        <div class="hf-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M9 3v7l-6 11h18L15 10V3"/></svg>
+<!-- ============ VALORES GENUS ============ -->
+<section class="hv-section" id="proceso">
+  <div class="hv-wrap">
+    <div class="hv-head">
+      <span class="hh-tag hh-tag-light">Nuestra propuesta</span>
+      <h2>Más que un laboratorio,<br>somos tu aliado estratégico</h2>
+    </div>
+    <div class="hv-grid">
+      <article class="hv-card">
+        <div class="hv-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v6.5L4 18a2 2 0 0 0 1.7 3h12.6A2 2 0 0 0 20 18l-6-9.5V2"/><line x1="8.5" y1="2" x2="15.5" y2="2"/></svg>
         </div>
-        <div class="hf-text">
-          <h4>Calidad que<br>se ve y se siente</h4>
-          <p>Trabajamos con materias primas seleccionadas y procesos controlados.</p>
+        <h3>Desarrollo a medida</h3>
+        <p>Desarrollamos el producto según tus necesidades. También contamos con un banco de desarrollos previamente aprobados para acelerar el lanzamiento.</p>
+      </article>
+      <article class="hv-card">
+        <div class="hv-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M9 3v7l-6 11h18L15 10V3"/></svg>
         </div>
-      </div>
-      <div class="hf-item">
-        <div class="hf-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v6.5L4 18a2 2 0 0 0 1.7 3h12.6A2 2 0 0 0 20 18l-6-9.5V2"/><line x1="8.5" y1="2" x2="15.5" y2="2"/></svg>
+        <h3>Fabricación propia</h3>
+        <p>Contamos con equipamiento de última generación y un equipo altamente capacitado para producir bajo altos estándares de calidad.</p>
+      </article>
+      <article class="hv-card">
+        <div class="hv-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="3"/><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/></svg>
         </div>
-        <div class="hf-text">
-          <h4>Tecnología<br>y experiencia</h4>
-          <p>Contamos con equipamiento de última generación y un equipo altamente capacitado.</p>
+        <h3>Acompañamiento</h3>
+        <p>Acompañamos tu proyecto en cada etapa, con cercanía y compromiso, desde la idea inicial hasta el producto terminado.</p>
+      </article>
+      <article class="hv-card">
+        <div class="hv-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
         </div>
-      </div>
-      <div class="hf-item">
-        <div class="hf-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="3"/><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/></svg>
-        </div>
-        <div class="hf-text">
-          <h4>Somos tu socio<br>estratégico</h4>
-          <p>Acompañamos tu proyecto en cada etapa, con cercanía y compromiso.</p>
-        </div>
-      </div>
-      <div class="hf-item">
-        <div class="hf-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
-        </div>
-        <div class="hf-text">
-          <h4>Llave en mano</h4>
-          <p>Nos encargamos del desarrollo, los envases, la producción, el envasado y la entrega.</p>
-        </div>
-      </div>
+        <h3>Llave en mano</h3>
+        <p>Nos encargamos del desarrollo, los envases, la producción, el envasado y la entrega.</p>
+      </article>
     </div>
   </div>
 </section>
 
 <!-- ============ PROCESO ============ -->
-<section class="hp" id="proceso">
+<section class="hp">
   <div class="hp-inner">
     <div class="hp-left">
       <span class="sup">Así trabajamos</span>
@@ -279,22 +282,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 </footer>
 
-<script src="mockups.js"></script>
 <script src="assets/mobile-menu.js?v=2" defer></script>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-  if (!window.GENUS_MOCKUP) return;
-  var slots = [
-    { id: 'heroProd1', shape: 'Shampoo', color: 'Incoloro', size: 118, nombre: 'SHAMPOO' },
-    { id: 'heroProd2', shape: 'Serum',   color: 'Incoloro', size: 96,  nombre: 'SERUM' },
-    { id: 'heroProd3', shape: 'Crema',   color: 'Blanco',   size: 108, nombre: 'CREMA' }
-  ];
-  slots.forEach(function (s) {
-    var el = document.getElementById(s.id);
-    if (el) el.innerHTML = GENUS_MOCKUP.getSVG(s.shape, s.color, s.size, 'TU MARCA', s.nombre);
-  });
-});
-</script>
 
 
     <!-- Creamy V2 — Asistente Inteligente -->
