@@ -3,41 +3,56 @@ import sharp from 'sharp';
 const SRC = 'assets/redesign/07_creamy/creamy_original_referencia.png';
 const OUT = 'assets/redesign/07_creamy/creamy_hero_clean.png';
 
-// Región del logo falso (círculo + "LABORATORIO GENUS").
-const region = { left: 145, top: 868, width: 615, height: 210 };
-
-// Mismo lenguaje visual que el resto de los assets del sitio (mockups.js
-// y las fotos de producto): una etiqueta "TU MARCA" — no una etiqueta en
-// blanco vacía, que se leía como un parche. Esto además es coherente con
-// que Creamy ES uno de los envases de la marca dentro de la escena.
-const labelW = region.width - 48;
-const labelH = region.height - 40;
-const labelX = Math.round((region.width - labelW) / 2);
-const labelY = Math.round((region.height - labelH) / 2);
-
-const labelSvg = `
-<svg width="${region.width}" height="${region.height}" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="g" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#ffffff"/>
-      <stop offset="100%" stop-color="#f6f8f9"/>
-    </linearGradient>
-    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
-      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#0a1e2e" flood-opacity="0.16"/>
-    </filter>
-  </defs>
-  <rect x="${labelX}" y="${labelY}" width="${labelW}" height="${labelH}" rx="10"
-        fill="url(#g)" filter="url(#soft)"/>
-  <text x="${region.width / 2}" y="${labelY + labelH * 0.6}" text-anchor="middle"
-        font-family="'Helvetica Neue',Arial,sans-serif" font-size="${Math.round(labelH * 0.36)}"
-        font-weight="600" letter-spacing="2.5" fill="#1a2a35">TU MARCA</text>
-</svg>`;
+// Región del logo falso (círculo + "LABORATORIO GENUS"), con margen
+// generoso — se recorta sola contra la silueta real del envase más abajo,
+// así que no hace falta medirla al pixel.
+const region = { left: 290, top: 862, width: 530, height: 186 };
+const source = { left: 290, top: 838, width: 530, height: 10 };
+const inset = 22;
 
 async function run() {
-  const labelPng = await sharp(Buffer.from(labelSvg)).png().toBuffer();
+  // 1) Relleno: franja limpia inmediatamente arriba, estirada solo en
+  //    vertical (conserva el degradado horizontal real del envase).
+  const fill = await sharp(SRC)
+    .extract(source)
+    .blur(3)
+    .resize(region.width, region.height, { fit: 'fill' })
+    .blur(5)
+    .removeAlpha()
+    .toBuffer();
+
+  // 2) Máscara de pluma (opaca al centro, se desvanece a los bordes).
+  const featherBg = await sharp({ create: { width: region.width, height: region.height, channels: 3, background: { r: 0, g: 0, b: 0 } } }).png().toBuffer();
+  const featherFg = await sharp({ create: { width: region.width - inset * 2, height: region.height - inset * 2, channels: 3, background: { r: 255, g: 255, b: 255 } } }).png().toBuffer();
+  const featherMask = await sharp(featherBg)
+    .composite([{ input: featherFg, left: inset, top: inset }])
+    .blur(Math.max(6, inset * 0.9))
+    .greyscale()
+    .toColourspace('b-w')
+    .raw()
+    .toBuffer();
+
+  // 3) Máscara real del envase en esa región (su propio canal alfa) — así
+  //    el parche NUNCA pinta más allá de la silueta de Creamy, sin
+  //    importar si el rectángulo de arriba se pasa un poco del cuerpo.
+  const silhouette = await sharp(SRC)
+    .extract(region)
+    .ensureAlpha()
+    .extractChannel('alpha')
+    .raw()
+    .toBuffer();
+
+  // 4) Combinar ambas máscaras (mínimo de las dos) y aplicarla como alfa.
+  const combined = Buffer.alloc(region.width * region.height);
+  for (let i = 0; i < combined.length; i++) {
+    combined[i] = Math.min(featherMask[i], silhouette[i]);
+  }
+  const maskPng = await sharp(combined, { raw: { width: region.width, height: region.height, channels: 1 } }).png().toBuffer();
+
+  const feathered = await sharp(fill).joinChannel(maskPng).png().toBuffer();
 
   await sharp(SRC)
-    .composite([{ input: labelPng, left: region.left, top: region.top }])
+    .composite([{ input: feathered, left: region.left, top: region.top }])
     .png()
     .toFile(OUT);
 
