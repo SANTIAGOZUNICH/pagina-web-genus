@@ -2181,15 +2181,16 @@ body {
 @media (max-width: 640px) {
   .hn-inner { height: 64px !important; }
   .hn-logo { margin-right: 12px !important; }
-  .hh-inner-v6 { padding: 26px 0 8px; }
-  .hh-title-v6 { font-size: clamp(26px, 8vw, 32px); margin-bottom: 14px; }
-  .hh-sub-v6 { font-size: 14.5px; margin-bottom: 24px; }
-  .hh-mini-list { margin-top: 16px; }
+  .hh-inner-v6 { padding: 22px 0 6px; }
+  .hh-content-v6 .hh-tag { margin-bottom: 14px; }
+  .hh-title-v6 { font-size: clamp(26px, 8vw, 32px); margin-bottom: 10px; }
+  .hh-sub-v6 { font-size: 14.5px; margin-bottom: 18px; }
+  .hh-mini-list { margin-top: 12px; }
 
   .hh-composition {
     width: calc(100vw - 20px);
     max-width: 100%;
-    margin: 16px auto 0;
+    margin: 10px auto 0;
   }
 }
 
