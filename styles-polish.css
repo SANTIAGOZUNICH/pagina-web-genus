@@ -2282,3 +2282,140 @@ body {
   .hv-grid { grid-template-columns: 1fr; }
   .hv-head { text-align: left; }
 }
+
+/* ============================================================
+   PRODUCTOS — categorías rediseñadas (solo productos.html;
+   selectores con .pg-productos / clases nuevas, no tocan las
+   clases .g-hero / .g-section-white / .g-product-card
+   compartidas con otras páginas)
+   ============================================================ */
+.pg-productos .g-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-image:
+    radial-gradient(ellipse 50% 60% at 90% 15%, rgba(45, 212, 230, .18) 0%, transparent 60%),
+    radial-gradient(ellipse 45% 50% at 6% 95%, rgba(22, 154, 176, .15) 0%, transparent 65%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='56' viewBox='0 0 64 56'%3E%3Ccircle cx='32' cy='28' r='1.4' fill='%232dd4e6' fill-opacity='0.14'/%3E%3Cpath d='M32 4l26 15v26L32 60 6 45V19z' fill='none' stroke='%232dd4e6' stroke-opacity='0.05' stroke-width='0.6'/%3E%3C/svg%3E");
+  background-size: cover, cover, 64px 56px;
+}
+
+.g-cat-section {
+  position: relative;
+  overflow: hidden;
+}
+.g-cat-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(ellipse 40% 45% at 96% 4%, rgba(22, 154, 176, .07) 0%, transparent 65%),
+    radial-gradient(ellipse 35% 40% at 2% 92%, rgba(45, 212, 230, .06) 0%, transparent 65%);
+}
+.g-cat-section > .g-wrap { position: relative; z-index: 1; }
+
+.g-cat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+.g-cat-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: 0 4px 16px rgba(7, 23, 47, .05);
+  transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+}
+.g-cat-card:hover,
+.g-cat-card:focus-visible {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 44px rgba(7, 23, 47, .12), 0 0 0 1px rgba(22, 154, 176, .3);
+  border-color: rgba(22, 154, 176, .35);
+}
+
+.g-cat-media {
+  position: relative;
+  height: 260px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(ellipse 70% 80% at 50% 55%, rgba(22, 154, 176, .10) 0%, rgba(22, 154, 176, .03) 55%, transparent 78%),
+    #f8fbfc;
+  overflow: hidden;
+}
+.g-cat-media picture {
+  width: 78%;
+  height: 78%;
+  display: block;
+}
+.g-cat-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  transition: transform .4s ease;
+}
+.g-cat-card:hover .g-cat-media img { transform: scale(1.045) translateY(-4px); }
+
+.g-cat-body {
+  padding: 26px 26px 28px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.g-cat-tag {
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--aqua);
+  margin-bottom: 10px;
+}
+.g-cat-body h3 {
+  font-size: 21px;
+  font-weight: 900;
+  margin: 0 0 10px;
+  color: var(--dark);
+}
+.g-cat-body p {
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: var(--mid);
+  margin: 0 0 20px;
+  flex: 1;
+}
+.g-cat-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  font-weight: 800;
+  color: var(--aqua-dark);
+}
+.g-cat-link svg { transition: transform .25s ease; }
+.g-cat-card:hover .g-cat-link svg { transform: translateX(4px); }
+
+@media (max-width: 1100px) {
+  .g-cat-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 640px) {
+  .g-cat-grid { grid-template-columns: 1fr; gap: 20px; }
+  .g-cat-media { height: 230px; }
+  .g-cat-body { padding: 22px 22px 24px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .g-cat-card, .g-cat-media img, .g-cat-link svg { transition: none !important; }
+}
