@@ -2060,8 +2060,8 @@ body {
   display: flex;
   align-items: center;
   gap: clamp(24px, 4vw, 64px);
-  min-height: clamp(560px, 68vh, 660px);
-  padding: 56px 0 88px;
+  min-height: clamp(480px, 56vh, 560px);
+  padding: 48px 0 56px;
 }
 
 /* ---------- Bloque de texto ---------- */
@@ -2140,198 +2140,173 @@ body {
 .hh-composition {
   position: relative;
   flex: 1 1 auto;
-  height: clamp(380px, 40vw, 480px);
+  height: clamp(320px, 32vw, 400px);
   z-index: 2;
 }
 
-/* Pedestal: superficie glossy que une Creamy + productos */
+/* Pedestal: plataforma ovalada navy/glossy, borde cyan fino, con glow
+   inferior — todos los productos y Creamy se apoyan sobre ella. */
 .hh-pedestal {
   position: absolute;
   left: 50%;
-  bottom: 6%;
+  bottom: 4%;
   transform: translateX(-50%);
-  width: 74%;
-  height: 26px;
+  width: 82%;
+  height: 30px;
   border-radius: 50%;
-  background: radial-gradient(ellipse at center, rgba(45,212,230,.28) 0%, rgba(45,212,230,.1) 55%, transparent 78%);
-  box-shadow: 0 0 0 1px rgba(45,212,230,.14) inset;
-  z-index: 0;
+  background: linear-gradient(180deg, rgba(18, 34, 58, .9) 0%, rgba(8, 18, 34, .96) 100%);
+  border: 1px solid rgba(45, 212, 230, .38);
+  box-shadow:
+    0 0 0 1px rgba(45, 212, 230, .08),
+    0 1px 0 rgba(255, 255, 255, .06) inset,
+    0 14px 30px rgba(0, 0, 0, .45);
+  z-index: 1;
 }
 .hh-pedestal::after {
   content: '';
   position: absolute;
-  inset: 6px 18%;
+  inset: 40% 10% auto;
+  height: 4px;
   border-radius: 50%;
-  background: rgba(45, 212, 230, .16);
-  filter: blur(6px);
+  background: rgba(140, 235, 245, .35);
+  filter: blur(3px);
 }
 
 .hh-comp-glow {
   position: absolute;
   left: 50%;
-  bottom: 10%;
+  bottom: 6%;
   transform: translateX(-50%);
-  width: 84%;
-  height: 72%;
-  background: radial-gradient(ellipse at center, rgba(45,212,230,.24) 0%, rgba(45,212,230,.08) 50%, transparent 74%);
-  filter: blur(14px);
+  width: 88%;
+  height: 60%;
+  background: radial-gradient(ellipse at center, rgba(45,212,230,.26) 0%, rgba(45,212,230,.09) 50%, transparent 74%);
+  filter: blur(16px);
   z-index: 0;
   animation: hh-glow-pulse 8s ease-in-out infinite;
 }
 @keyframes hh-glow-pulse {
   0%, 100% { opacity: 1; }
-  50% { opacity: .82; }
+  50% { opacity: .8; }
 }
 
-/* Composición fotográfica de productos (imagen real, con viñeta que se
-   funde con el fondo navy — actúa a la vez como el halo de luz) */
-.hh-comp-products {
+/* Elementos individuales de la composición — cada producto se posiciona,
+   escala y anima por separado sobre el mismo pedestal, con su propia
+   sombra de contacto (pseudo-elemento) para no verse flotando. */
+.hh-prod {
   position: absolute;
-  right: 0;
   bottom: 6%;
+  filter: drop-shadow(0 10px 14px rgba(0, 0, 0, .38));
+  -webkit-mask-image: radial-gradient(ellipse 78% 88% at 50% 55%, #000 72%, transparent 100%);
+  mask-image: radial-gradient(ellipse 78% 88% at 50% 55%, #000 72%, transparent 100%);
+}
+.hh-prod picture,
+.hh-prod img { width: 100%; height: auto; display: block; }
+.hh-prod::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -6%;
+  transform: translateX(-50%);
   width: 72%;
-  max-width: 560px;
-  z-index: 1;
+  height: 14%;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, .4) 0%, transparent 72%);
+  z-index: -1;
+}
+
+.hh-prod-shampoo {
+  left: 27%;
+  width: 30%;
+  bottom: 7%;
+  z-index: 2;
   animation: hh-float-b 7s ease-in-out infinite;
 }
-.hh-comp-products img { width: 100%; height: auto; display: block; }
+.hh-prod-serum {
+  left: 60%;
+  width: 9.5%;
+  bottom: 10%;
+  z-index: 4;
+  animation: hh-float-c 6s ease-in-out infinite;
+}
+.hh-prod-crema {
+  left: 68%;
+  width: 17.5%;
+  bottom: 5%;
+  z-index: 5;
+  animation: hh-float-c 6.4s ease-in-out infinite reverse;
+}
 
-/* Creamy: asset real, superpuesto al borde de la composición para dar
-   profundidad — "segundo plano" respecto del producto protagonista */
+/* Creamy: presencia importante, parada junto al shampoo sobre la misma
+   superficie — ya no es una tarjeta flotante ni tiene speech bubble. */
 .hh-comp-creamy {
   position: absolute;
-  left: 2%;
-  bottom: 2%;
-  z-index: 2;
-  width: clamp(150px, 18vw, 240px);
-  filter: drop-shadow(0 20px 26px rgba(5, 14, 28, .4));
+  left: 0;
+  bottom: 5%;
+  width: 25%;
+  z-index: 3;
+  filter: drop-shadow(0 14px 18px rgba(0, 0, 0, .42));
   animation: hh-float-a 5.5s ease-in-out infinite;
 }
+.hh-comp-creamy picture,
 .hh-comp-creamy img { width: 100%; height: auto; display: block; }
-
-.hh-greet-card {
+.hh-comp-creamy::after {
+  content: '';
   position: absolute;
-  top: 2%;
-  left: 92%;
-  width: max-content;
-  max-width: 150px;
-  background: rgba(255, 255, 255, .12);
-  backdrop-filter: blur(14px) saturate(160%);
-  -webkit-backdrop-filter: blur(14px) saturate(160%);
-  border: 1px solid rgba(255, 255, 255, .22);
-  border-radius: 14px;
-  padding: 9px 13px;
-  font-size: 11.5px;
-  font-weight: 600;
-  line-height: 1.4;
-  color: #ffffff;
-  box-shadow: 0 12px 28px rgba(5, 14, 28, .3);
+  left: 50%;
+  bottom: -5%;
+  transform: translateX(-50%);
+  width: 78%;
+  height: 15%;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, .42) 0%, transparent 72%);
+  z-index: -1;
 }
 
 @keyframes hh-float-a {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
+  50% { transform: translateY(-7px); }
 }
 @keyframes hh-float-b {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-5px); }
+  50% { transform: translateY(-4px); }
 }
-
-/* ---------- Floating stats bar — una sola fila en desktop ---------- */
-.hh-stats-float {
-  position: relative;
-  z-index: 3;
-  width: min(1080px, calc(100% - 56px));
-  margin: 0 auto;
-  transform: translateY(-46%);
-  background: rgba(10, 24, 42, .58);
-  backdrop-filter: blur(18px) saturate(160%);
-  -webkit-backdrop-filter: blur(18px) saturate(160%);
-  border: 1px solid rgba(45, 212, 230, .22);
-  border-radius: 16px;
-  box-shadow: 0 20px 50px rgba(5, 14, 28, .35);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: nowrap;
-  padding: 18px 20px;
-  gap: 0;
-}
-.hh-stat-v6 {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  padding: 0 18px;
-  color: #ffffff;
-  white-space: nowrap;
-}
-.hh-stat-v6 svg { color: #2dd4e6; flex-shrink: 0; }
-.hh-stat-v6 strong { font-size: 17px; font-weight: 800; line-height: 1; }
-.hh-stat-v6 span { font-size: 11px; color: rgba(224, 238, 242, .68); line-height: 1.3; }
-.hh-stat-sep {
-  width: 1px;
-  height: 28px;
-  background: rgba(255, 255, 255, .14);
-  flex-shrink: 0;
-}
-
-/* ---------- Responsive ---------- */
-@media (max-width: 1250px) {
-  .hh-stats-float { width: calc(100% - 40px); padding: 16px 12px; }
-  .hh-stat-v6 { padding: 0 12px; gap: 7px; }
-  .hh-stat-v6 strong { font-size: 15px; }
-  .hh-stat-v6 span { font-size: 10px; }
+@keyframes hh-float-c {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
 }
 
 .hv-accent { color: #169ab0; }
 
 /* ---------- Tablet (≤1100px): composición debajo del texto ---------- */
 @media (max-width: 1100px) {
-  .hh-inner-v6 { flex-direction: column; align-items: stretch; padding: 44px 0 64px; min-height: auto; }
+  .hh-inner-v6 { flex-direction: column; align-items: stretch; padding: 40px 0 52px; min-height: auto; }
   .hh-content-v6 { width: 100%; text-align: center; }
   .hh-content-v6 .hh-sub-v6 { max-width: 520px; margin-left: auto; margin-right: auto; }
   .hh-btns-v6, .hh-mini-list { justify-content: center; }
   .hh-composition {
-    width: min(560px, calc(100vw - 32px));
+    width: min(520px, calc(100vw - 32px));
     max-width: 100%;
-    height: clamp(280px, 62vw, 380px);
-    margin: 32px auto 0;
+    height: clamp(260px, 56vw, 340px);
+    margin: 30px auto 0;
   }
-  .hh-stats-float {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    width: calc(100% - 32px);
-    gap: 10px;
-  }
-  .hh-stat-v6 { flex-direction: column; align-items: center; text-align: center; gap: 6px; padding: 4px 2px; }
-  .hh-stat-sep { display: none; }
 }
 
-/* ---------- Mobile (≤640px): composición contenida, stats 2×2 ---------- */
+/* ---------- Mobile (≤640px): composición contenida, sin espacios vacíos ---------- */
 @media (max-width: 640px) {
   .hn-inner { height: 64px !important; }
   .hn-logo { margin-right: 12px !important; }
-  .hh-inner-v6 { padding: 30px 0 56px; }
-  .hh-title-v6 { font-size: clamp(26px, 8vw, 32px); }
-  .hh-sub-v6 { font-size: 14.5px; }
+  .hh-inner-v6 { padding: 26px 0 8px; }
+  .hh-title-v6 { font-size: clamp(26px, 8vw, 32px); margin-bottom: 14px; }
+  .hh-sub-v6 { font-size: 14.5px; margin-bottom: 24px; }
+  .hh-mini-list { margin-top: 16px; }
 
   .hh-composition {
-    width: calc(100vw - 32px);
-    height: clamp(220px, 62vw, 280px);
-    margin: 26px auto 0;
+    width: calc(100vw - 24px);
+    height: clamp(200px, 58vw, 260px);
+    margin: 20px auto 0;
   }
-  .hh-comp-creamy { width: 30%; left: 2%; }
-  .hh-comp-products { width: 76%; right: 0; }
-
-  .hh-stats-float {
-    grid-template-columns: repeat(2, 1fr);
-    transform: translateY(-24px);
-    padding: 16px 14px;
-    gap: 14px 8px;
-    width: calc(100% - 32px);
-  }
-  .hh-stat-v6 strong { font-size: 16px; }
-  .hh-stat-v6 span { font-size: 10.5px; }
+  .hh-comp-creamy { width: 27%; }
+  .hh-prod-shampoo { width: 32%; left: 25%; }
+  .hh-prod-serum { left: 58%; width: 10%; }
+  .hh-prod-crema { left: 67%; width: 19%; }
 }
 
 @media (max-width: 400px) {
@@ -2340,7 +2315,7 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hh-comp-creamy, .hh-comp-products, .hh-comp-glow { animation: none !important; }
+  .hh-comp-creamy, .hh-prod-shampoo, .hh-prod-serum, .hh-prod-crema, .hh-comp-glow { animation: none !important; }
 }
 
 /* ============================================================
@@ -2355,7 +2330,7 @@ body {
 
 .hv-section {
   background: linear-gradient(180deg, #ffffff 0%, #f7fafb 100%);
-  padding: clamp(72px, 8vw, 104px) 0;
+  padding: clamp(52px, 6vw, 76px) 0 clamp(72px, 8vw, 104px);
 }
 .hv-wrap {
   width: min(1200px, calc(100% - 56px));
