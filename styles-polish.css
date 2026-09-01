@@ -2831,3 +2831,13 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .pg-quienes .g-mv-card, .pg-quienes .g-valor-card, .pg-quienes .g-porque-item, .g-nos-cta-wa { transition: none !important; }
 }
+
+/* ---------- Nosotros mobile: el globo de saludo de Creamy V2 caía
+   sobre el botón "Hablar con un asesor" del Hero en 375px (el widget
+   es fixed y ese botón cae justo en su zona vertical). Se oculta solo
+   el globo automático en esta página en mobile — el botón flotante
+   (FAB) del widget sigue 100% visible y funcional, no se toca su
+   lógica ni su comportamiento en el resto del sitio. ---------- */
+@media (max-width: 640px) {
+  .pg-quienes #creamy-v2 .cv2-greeting { display: none !important; }
+}
