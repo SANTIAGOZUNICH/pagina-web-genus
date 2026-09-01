@@ -2793,6 +2793,28 @@ body {
 }
 .g-nos-cta-wa:hover { transform: translateY(-2px); background: rgba(37, 211, 102, .12); }
 
+/* ---------- Optimización de espaciado desktop/tablet (≥641px) ----------
+   Solo compacta padding vertical; no toca mobile, textos, colores ni
+   estructura. */
+@media (min-width: 641px) {
+  .pg-quienes .g-hero {
+    padding: clamp(52px, 6vw, 72px) 0 clamp(44px, 5vw, 56px) !important;
+  }
+  .pg-quienes .g-nos-historia,
+  .pg-quienes .g-nos-mv,
+  .pg-quienes .g-nos-valores,
+  .pg-quienes .g-nos-porque,
+  .pg-quienes .g-nos-video {
+    padding: clamp(44px, 5.5vw, 60px) 0 !important;
+  }
+  .pg-quienes .g-section-head {
+    margin-bottom: clamp(32px, 4vw, 48px) !important;
+  }
+  .g-nos-cta {
+    padding: clamp(44px, 5.5vw, 64px) 0;
+  }
+}
+
 @media (max-width: 640px) {
   .pg-quienes .g-hero { padding: 40px 0 44px !important; }
   .g-nos-crescent { display: none; }
