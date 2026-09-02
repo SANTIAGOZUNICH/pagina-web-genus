@@ -3010,6 +3010,8 @@ body {
   background-image: radial-gradient(ellipse 55% 30% at 50% 0%, rgba(45, 212, 230, .24) 0%, transparent 68%) !important;
 }
 .k-badge-section > .g-wrap { position: relative; z-index: 1; }
+.pg-llave .k-badge-section { padding-bottom: 32px !important; }
+.pg-llave .k-incluye-section { padding-top: 32px !important; }
 
 /* ---------- Qué incluye: cards del proceso ---------- */
 .pg-llave .k-incluye-section .g-process-step {
@@ -3089,6 +3091,9 @@ body {
   .k-orbit-icon svg { width: 18px; height: 18px; }
   .k-orbit-node strong { font-size: 9.5px; }
   .pg-llave .k-hero-grid { padding: 40px 0 36px; gap: 28px; }
+  .pg-llave .k-incluye-section .g-process-step { padding: 20px 20px; }
+  .pg-llave .k-incluye-section .g-process-grid { gap: 16px; }
+  .g-process-num { width: 34px; height: 34px; margin-bottom: 10px !important; }
 }
 
 @media (prefers-reduced-motion: reduce) {
