@@ -2841,3 +2841,259 @@ body {
 @media (max-width: 640px) {
   .pg-quienes #creamy-v2 .cv2-greeting { display: none !important; }
 }
+
+/* ============================================================
+   LLAVE EN MANO — hero con circuito de etapas + pasada premium
+   (solo llave-en-mano.html; .pg-llave para las clases compartidas
+   .g-hero / .g-section-* / .g-porque-* con calidad/quienes-somos)
+   ============================================================ */
+
+/* ---------- Hero: dos columnas, texto + circuito circular ---------- */
+.pg-llave .g-hero { position: relative; overflow: hidden; }
+.pg-llave .g-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-image:
+    radial-gradient(ellipse 55% 65% at 88% 15%, rgba(45, 212, 230, .14) 0%, transparent 62%),
+    radial-gradient(ellipse 45% 55% at 4% 100%, rgba(22, 154, 176, .14) 0%, transparent 65%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='56' viewBox='0 0 64 56'%3E%3Ccircle cx='32' cy='28' r='1.4' fill='%232dd4e6' fill-opacity='0.15'/%3E%3Cpath d='M32 4l26 15v26L32 60 6 45V19z' fill='none' stroke='%232dd4e6' stroke-opacity='0.06' stroke-width='0.6'/%3E%3C/svg%3E");
+  background-size: cover, cover, 64px 56px;
+}
+.pg-llave .k-hero-grid {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: clamp(28px, 5vw, 64px);
+  padding: clamp(52px, 6.5vw, 76px) 0 clamp(48px, 6vw, 68px);
+}
+.pg-llave .k-hero-text { flex: 0 0 auto; width: min(460px, 44%); }
+.pg-llave .k-hero-text .g-hero-actions { margin-top: 4px; }
+.pg-llave .k-hero-text h1 {
+  position: relative;
+  padding-bottom: 18px;
+  margin-bottom: 20px !important;
+}
+.pg-llave .k-hero-text h1::after {
+  content: '';
+  position: absolute;
+  left: 0; bottom: 0;
+  width: 56px; height: 3px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #2dd4e6, transparent);
+}
+.pg-llave .g-hero-tag {
+  background: rgba(45, 212, 230, .12) !important;
+  border: 1px solid rgba(45, 212, 230, .35) !important;
+  backdrop-filter: blur(6px) !important;
+  color: #eafcff !important;
+}
+
+/* ---------- Circuito circular de etapas ---------- */
+.k-orbit {
+  --orbit-radius: clamp(150px, 15vw, 195px);
+  --orbit-node: 92px;
+  position: relative;
+  z-index: 2;
+  flex: 1 1 auto;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  max-width: 560px;
+  margin: 0 auto;
+}
+.k-orbit-ring {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: calc(var(--orbit-radius) * 2);
+  height: calc(var(--orbit-radius) * 2);
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 1px solid rgba(45, 212, 230, .28);
+  box-shadow: 0 0 40px rgba(45, 212, 230, .08) inset;
+}
+.k-orbit-ring--outer {
+  width: calc(var(--orbit-radius) * 2 + 70px);
+  height: calc(var(--orbit-radius) * 2 + 70px);
+  border-color: rgba(45, 212, 230, .12);
+  animation: k-orbit-spin 60s linear infinite;
+  border-style: dashed;
+}
+.k-orbit-center {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 84px; height: 84px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: rgba(10, 24, 42, .6);
+  border: 1px solid rgba(45, 212, 230, .35);
+  box-shadow: 0 0 34px rgba(45, 212, 230, .22), 0 8px 24px rgba(0, 0, 0, .35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(6px);
+}
+.k-orbit-center img { width: 46px; height: 46px; object-fit: contain; }
+
+.k-orbit-node {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: var(--orbit-node);
+  margin-top: calc(var(--orbit-node) / -2);
+  margin-left: calc(var(--orbit-node) / -2);
+  transform: rotate(calc(-90deg + var(--i) * 40deg)) translate(var(--orbit-radius)) rotate(calc(90deg - var(--i) * 40deg));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+}
+.k-orbit-icon {
+  position: relative;
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  background: rgba(15, 32, 54, .82);
+  border: 1px solid rgba(45, 212, 230, .4);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, .3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #7fe8f2;
+  transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+.k-orbit-icon svg { width: 22px; height: 22px; }
+.k-orbit-icon span {
+  position: absolute;
+  top: -6px; right: -6px;
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #2dd4e6, #169ab0);
+  color: #052032;
+  font-size: 9.5px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .3);
+}
+.k-orbit-node strong {
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: rgba(224, 238, 242, .82);
+}
+.k-orbit-node:hover .k-orbit-icon {
+  transform: translateY(-3px) scale(1.06);
+  border-color: rgba(45, 212, 230, .8);
+  box-shadow: 0 8px 22px rgba(45, 212, 230, .28);
+}
+
+@keyframes k-orbit-spin {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* ---------- Transición hero → badge ---------- */
+.k-badge-section {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(180deg, #0a1f38 0%, #eef7f9 6%, var(--white) 26%) !important;
+}
+.k-badge-section::before {
+  content: '' !important;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: radial-gradient(ellipse 55% 30% at 50% 0%, rgba(45, 212, 230, .24) 0%, transparent 68%) !important;
+}
+.k-badge-section > .g-wrap { position: relative; z-index: 1; }
+
+/* ---------- Qué incluye: cards del proceso ---------- */
+.pg-llave .k-incluye-section .g-process-step {
+  background: linear-gradient(160deg, #ffffff 0%, #f6fafc 100%) !important;
+  border: 1px solid rgba(22, 154, 176, .14) !important;
+  box-shadow: 0 2px 10px rgba(7, 23, 47, .04) !important;
+  padding: 30px 26px;
+}
+.pg-llave .k-incluye-section .g-process-step:hover {
+  transform: translateY(-5px) !important;
+  border-color: rgba(22, 154, 176, .34) !important;
+  box-shadow: 0 20px 40px rgba(7, 23, 47, .1) !important;
+}
+.g-process-num {
+  width: 40px; height: 40px;
+  font-size: 15px;
+}
+
+/* ---------- Envases ---------- */
+.pg-llave .k-envases-section .g-envase-item {
+  background: rgba(255, 255, 255, .9) !important;
+  border: 1px solid rgba(22, 154, 176, .14) !important;
+  box-shadow: 0 2px 8px rgba(7, 23, 47, .04) !important;
+}
+.pg-llave .k-envases-section .g-envase-item:hover {
+  background: #ffffff !important;
+  box-shadow: 0 18px 36px rgba(7, 23, 47, .1) !important;
+  border-color: rgba(22, 154, 176, .32) !important;
+}
+
+/* ---------- Beneficios clave (dark) ---------- */
+.k-beneficios-section { position: relative; overflow: hidden; }
+.k-beneficios-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(ellipse 42% 55% at 92% 8%, rgba(45, 212, 230, .12) 0%, transparent 62%),
+    radial-gradient(ellipse 38% 50% at 4% 95%, rgba(22, 154, 176, .12) 0%, transparent 65%);
+}
+.k-beneficios-section > .g-wrap { position: relative; z-index: 1; }
+.pg-llave .k-beneficios-section .g-porque-item {
+  background: #101928 !important;
+  border: 1px solid #1e2e3e !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+.pg-llave .k-beneficios-section .g-porque-item span {
+  color: #e0e8f0 !important;
+}
+.pg-llave .k-beneficios-section .g-porque-item:hover {
+  transform: translateY(-4px) !important;
+  border-color: rgba(45, 212, 230, .4) !important;
+  box-shadow: 0 16px 32px rgba(0, 0, 0, .25) !important;
+}
+
+@media (max-width: 1100px) {
+  .pg-llave .k-hero-grid { flex-direction: column; align-items: stretch; text-align: center; }
+  .pg-llave .k-hero-text { width: 100%; }
+  .pg-llave .k-hero-text .g-hero-actions { justify-content: center; }
+  .pg-llave .k-hero-text h1::after { left: 50%; transform: translateX(-50%); }
+  .k-orbit { max-width: 460px; margin-top: 8px; }
+}
+
+@media (max-width: 640px) {
+  .k-orbit {
+    --orbit-radius: clamp(110px, 34vw, 140px);
+    --orbit-node: 78px;
+    max-width: 340px;
+  }
+  .k-orbit-center { width: 64px; height: 64px; }
+  .k-orbit-center img { width: 34px; height: 34px; }
+  .k-orbit-icon { width: 42px; height: 42px; }
+  .k-orbit-icon svg { width: 18px; height: 18px; }
+  .k-orbit-node strong { font-size: 9.5px; }
+  .pg-llave .k-hero-grid { padding: 40px 0 36px; gap: 28px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .k-orbit-ring--outer { animation: none !important; }
+  .k-orbit-icon, .pg-llave .k-incluye-section .g-process-step, .pg-llave .k-envases-section .g-envase-item, .pg-llave .k-beneficios-section .g-porque-item {
+    transition: none !important;
+  }
+}
