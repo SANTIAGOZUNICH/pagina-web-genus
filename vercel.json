@@ -39,6 +39,18 @@
   ],
   "rewrites": [
     {
+      "source": "/entregas",
+      "destination": "https://appgenus.vercel.app/entregas"
+    },
+    {
+      "source": "/entregas/:path*",
+      "destination": "https://appgenus.vercel.app/entregas/:path*"
+    },
+    {
+      "source": "/_next/:path*",
+      "destination": "https://appgenus.vercel.app/_next/:path*"
+    },
+    {
       "source": "/quienes-somos",
       "destination": "/quienes-somos.html"
     },
