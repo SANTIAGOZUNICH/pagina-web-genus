@@ -3,6 +3,7 @@
  * GET /api/creamy-v2/debug
  */
 
+import { isAdminRequest, notFound } from '../../backend/creamy-v2/lib/admin-auth.js';
 import { probeAIProvider, getActiveProviderName, getProviderModel } from '../../backend/creamy-v2/lib/ai/provider.js';
 
 function json(res, status, body) {
@@ -13,6 +14,9 @@ function json(res, status, body) {
 }
 
 export default async function handler(req, res) {
+  // Diagnóstico: solo con CREAMY_ADMIN_TOKEN (Authorization: Bearer). Sin él, 404.
+  if (!isAdminRequest(req)) return notFound(res);
+
   if (req.method === 'OPTIONS') {
     res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');

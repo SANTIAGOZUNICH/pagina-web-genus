@@ -95,8 +95,12 @@ await testVisitorEvent();
 
 async function testSheetsDebug() {
   const res = mockRes();
-  await sheetsDebugHandler({ method: 'GET' }, res);
-  check('sheets-debug responde', res.statusCode === 503 || res.statusCode === 200);
+  // Sin token de administrador: 404 y no escribe nada en la planilla.
+  const saved = process.env.CREAMY_ADMIN_TOKEN;
+  delete process.env.CREAMY_ADMIN_TOKEN;
+  await sheetsDebugHandler({ method: 'GET', headers: {} }, res);
+  check('sheets-debug oculto sin token de administrador', res.statusCode === 404);
+  if (saved !== undefined) process.env.CREAMY_ADMIN_TOKEN = saved;
 }
 
 await testSheetsDebug();

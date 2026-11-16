@@ -3,6 +3,7 @@
  * GET /api/creamy-v2/health
  */
 
+import { isAdminRequest } from '../../backend/creamy-v2/lib/admin-auth.js';
 import { loadKnowledge } from '../../backend/creamy-v2/lib/knowledge.js';
 import { loadSystemPromptBase } from '../../backend/creamy-v2/lib/prompt.js';
 import { getActiveProviderName, getKeyInfo, getProviderModel } from '../../backend/creamy-v2/lib/ai/provider.js';
@@ -59,9 +60,14 @@ export default async function handler(req, res) {
 
   const ready = checks.knowledge && checks.system_prompt && checks.key_present;
 
+  const status = ready ? 'ready' : 'degraded';
+  // Público: solo lo que usa el widget (status). El detalle (proveedor, modelo, variables, errores) es administrativo.
+  if (!isAdminRequest(req)) {
+    return json(res, ready ? 200 : 503, { service: 'creamy-v2', status, timestamp: new Date().toISOString() });
+  }
   return json(res, ready ? 200 : 503, {
     service: 'creamy-v2',
-    status: ready ? 'ready' : 'degraded',
+    status,
     version: '2.0.0',
     provider,
     model,
