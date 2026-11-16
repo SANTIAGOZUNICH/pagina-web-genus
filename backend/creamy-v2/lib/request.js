@@ -63,5 +63,5 @@ export function normalizeUserMessage(message) {
 export function getEmergencyMessage(knowledge) {
   const email = knowledge?.laboratorio?.email || 'ventas@laboratoriogenus.com.ar';
   const wa = knowledge?.laboratorio?.whatsapp || 'https://wa.me/5491124980861';
-  return `Estoy teniendo una demora técnica para responder consultas complejas. Mientras tanto, puedo ayudarte con información básica del laboratorio o derivarte con un asesor.\n\n**Contacto:** ${email}\n**WhatsApp:** ${wa}\n\nMOQ desarrollo: **500 unidades** · Llave en mano: desde **5.000 unidades**.`;
+  return `Estoy teniendo una demora técnica para responder consultas complejas. Mientras tanto, puedo ayudarte con información básica del laboratorio o derivarte con un asesor.\n\n**Contacto:** ${email}\n**WhatsApp:** ${wa}\n\nMínimo de fabricación: **1.000 unidades por producto** · Llave en mano: desde **5.000 unidades**.`;
 }
