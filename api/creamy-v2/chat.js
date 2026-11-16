@@ -162,7 +162,6 @@ export default async function handler(req, res) {
     message_len: message.length,
     gemini_key_present: !!geminiKey,
     openai_key_present: !!openaiKey,
-    gemini_key_prefix: geminiKey ? `${geminiKey.slice(0, 6)}...` : null,
   });
 
   if (provider === 'gemini' && !geminiKey) {

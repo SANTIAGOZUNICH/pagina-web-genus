@@ -19,23 +19,23 @@
     "desarrollo": "/desarrolla-tu-producto.html"
   },
   "comercial": {
-    "moq_desarrollo_fabricacion": 500,
+    "moq_desarrollo_fabricacion": 1000,
     "moq_llave_en_mano": 5000,
     "unidad_minima": "unidades",
-    "nota_moq": "El MOQ de 500 unidades aplica a desarrollo cosmético y fabricación tercerizada. Llave en mano desde 5.000 unidades."
+    "nota_moq": "Mínimo de fabricación: 1.000 unidades por producto (cada producto por separado; no se suman cantidades de productos distintos). Aplica a desarrollo cosmético y fabricación tercerizada. Llave en mano desde 5.000 unidades."
   },
   "servicios": [
     {
       "id": "desarrollo",
       "nombre": "Desarrollo cosmético a medida",
       "descripcion": "Formulación personalizada según brief. Incluye iteraciones de muestra hasta aprobación.",
-      "moq": 500
+      "moq": 1000
     },
     {
       "id": "fabricacion",
       "nombre": "Fabricación tercerizada",
       "descripcion": "Producción con fórmula del cliente o desarrollada en el laboratorio.",
-      "moq": 500
+      "moq": 1000
     },
     {
       "id": "llave_en_mano",

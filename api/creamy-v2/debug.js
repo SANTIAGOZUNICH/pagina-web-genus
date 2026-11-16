@@ -33,7 +33,6 @@ export default async function handler(req, res) {
       model: report.model,
       gemini_key_present: report.gemini_key_present ?? (provider === 'gemini' ? report.key_present : false),
       openai_key_present: provider === 'openai' ? report.key_present : !!process.env.OPENAI_API_KEY?.trim(),
-      key_prefix: report.key_prefix,
       can_connect: report.can_connect,
       status: report.status,
       last_error: report.last_error,

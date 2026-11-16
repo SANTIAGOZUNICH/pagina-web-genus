@@ -53,7 +53,7 @@ function loadSystemPrompt() {
   log.error('PROMPT_LOAD', new Error('system-prompt.txt not found'));
   return `Sos Creamy, el asistente de Laboratorio Genus.
 Respondés consultas sobre desarrollo cosmético y fabricación tercerizada.
-MOQ mínimo: 500 unidades. Llave en mano desde 5000 unidades.
+Mínimo de fabricación: 1.000 unidades por producto (no se suman productos distintos). Llave en mano desde 5000 unidades.
 No fabricamos bálsamos en barra. Sí fabricamos bálsamos y pomadas en lata.
 Inferí información del mensaje antes de preguntar. No repreguntes lo que el usuario ya dijo.`;
 }

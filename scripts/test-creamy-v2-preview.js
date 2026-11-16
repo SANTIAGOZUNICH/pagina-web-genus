@@ -121,7 +121,7 @@ async function main() {
     check('Chat API responde 200', chatRes.status === 200, `HTTP ${chatRes.status}`);
     const reply = chat.reply || chat.message || '';
     check('Respuesta no vacía', reply.length > 80, `len=${reply.length}`);
-    check('Menciona MOQ o 500', /500|MOQ|unidades/i.test(reply));
+    check('Menciona el mínimo de 1.000', /1\.000|1000|MOQ|unidades/i.test(reply));
     if (reply) console.log(`\n💬 Preview respuesta:\n${reply.slice(0, 400)}...\n`);
   } else {
     console.log('⏭️  Chat API omitido (servicio no ready)\n');
