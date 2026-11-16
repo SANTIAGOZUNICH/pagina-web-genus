@@ -35,7 +35,6 @@ export default async function handler(req, res) {
     provider,
     model,
     key_present: keyInfo.key_present || keyInfo.gemini_key_present || false,
-    key_prefix: keyInfo.key_prefix,
     key_env: keyInfo.key_env,
     knowledge_as: 'context_only',
   };

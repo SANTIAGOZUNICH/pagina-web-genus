@@ -34,7 +34,6 @@ export function getKeyInfo(provider = getActiveProviderName()) {
     return {
       provider: 'openai',
       key_present: trimmed.length > 0,
-      key_prefix: trimmed ? `${trimmed.slice(0, 7)}...` : null,
       key_env: 'OPENAI_API_KEY',
       model: OPENAI_MODEL,
     };
@@ -45,7 +44,6 @@ export function getKeyInfo(provider = getActiveProviderName()) {
     provider: 'gemini',
     gemini_key_present: trimmed.length > 0,
     key_present: trimmed.length > 0,
-    key_prefix: trimmed ? `${trimmed.slice(0, 6)}...` : null,
     key_env: 'GEMINI_API_KEY',
     model: GEMINI_MODEL,
   };
